@@ -1,0 +1,17 @@
+.courseBox{
+    list-style-type: none;
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    align-content: center;
+    gap: 20px ;
+    background-color: rgba(0, 255, 255, 0.224);
+    border-width: 2px;
+    border-color: black;
+
+    
+}
+
+.deleteButon{
+    color:crimson;
+    
+}

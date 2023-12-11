@@ -1,0 +1,24 @@
+
+
+     
+    .link-nav{
+        list-style: none;
+        text-decoration: none;
+        color: #000;
+    }
+
+    .elemento{
+        background-color: blueviolet;
+    }
+
+
+    .nav{
+        list-style: none;
+        display: inline;
+        display: flex;
+        justify-content: space-around;
+        background-image: url();
+    }
+
+
+    

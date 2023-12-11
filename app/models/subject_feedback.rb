@@ -1,0 +1,2 @@
+class SubjectFeedback < ApplicationRecord
+end

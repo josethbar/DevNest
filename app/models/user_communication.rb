@@ -1,0 +1,2 @@
+class UserCommunication < ApplicationRecord
+end
