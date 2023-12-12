@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import './Course.css';
 import { getCourses } from '../../api/fwd';
 import { useNavigate } from 'react-router-dom';
-// import defaultImage from "../..";
+import imagen from '../../img/descarga.png';
+
+
 
 function Course({ authenticated }) {
     const APi_URL = "http://localhost:3009/course";
@@ -107,9 +109,11 @@ function Course({ authenticated }) {
 
     return (
         <div className='container-cage'>
+           
             <div>
-            {/* <button> <a href="/home"><img src="" alt="" /></a></button>    */}
+            
             <h1>Courses</h1>
+            <img src={imagen} alt="" />
             </div>
             {error && <p>{error}</p>}
             {isLoading ? (

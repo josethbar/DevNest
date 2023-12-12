@@ -60,16 +60,16 @@ class GroupController < ApplicationController
         
             #   authorize @groups # Implementa tu lógica de autorización aquí, por ejemplo, Pundit o CanCanCan
             @groups = Group.find(params[:id])
-              
-          
+
+
             #   p params[:id]
-              if @groups.destroy
+                if @groups.destroy
                 puts "Curso eliminado correctamente" 
                 render json: { message: "Curso eliminado correctamente" }, status: :ok
-              else
+                else
                 puts "Hubo un error al eliminar el curso"
                 render json: { message: 'Hubo un error al eliminar el curso' }, status: :unprocessable_entity
-              end
+                end
             end
     
     

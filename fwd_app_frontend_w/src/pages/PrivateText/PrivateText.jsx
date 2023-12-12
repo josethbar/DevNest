@@ -12,6 +12,7 @@ import NewGroup from "../Group/NewGroup";
 const PrivateText = ({ currUser, setCurrUser }) => {
     // debugger;
 
+
     // const {authState,setAuthState} = useContext(AuthContext);
     const [message, setMessage] = useState(null);
     const [authenticated, setAuthenticated] = useState(false);
@@ -31,7 +32,9 @@ const PrivateText = ({ currUser, setCurrUser }) => {
 
                 if (response.ok) {
                     const data = await response.json();
-                    console.log('Authenticated:', data.token);
+                    console.log('Authenticated:', token);
+                    console.log('Authenticated:', data);
+
                     setAuthenticated(true);
                     setMessage(data.message);
                 } else {
@@ -54,6 +57,7 @@ const PrivateText = ({ currUser, setCurrUser }) => {
         checkTokenValidity();
     }, []);
 
+
     useEffect(() => {
         if (currUser) {
             setAuthenticated(true)
@@ -63,7 +67,6 @@ const PrivateText = ({ currUser, setCurrUser }) => {
 
 
     return (
-
         <Router>
             {/* <AuthProvider> */}
             <Routes>
@@ -73,8 +76,8 @@ const PrivateText = ({ currUser, setCurrUser }) => {
                 <Route path="/" element={<User currUser={currUser} setCurrUser={setCurrUser} authenticated={authenticated}></User>}></Route>
                 <Route path="/home" element={<FwdApp authenticated={authenticated} />} />
                 <Route path="/course" element={ <Course authenticated={authenticated} /> } />
-                <Route path="/newCourse" element={ <NewCourse /> } />
-                <Route path="/group" element={<Group/>}/>
+                <Route path="/newCourse" element={ <NewCourse authenticated={authenticated} /> } />
+                <Route path="/group" element={<Group authenticated={authenticated}/>}/>
                 <Route path="/newGroup" element={<NewGroup/>}/>
             </Routes>
             {/* </AuthProvider> */}

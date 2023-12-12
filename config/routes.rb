@@ -32,7 +32,8 @@ Rails.application.routes.draw do
 
     resources :group, only: [:index, :create, :show, :update, :destroy]
     resources :user_groups
-    post '/groups/:group_id/add_user/:user_id', to: 'groups#add_user'
+    # post '/groups/:group_id/add_user/:user_id', to: 'groups#add_user'
+    post '/groups/:group_id/add_user/:user_id', to: 'user_groups#create'
     # resources :course
 
   end

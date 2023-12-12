@@ -65,10 +65,10 @@ const Signup = ({ setCurrUser, setShow }) => {
 
                 <label>
                     <input type="date" name='age' placeholder="Date" className="input" />
-                    <span>Date</span>
+                    <span>Birth Date</span>
                 </label>
 
-                <button type='submit' value="Submit" className="submit" />
+                <button type='submit' value="Submit" className="submit">Sign Up</button>
 
 
                 <p className="signin">Already registered, <a href="#login" onClick={handleClick} >Login</a> here.</p>

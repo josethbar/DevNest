@@ -1,154 +1,113 @@
-import React, { useState } from 'react'
-import { useEffect } from 'react';
-import { getGroups } from '../../api/fwd';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function Group(props) {
-    const APi_URL = "http://localhost:3009/group"
 
+function Group({ userId, authenticated }) {
+    //asignas una variable al api
+    const API_URL = "http://localhost:3009/group";
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (authenticated === false) {
+            console.log("estas?" , authenticated)
+            navigate("/course");
+        }
+    }, [authenticated, navigate]);
+
+
+        //Seteas variable de grupos y estado
     const [groups, setGroups] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    // const fetchData = async () => {
-    //     try {
-    //         const token = localStorage.getItem("token");
-    //         const response = await fetch(APi_URL, {
-    //             headers: {
-    //                 Authorization: `Bearer ${token}`
-    //             }
-    //         });
-    //         const json = await response.json();
-    //         setGroups(json);
-    //     } catch (error) {
-    //         console.log("error", error);
-    //     }
-    // };
-    // // fetchData();
-
-    // useEffect(() => {
-    //     fetchData();
-    // }, []);
-
-
-    // useEffect(() => {
-    //     const getData = async () => {
-    //       try {
-    //         const groupList = await fetchData(); // Llama a la función fetchData
-    //         setGroups(groupList); // Actualiza el estado con los datos obtenidos
-    //       } catch (error) {
-    //         // Manejo de errores
-    //         console.error('Error al obtener datos en el componente:', error);
-    //       }
-    //     };
-
-    //     getData();
-    //   }, []);
-
-
+    //haces un fetch al que le pasas el toquen
     const fetchData = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(APi_URL, {
+            const response = await fetch(API_URL, {
                 headers: {
+                    'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}`
                 }
             });
+
+            //llamas los datos de los groups 
             const data = await response.json();
             setGroups(data);
             setIsLoading(false);
+
+            //no encuentra datos
         } catch (error) {
-            console.log('error', error);
+            console.log('Error fetching data:', error);
             setIsLoading(false);
         }
     };
 
+    //carga la función
     useEffect(() => {
         fetchData();
     }, []);
 
 
-    const addUserToGroups = async (userId, groupId) => {
+    //añadir el usuario a un group
+    const addUserToGroup = async (groupId) => {
+        
         try {
+            // le pasa el token al fetch
             const token = localStorage.getItem('token');
-            const response = await fetch(`/groups/${groupId}/add_user/${userId}`, {
+            const response = await fetch(`http://localhost:3009/groups/${groupId}/add_user/${userId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
             });
-    
+
+            //agrega el usuario
             if (response.ok) {
-                console.log('Usuario agregado');
+                console.log('Usuario agregado al grupo');
+                // Puedes actualizar la interfaz aquí si es necesario
             } else {
-                console.log("No se pudo agregar el usuario")
-                console.log("usuarioid",userId);
-                console.log("grupoid", groupId);
+                console.log("No se pudo agregar el usuario al grupo");
             }
         } catch (error) {
-            console.log(error)
+            console.log('Error adding user to group:', error);
         }
     };
 
-    useEffect(() => {
-        const userId = 'group_id'; 
-        const groupId = 'user_id'; 
-        addUserToGroups(userId, groupId);
 
-    }, []);
-
-
-    const navigate = useNavigate();
-
-    const irDetalles = (id) => {
-        navigate(`/group/${id}`);
+    const handleAddUser = (groupId) => {
+        addUserToGroup(groupId);
+        console.log("WHAAAT´S YOUR NAME", userId);
+        console.log("WHERE YOU FROOOM", groupId);
     };
 
+    return (
+        <div>
+            <h1>Grupos</h1>
 
-    const GroupUsers = ({ groupId }) => {
-        const [groupUsers, setGroupUsers] = useState([]);
-
-        useEffect(() => {
-            const fetchGroupUsers = async () => {
-                try {
-                    const response = await fetch(`/api/groups/${groupId}/user`);
-                    if (!response.ok) {
-                        throw new Error('Error fetching group users');
-                    }
-                    const data = await response.json();
-                    setGroupUsers(data); // Actualizar el estado con los usuarios obtenidos
-                } catch (error) {
-                    console.error('Error fetching group users:', error);
-                }
-            };
-
-            fetchGroupUsers();
-        }, [groupId]);
-        
-    
-
-
-
-
-        return (
-            <div>
-                <h1>groups</h1>
-
-                {isLoading ? (
-                    <p>Cargando datos...</p>
-                ) : groups ? (
-                    <ul>
-                        {groupUsers.map((user) => (
-                            <li key={user.id}>{user.name}</li>
-                        ))}
-                    </ul>
-                ) : (
-                    <p>No se encontraron datos.</p>
-                )}
-                <a href="/newGroup">new</a>
-            </div>
-        )
-    }
+            {isLoading ? (
+                <p>Cargando datos...</p>
+            ) : (
+                <div>
+                    {groups.length > 0 ? (
+                        <ul>
+                            {groups.map((group) => (
+                                <li key={group.id}>
+                                    {group.name}
+                                    <button onClick={() => handleAddUser(group.id)}>
+                                        +
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p>No hay grupos disponibles.</p>
+                    )}
+                </div>
+            )}
+        </div>
+    );
 }
 
-    export default Group;
+export default Group;

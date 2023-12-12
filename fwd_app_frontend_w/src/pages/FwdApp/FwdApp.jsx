@@ -4,6 +4,8 @@ import React from 'react';
 import { getCourses } from '../../api/fwd';
 import { useEffect, useState } from 'react';
 import './FwdApp.css';
+// import imagen from '../../img/arrow.png'
+
 // import Logout from '../../components/User/Logout';
 
 // import { Link } from 'react-router-dom';
@@ -60,27 +62,8 @@ function FwdApp({ authenticated, }) {
 
 
 
-
   return (
-    <div>
-      <ul className='nav' >
-        <li className='buttom-nav'>
-          <a href="/home" className='link-nav'>Home 🏠</a>
-        </li>
-        <li className='buttom-nav' >
-          <a href="/course" className='link-nav'>course</a>
-        </li>
-        <li className='buttom-nav' >
-          <a href="/group" className='link-nav'>Groups</a>
-        </li>
-        <li className='buttom-nav' >
-          <a href="#" className='link-nav'>Health</a>
-        </li>
-      </ul>
-
-      
-
-    </div>
+   <h1>hola</h1>
   )
 }
 

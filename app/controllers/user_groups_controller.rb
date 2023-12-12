@@ -10,4 +10,9 @@ class UserGroupsController < ApplicationController
             render json: { error: 'Hubo un problema al agregar el usuario al grupo' }, status: :unprocessable_entity
         end
     end
+
+
+    def studentList
+        
+    end
 end

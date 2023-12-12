@@ -91,7 +91,8 @@ function NewCourse(authenticated) {
                     onChange={handleInputChange}
                 /> <br />
 
-                <button type="submit">Create Course</button>
+                {/* <button type="submit" onClick={}>Create Course</button> */}
+
                 {/* {newCourse && <redirect to="/" />} */}
             </form>
         </div>
