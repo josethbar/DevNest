@@ -69,6 +69,8 @@ class CoursePolicy
   end
 
   def destroy?
+
+    true
     # # binding.pry 
     # puts "entra en el destroy"
     # if user.present?

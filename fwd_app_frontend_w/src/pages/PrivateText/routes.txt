@@ -1,0 +1,19 @@
+                {/* <Route path="/" element={<FwdApp message={message} />} /> */}
+                {/* <Route path="/" element={<User currUser={currUser} setCurrUser={setCurrUser} authenticated={authenticated}></User>}></Route>
+                <Route path="/home" element={<FwdApp currUser={currUser} authenticated={authenticated} />} />
+                <Route path="/course" element={ <Course authenticated={authenticated} /> } />
+                <Route path="/newCourse" element={ <NewCourse authenticated={authenticated} /> } />
+                <Route path="/group" element={<Group authenticated={authenticated}/>}/>
+                <Route path="/newGroup" element={<NewGroup/>}/> */}
+
+                                {/* <Route path="/login" element={<User currUser={currUser} setCurrUser={setCurrUser} authenticated={authenticated} />}></Route> */}
+
+                {/* <User currUser={currUser} setCurrUser={setCurrUser} /> */}                {/* <Route path="/" element={<FwdApp message={message} />} /> */}
+                {/* <Route path="/" element={<User currUser={currUser} setCurrUser={setCurrUser} authenticated={authenticated}></User>}></Route>
+                <Route path="/home" element={<FwdApp currUser={currUser} authenticated={authenticated} />} />
+                <Route path="/course" element={ <Course authenticated={authenticated} /> } />
+                <Route path="/newCourse" element={ <NewCourse authenticated={authenticated} /> } />
+                <Route path="/group" element={<Group authenticated={authenticated}/>}/>
+                <Route path="/newGroup" element={<NewGroup/>}/> */}                {/* <Route path="/login" element={<User currUser={currUser} setCurrUser={setCurrUser} authenticated={authenticated} />}></Route> */}
+
+                {/* <User currUser={currUser} setCurrUser={setCurrUser} /> */}

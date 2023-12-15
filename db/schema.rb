@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_12_12_201555) do
+ActiveRecord::Schema[7.0].define(version: 2023_12_13_212921) do
   create_table "communications", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "issue"
     t.string "text"
@@ -42,13 +42,22 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_12_201555) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "health_users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "health_id", null: false
+    t.bigint "user_reference_id", null: false
+    t.bigint "user_id", null: false
+    t.index ["health_id"], name: "index_health_users_on_health_id"
+    t.index ["user_id"], name: "index_health_users_on_user_id"
+    t.index ["user_reference_id"], name: "index_health_users_on_user_reference_id"
+  end
+
   create_table "healths", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "type"
+    t.string "category"
     t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "User_id", null: false
-    t.index ["User_id"], name: "index_healths_on_User_id"
   end
 
   create_table "jwt_denylist", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -114,15 +123,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_12_201555) do
     t.index ["user_id"], name: "index_user_groups_on_user_id"
   end
 
-  create_table "user_healths", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "User_id", null: false
-    t.bigint "Health_id", null: false
-    t.index ["Health_id"], name: "index_user_healths_on_Health_id"
-    t.index ["User_id"], name: "index_user_healths_on_User_id"
-  end
-
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -151,6 +151,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_12_201555) do
 
   add_foreign_key "course_subjects", "courses"
   add_foreign_key "course_subjects", "subjects"
+  add_foreign_key "health_users", "healths"
+  add_foreign_key "health_users", "users"
   add_foreign_key "subject_feedbacks", "subjects"
   add_foreign_key "user_communications", "communications"
   add_foreign_key "user_communications", "users"

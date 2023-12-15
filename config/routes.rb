@@ -2,7 +2,6 @@ Rails.application.routes.draw do
     namespace :api do
       namespace :v1 do
         resources :users
-        # Agrega más recursos si necesitas más controladores dentro de este namespace
       end
     end
   
@@ -28,12 +27,17 @@ Rails.application.routes.draw do
 
     # resources :course, only: [:index, :create, :destroy]
     resources :course, only: [:index, :create, :show, :update, :destroy]
+    post '/course/:course_id/add_user/:user_id', to: 'user_course#create'
     
 
     resources :group, only: [:index, :create, :show, :update, :destroy]
     resources :user_groups
     # post '/groups/:group_id/add_user/:user_id', to: 'groups#add_user'
-    post '/groups/:group_id/add_user/:user_id', to: 'user_groups#create'
+    post '/group/:group_id/add_user/:user_id', to: 'user_groups#create'
+    # post '/group/:group_id/add_user/:user_id/group/:group_id/add_user/:user_id'
     # resources :course
+    resources :health
+
+  
 
   end
