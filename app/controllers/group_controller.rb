@@ -1,6 +1,5 @@
 class GroupController < ApplicationController
         before_action :authenticate_user!, except: [:index, :show ,:create, :destroy]
-        
         before_action :set_course, only: [:show, :edit, :update, :destroy]
     
             def index
@@ -19,6 +18,7 @@ class GroupController < ApplicationController
                     render json: { error: 'Grupo no encontrado' }, status: :not_found
                 end
             end
+            
     
             def new
                 @groups = Group.new
@@ -40,6 +40,8 @@ class GroupController < ApplicationController
                 end
                 redirect_to "/"
             end
+
+
 
             def update
                 # authorize @groups

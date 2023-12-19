@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import Group from './Group';
+import { useNavigate } from 'react-router-dom';
+
 
 export default function NewGroup() {
     const API_URL = "http://localhost:3009/group";
@@ -7,6 +10,8 @@ export default function NewGroup() {
         name: '',
         quantity: ''
     });
+
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -30,6 +35,7 @@ export default function NewGroup() {
             if (response.ok) {
                 const data = await response.json();
                 console.log('Group created:', data);
+                console.log('Group created. Redirecting...');
             } else {
                 const errorData = await response.json();
                 console.error('Error creating group:', errorData.errors);
@@ -38,6 +44,12 @@ export default function NewGroup() {
         } catch (error) {
             console.error('Error creating group en el catch:', error);
         }
+        
+        if(grupoData){
+            console.log("weeeeeeeee");
+            navigate("/group");
+        }
+
     };
 
     return (
@@ -48,7 +60,7 @@ export default function NewGroup() {
                 <input
                     type="text"
                     name="name"
-                    placeholder="Course Name"
+                    placeholder="Group Name"
                     value={grupoData.name} // Use grupoData.name here
                     onChange={handleChange}
                 /> <br />
@@ -60,7 +72,7 @@ export default function NewGroup() {
                     onChange={handleChange}
                 ></textarea><br />
 
-                <button type="submit">Create Course</button>
+                <button type="submit">Create Group</button>
             </form>
         </div>
     )
