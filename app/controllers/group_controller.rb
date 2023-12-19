@@ -18,6 +18,7 @@ class GroupController < ApplicationController
                     render json: { error: 'Grupo no encontrado' }, status: :not_found
                 end
             end
+            
     
             def new
                 @groups = Group.new
@@ -39,6 +40,8 @@ class GroupController < ApplicationController
                 end
                 redirect_to "/"
             end
+
+
 
             def update
                 # authorize @groups

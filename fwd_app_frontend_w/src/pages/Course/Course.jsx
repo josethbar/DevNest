@@ -40,7 +40,7 @@ function Course({ authenticated }) {
             });
             const data = await response.json();
             setCourses(data);
-            console.log("couuuuuuuuuuuusrde", data)
+            // console.log("couuuuuuuuuuuusrde", data)
             setIsLoading(false);
         } catch (error) {
             setError('Error al cargar datos.');
@@ -121,7 +121,10 @@ function Course({ authenticated }) {
     return (
         <div className='container-cage'>
             <div>
-                <h1>Cursos</h1>
+                <div className='top-container'>
+                 <h1>Cursos</h1>   
+                 <a href="/newCourse"  className="custom-btn btn-2">Nuevo</a>
+                </div>
             </div>
             {error && <p>{error}</p>}
             {isLoading ? (
@@ -180,7 +183,8 @@ function Course({ authenticated }) {
                 <p>No se encontraron datos.</p>
             )}
             {/* Enlace para navegar a la página de nuevo curso */}
-            <a href="/newCourse">Nuevo</a>
+            
+            
         </div>
     )
 }

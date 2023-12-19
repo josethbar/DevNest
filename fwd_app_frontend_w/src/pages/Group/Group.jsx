@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Group.css';
-import { jwtDecode } from 'jwt-decode';
+
+// import jwtDecode from 'jwt-decode';
 
 function Group({ authenticated }) {
     // Definición de las URLs de la API
@@ -24,7 +25,7 @@ function Group({ authenticated }) {
     const [isLoadingGroups, setIsLoadingGroups] = useState(true);
     const [users, setUsers] = useState([]);
     const [isLoadingUsers, setIsLoadingUsers] = useState(true);
-    const [selectedUserId, setSelectedUserId] = useState('');
+
 
     // Función para obtener datos de grupos y usuarios desde la API
     const fetchData = async () => {
@@ -52,21 +53,14 @@ function Group({ authenticated }) {
 
             if (usersResponse.ok) {
                 const usersData = await usersResponse.json();
-                setIsLoadingGroups(false);
-
-                if (Array.isArray(usersData)) {
-                    setUsers(usersData);
-                    setIsLoadingUsers(false);
-                } else {
-                    console.error('La respuesta del servidor no es un array de usuarios.');
-                    setIsLoadingUsers(false);
-                }
+                setUsers(usersData);
+                setIsLoadingUsers(false);
             } else {
                 console.error('Error al obtener usuarios:', usersResponse.status);
                 setIsLoadingUsers(false);
             }
         } catch (error) {
-            console.log('Error al obtener datos:', error);
+            console.error('Error en la llamada a la API:', error.message);
             setIsLoadingGroups(false);
             setIsLoadingUsers(false);
         }
@@ -78,23 +72,49 @@ function Group({ authenticated }) {
     }, []);
 
     // Función para agregar un usuario a un grupo
-    const addUserToGroup = async (groupId) => {
+    const addUserToGroup = async (groupId, userId) => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:3009/group/${groupId}/add_user/${selectedUserId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': token
-                },
-            });
+
+
+            const requestData = {
+                user_id: userId,
+                group_id: groupId
+            };
+
+            const response = await fetch
+                (`http://localhost:3009/group/${groupId}/add_user`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': token
+                        },
+                        body: JSON.stringify(requestData)
+                    });
+
+            console.log("WHAT'S YOUR NAAAME", userId);
+            console.log("WHEEEEEEEEEEEEEEEEEEERE YOU FROOOM", groupId);
 
             if (response.ok) {
                 console.log('Usuario agregado al grupo');
-                fetchData(); // Actualizar la lista de grupos
+                const updatedGroups = groups.map(group => {
+                    if (group.id === groupId) {
+                        return { ...group, selectedUserId: userId };
+                    }
+                    return group;
+                });
+
+                // setGroups([...updatedGroups]);  origin
+                setGroups(updatedGroups);
+                fetchData();
+                console.log("señooooooooor dame paciencia", updatedGroups);
+                console.log("Grupos actualizados después de agregar usuario:", updatedGroups);
+
             } else {
-                console.log("No se pudo agregar el usuario al grupo");
-                console.log('No se pudo agregar el usuario al grupo');
+                const errorData = await response.json(); // Obtener el mensaje de error desde el servidor
+                console.log('Error al agregar usuario al grupo  FRONTEND:', errorData.error); // Mostrar el mensaje de error en la consola
+                console.log("No se pudo agregar el usuario al grupo FRONTEND");
             }
         } catch (error) {
             console.log('Error al agregar usuario al grupo:', error);
@@ -124,7 +144,6 @@ function Group({ authenticated }) {
             console.log('Error al eliminar el grupo:', error);
         }
     };
-
     // Manejador de selección de usuario
     const handleUserSelect = (groupId, userId) => {
         const updatedGroups = groups.map(group => {
@@ -135,9 +154,10 @@ function Group({ authenticated }) {
         });
         setGroups(updatedGroups);
     };
+
     // Manejador para agregar un usuario a un grupo
-    const handleAddUser = (groupId) => {
-        addUserToGroup(groupId);
+    const handleAddUser = (groupId, userId) => {
+        addUserToGroup(groupId, userId); // Pasar selectedUserId como argumento
     };
 
     // Manejador para eliminar un grupo
@@ -163,7 +183,7 @@ function Group({ authenticated }) {
             ) : (
                 <div>
                     {/* Contenido una vez que se han cargado grupos y usuarios */}
-                    <div>¡Hola! Este es el contenido del componente Group.</div>
+                    {/* <div>¡Hola! Este es el contenido del componente Group.</div> */}
                     {/* Mostrar lista de grupos */}
                     <div>
                         {groups.length > 0 ? (
@@ -171,7 +191,6 @@ function Group({ authenticated }) {
                                 {groups.map((group) => (
                                     <li key={group.id}>
                                         {group.name}
-                                        {/* <button onClick={() => handleAddUser(group.id)}>add user</button> */}
                                         <select
                                             id={`userDropdown_${group.id}`}
                                             value={group.selectedUserId || ""}
@@ -184,6 +203,10 @@ function Group({ authenticated }) {
                                                 </option>
                                             ))}
                                         </select>
+
+                                        <button onClick={() => handleAddUser(group.id, group.selectedUserId)}>add user</button>
+
+                                        {/* <button onClick={() => handleAddUser(group.id)}>add user</button> no1 */}
                                         {/* <p>Categoría seleccionada: {selectedUserId}</p> */}
                                         <button onClick={() => handleDeleteGroup(group.id)}>eliminar/grupo</button>
                                     </li>

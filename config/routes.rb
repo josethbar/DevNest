@@ -28,14 +28,13 @@ Rails.application.routes.draw do
     # resources :course, only: [:index, :create, :destroy]
     resources :course, only: [:index, :create, :show, :update, :destroy]
     post '/course/:course_id/add_user/:user_id', to: 'user_course#create'
-    
-
+  
     resources :group, only: [:index, :create, :show, :update, :destroy]
-    resources :user_groups
-    # post '/groups/:group_id/add_user/:user_id', to: 'groups#add_user'
-    post '/group/:group_id/add_user/:user_id', to: 'user_groups#create'
-    # post '/group/:group_id/add_user/:user_id/group/:group_id/add_user/:user_id'
-    # resources :course
+    # post '/group/:group_id/add_user/:user_id', to: 'user_groups#create'  //origin
+    post '/group/:groupId/add_user', to: 'user_groups#create'
+  
+    resources :user_groups, only: [:create, :destroy] # Podrías limitar solo a la acción create si es lo único que necesitas
+    
     resources :health
 
   
