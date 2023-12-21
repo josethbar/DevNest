@@ -37,6 +37,8 @@ Rails.application.routes.draw do
     
     resources :health
 
+    resources :medical_record
+
   
 
   end

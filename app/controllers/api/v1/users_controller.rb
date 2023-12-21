@@ -79,4 +79,10 @@ class Api::V1::UsersController < ApplicationController
         def user_params
             params.require(:user).permit(:first_name, :description, :email, :encrypted_password, :avatar)
         end
+
+
+        def show_students
+          students = User.with_role(:student)
+          render json: students
+        end
     end

@@ -38,7 +38,8 @@ class HealthController < ApplicationController
 
     def destroy
         # authorize @health
-        @health = Health.find(params[:id])
+        @health = Health.find(
+            params[:id])
 
         if @health.destroy
         render json: { message: "Registro de salud eliminado correctamente" }, status: :ok
