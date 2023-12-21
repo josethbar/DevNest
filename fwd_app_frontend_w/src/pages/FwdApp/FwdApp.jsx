@@ -4,6 +4,7 @@ import React from 'react';
 import { getCourses } from '../../api/fwd';
 import { useEffect, useState } from 'react';
 import './FwdApp.css';
+import Logout from '../../components/User/Logout';
 // import imagen from '../../img/arrow.png'
 
 // import Logout from '../../components/User/Logout';
@@ -63,7 +64,9 @@ function FwdApp({ authenticated, }) {
 
 
   return (
+    <div>
     <h1>devNest</h1>
+    </div>
   )
 }
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_12_13_212921) do
+ActiveRecord::Schema[7.0].define(version: 2023_12_20_163005) do
   create_table "communications", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "issue"
     t.string "text"
@@ -42,28 +42,28 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_13_212921) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "health_users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "health_id", null: false
-    t.bigint "user_reference_id", null: false
-    t.bigint "user_id", null: false
-    t.index ["health_id"], name: "index_health_users_on_health_id"
-    t.index ["user_id"], name: "index_health_users_on_user_id"
-    t.index ["user_reference_id"], name: "index_health_users_on_user_reference_id"
-  end
-
   create_table "healths", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "category"
+    t.string "type"
     t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.index ["user_id"], name: "fk_rails_bc4eb468f1"
   end
 
   create_table "jwt_denylist", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "jti", null: false
     t.datetime "exp", null: false
     t.index ["jti"], name: "index_jwt_denylist_on_jti"
+  end
+
+  create_table "medical_records", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "suffering"
+    t.string "specifications"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_medical_records_on_user_id"
   end
 
   create_table "roles", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -151,8 +151,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_13_212921) do
 
   add_foreign_key "course_subjects", "courses"
   add_foreign_key "course_subjects", "subjects"
-  add_foreign_key "health_users", "healths"
-  add_foreign_key "health_users", "users"
+  add_foreign_key "healths", "users"
+  add_foreign_key "medical_records", "users"
   add_foreign_key "subject_feedbacks", "subjects"
   add_foreign_key "user_communications", "communications"
   add_foreign_key "user_communications", "users"

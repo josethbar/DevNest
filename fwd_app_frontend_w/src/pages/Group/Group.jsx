@@ -26,7 +26,6 @@ function Group({ authenticated }) {
     const [users, setUsers] = useState([]);
     const [isLoadingUsers, setIsLoadingUsers] = useState(true);
 
-
     // Función para obtener datos de grupos y usuarios desde la API
     const fetchData = async () => {
         try {
@@ -66,10 +65,31 @@ function Group({ authenticated }) {
         }
     };
 
+    // fetch('/api/users?role=student')
+    // .then(response => {
+    // if (!response.ok) {
+    //     throw new Error(`HTTP error! Status: ${response.status}`);
+    // }
+    // return response.json();
+    // })
+    // .then(data => {
+    // // Maneja la respuesta del servidor, que contiene los usuarios con el rol "student"
+    // const students = data;
+    // console.log(students);
+    // })
+    // .catch(error => {
+    // console.error('Error fetching students:', error);
+    // });
+
+
     // Efecto para cargar datos al montar el componente
     useEffect(() => {
         fetchData();
     }, []);
+
+    
+
+
 
     // Función para agregar un usuario a un grupo
     const addUserToGroup = async (groupId, userId) => {
@@ -193,8 +213,9 @@ function Group({ authenticated }) {
                                         {group.name}
                                         <select
                                             id={`userDropdown_${group.id}`}
-                                            value={group.selectedUserId || ""}
-                                            onChange={(e) => handleUserSelect(group.id, e.target.value)}
+                                            value={group.selectedUserIds || ""}
+                                            // onChange={(e) => handleUserSelect(group.id, e.target.value)} origin
+                                            onChange={(e) =>handleUserSelect(group.id, Array.from(e.target.selectedOptions, option => option.value))}
                                         >
                                             <option value="">Selecciona Usuario</option>
                                             {users.map((user) => (

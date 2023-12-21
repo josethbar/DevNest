@@ -39,6 +39,8 @@ const PrivateText = ({ currUser, setCurrUser }) => {
 
                     setAuthenticated(true);
                     setMessage(data.message);
+                    setCurrUser(data.user); 
+                    
                 } else {
                     setAuthenticated(false);
                     setMessage(null);
@@ -85,7 +87,7 @@ const PrivateText = ({ currUser, setCurrUser }) => {
                                 <Route path="/group" element={<Group currUser={currUser} authenticated={authenticated} />} />
                                 <Route path="/newGroup" element={<NewGroup />} />
                                 <Route path="/health" element={<Health authenticated={authenticated}/>}/>
-                                <Route path="/healthyform" element={<DisplayHealth authenticated={authenticated} />} />
+                                <Route path="/healthyform" element={<DisplayHealth authenticated={authenticated} currUser={currUser} />} />
                             </Routes>
                         </>
                     }

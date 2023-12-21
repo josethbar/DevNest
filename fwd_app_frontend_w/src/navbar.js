@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './navbar.css';
+import Logout from './components/User/Logout';
 
 const NavigationBar = () => {
   return (
@@ -10,29 +11,11 @@ const NavigationBar = () => {
     <Link to="/home" className='link-nav'>Home</Link>
     <Link to="/course" className='link-nav'>Course</Link>
     <Link to="/group" className='link-nav'>Groups</Link>
-    <Link to="/health" className='link-nav'>Health</Link>
+    <Link to="/healthyform" className='link-nav'>Health</Link>
     </div>
-    <div className="user-menu">Usuario</div>
+    {/* <div className="user-menu">log aout</div> */}
+    <Logout className="user-menu"></Logout>
   </nav>
-
-
-
-
-
-
-    // <div>
-    //   <ul className='nav'>
-    //     <li className='button-nav'>
-    //       <Link to="/home" className='link-nav'>Home 🏠</Link>
-    //     </li>
-    //     <li className='button-nav'>
-    //       <Link to="/course" className='link-nav'>Course</Link>
-    //     </li>
-    //     <li className='button-nav'>
-    //       <Link to="/group" className='link-nav'>Groups</Link>
-    //     </li>
-    //   </ul>
-    // </div>
   );
 };
 
