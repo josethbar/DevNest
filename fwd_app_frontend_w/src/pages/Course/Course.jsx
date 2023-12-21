@@ -18,6 +18,12 @@ function Course({ authenticated }) {
         info: '',
         description: ''
     });
+
+    const [selectedCourse, setSelectedCourse] = useState(null);
+    const [selectedGroup, setSelectedGroup] = useState(null);
+
+
+
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
@@ -118,12 +124,82 @@ function Course({ authenticated }) {
         });
     };
 
+
+
+    const handleCourseChange = (e) => {
+        setSelectedCourse(e.target.value);
+    };
+
+    const handleGroupChange = (e) => {
+        setSelectedGroup(e.target.value);
+    };
+
+
+    const assignGroupCourse = async (groupId, courseId) => {
+        try {
+            const token = localStorage.getItem('token');
+
+            const requestData = {
+                course_id: courseId,
+                group_id: groupId
+            };
+
+            const response = await fetch(`http://localhost:3009/course_group/assign_group/${selectedGroup}`,
+                {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': token
+                    },
+                    body: JSON.stringify(requestData)
+
+                })
+
+            console.log("CURSOOOOOOOOOOOOO", courseId);
+            console.log("GRUPOOOOOOOOOOOOOOOOOO", groupId);
+
+            if (response.ok) {
+                console.log("que pasoooooo")
+
+            } else {
+
+            }
+        } catch (error) {
+
+        }
+    }
+
+
+    // ======================================="acaaaaaaaaaaaaaaaa"===========================
+    // const fetchGroups = async () => {
+    //     try {
+    //         const response = await fetch('http://localhost:3009/group'); // Ruta para obtener los grupos, ajusta según tu backend
+    //         if (!response.ok) {
+    //             throw new Error('Failed to fetch groups.');
+    //         }
+    //         const data = await response.json();
+    //         selectedGroup(data);
+    //     } catch (error) {
+    //         setError('Error al obtener la lista de grupos. y tu');
+    //     }
+    // };
+
+    // useEffect(() => {
+    //     fetchGroups(); // Llama a fetchGroups al cargar el componente para obtener los grupos
+    // }, []);
+
+
+
+
+
+
+
     return (
         <div className='container-cage'>
             <div>
                 <div className='top-container'>
-                 <h1>Cursos</h1>   
-                 <a href="/newCourse"  className="custom-btn btn-2">Nuevo</a>
+                    <h1>Courses</h1>
+                    <a href="/newCourse" className="custom-btn btn-2">Nuevo</a>
                 </div>
             </div>
             {error && <p>{error}</p>}
@@ -183,8 +259,32 @@ function Course({ authenticated }) {
                 <p>No se encontraron datos.</p>
             )}
             {/* Enlace para navegar a la página de nuevo curso */}
-            
-            
+
+
+            <div className='assign-group-form'>
+                <h2>Asignar Grupo a Curso</h2>
+                <label htmlFor='courses'>Seleccionar Curso:</label>
+                <select id='courses' onChange={handleCourseChange}>
+                    <option value=''>Selecciona un curso</option>
+                    {courses.map((course) => (
+                        <option key={course.id} value={course.id}>
+                            {course.name}
+                        </option>
+                    ))}
+                </select>
+                <label htmlFor='groups'>Seleccionar Grupo:</label>
+                <select id='groups' onChange={handleGroupChange}>
+                    <option value=''>Selecciona un grupo</option>
+                    {/* Aquí deberías cargar los grupos desde tu API */}
+                    {/* Ejemplo estático */}
+                    <option value='1'>Grupo 1</option>
+                    <option value='2'>Grupo 2</option>
+                    {/* Fin del ejemplo estático */}
+                </select>
+                <button onClick={assignGroupCourse}>Asignar Grupo</button>
+                {error && <p>{error}</p>}
+            </div>
+
         </div>
     )
 }

@@ -65,23 +65,7 @@ function Group({ authenticated }) {
         }
     };
 
-    // fetch('/api/users?role=student')
-    // .then(response => {
-    // if (!response.ok) {
-    //     throw new Error(`HTTP error! Status: ${response.status}`);
-    // }
-    // return response.json();
-    // })
-    // .then(data => {
-    // // Maneja la respuesta del servidor, que contiene los usuarios con el rol "student"
-    // const students = data;
-    // console.log(students);
-    // })
-    // .catch(error => {
-    // console.error('Error fetching students:', error);
-    // });
-
-
+    
     // Efecto para cargar datos al montar el componente
     useEffect(() => {
         fetchData();
@@ -113,8 +97,8 @@ function Group({ authenticated }) {
                         body: JSON.stringify(requestData)
                     });
 
-            console.log("WHAT'S YOUR NAAAME", userId);
-            console.log("WHEEEEEEEEEEEEEEEEEEERE YOU FROOOM", groupId);
+            // console.log("WHAT'S YOUR NAAAME", userId);
+            // console.log("WHEEEEEEEEEEEEEEEEEEERE YOU FROOOM", groupId);
 
             if (response.ok) {
                 console.log('Usuario agregado al grupo');

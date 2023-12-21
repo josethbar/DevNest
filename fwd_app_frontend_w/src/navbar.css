@@ -1,65 +1,48 @@
-/* Navbar.css */
+/* navbar.css */
 
-/* body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-  } */
-  
-  .navbar {
-    background-color: #3498db;
-    color: #fff;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px;
-  }
-  
-  .logo {
-    font-size: 1.5em;
-    font-weight: bold;
-    height: 40px;
-    width: 50px;
-    background-image: url(https://yt3.googleusercontent.com/XVa_Z4LajBH_66qTGOlS3f6IHpM0ERLGSJM_aOSqxK4wfohdqnfqjN2Tu28zC2nrradiRViU_Ag=s900-c-k-c0x00ffffff-no-rj);
-    background-repeat: no-repeat;
-    background-size: 50px 40px;
-    border-radius: 20px;
-  }
-  
-  .nav-links {
-    display: flex;
-  }
-  
-  .nav-links a {
-    color: #fff;
-    text-decoration: none;
-    margin-right: 20px;
-    transition: color 0.3s ease;
-  }
-  
-  .nav-links a:hover {
-    color: #ecf0f1;
-  }
-  
-  .user-menu {
-    padding: 10px 20px;
-    background-color: #2980b9;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .user-menu:hover {
-    background-color: #1a5276;
-  }
 
-  .link-nav{
-    color: #fff;
-  text-decoration: none;
-  margin-right: 20px;
-  transition: color 0.3s ease;
+.navbar {
+  background-color: #0566c6; /* Azul oscuro */
+  overflow: hidden;
+  padding: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+}
+
+.nav-links {
   display: flex;
-  justify-content: space-between;
-  align-items: center
+  justify-content: space-around;
+}
+
+.link-nav {
+  color: #ecf0f1; /* Blanco */
+  text-decoration: none;
+  padding: 14px 16px;
+  display: block;
+  transition: background-color 0.3s ease;
+}
+
+.link-nav:hover {
+  background-color: #3498db; /* Azul más claro al pasar el ratón */
+  border-radius: 20px;
+}
+
+.user-menu {
+  float: right;
+  color: #ecf0f1; /* Blanco */
+}
+
+/* Estilos para pantallas más pequeñas */
+@media screen and (max-width: 600px) {
   
+
+  .link-nav {
+    color: #ecf0f1; /* Blanco */
+    text-decoration: none;
+    padding: 14px 16px;
+    display: block;
+    transition: background-color 0.3s ease;
+    font-size: 10px;
   }
+
   
+}

@@ -25,7 +25,7 @@ function FwdApp({ authenticated, }) {
   const navigate = useNavigate()
 
   useEffect(() => {
-    console.log(authenticated, "estas?")
+    // console.log(authenticated, "estas?")
     if (authenticated == false) {
       navigate("/login")
     }

@@ -10,6 +10,7 @@ import NewGroup from "../Group/NewGroup";
 import NavigationBar from "../../navbar";
 import Health from "../Health/Health";
 import DisplayHealth from "../medic records/Clinical_form";
+import RecordsComponent from "../Records/Records";
 
 const PrivateText = ({ currUser, setCurrUser }) => {
     // debugger;
@@ -88,6 +89,7 @@ const PrivateText = ({ currUser, setCurrUser }) => {
                                 <Route path="/newGroup" element={<NewGroup />} />
                                 <Route path="/health" element={<Health authenticated={authenticated}/>}/>
                                 <Route path="/healthyform" element={<DisplayHealth authenticated={authenticated} currUser={currUser} />} />
+                                <Route path="/records" element={<RecordsComponent authenticated={authenticated} currUser={currUser} />} />
                             </Routes>
                         </>
                     }

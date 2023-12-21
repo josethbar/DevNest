@@ -12,9 +12,9 @@ const NavigationBar = () => {
     <Link to="/course" className='link-nav'>Course</Link>
     <Link to="/group" className='link-nav'>Groups</Link>
     <Link to="/healthyform" className='link-nav'>Health</Link>
+    <div className="logout-button">  <Logout ></Logout>  </div>
     </div>
-    {/* <div className="user-menu">log aout</div> */}
-    <Logout className="user-menu"></Logout>
+   
   </nav>
   );
 };

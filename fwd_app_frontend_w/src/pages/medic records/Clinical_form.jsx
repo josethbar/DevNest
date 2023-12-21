@@ -74,11 +74,11 @@ const DropdownComponent = ({ currUser, authenticated }) => {
 
 
     const requestData = {
-      category: selectedCategory,
-      description: description,
-      suffering: "suffering_data",
-      specifications: "specifications_data",
-      user_id: user_Id // Incluir user_id en los datos de la solicitud
+      category: selectedCategory,  
+      description: description,    
+      suffering: selectedCategory,
+      specifications: description,
+      user_id: user_Id,
     };
 
     const userId = sessionStorage.getItem("user_id");
@@ -111,7 +111,7 @@ const DropdownComponent = ({ currUser, authenticated }) => {
 
   return (
     <div>
-      {error && <p>Error: {error}</p>}
+      {error && <p>{error}</p>}
       <label htmlFor="categoryDropdown">Selecciona una categoría:</label>
       <select
         id="categoryDropdown"
