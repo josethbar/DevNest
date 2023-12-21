@@ -65,7 +65,7 @@ function FwdApp({ authenticated, }) {
 
   return (
     <div>
-    <h1>devNest</h1>
+      <h1>devNest</h1>
     </div>
   )
 }
