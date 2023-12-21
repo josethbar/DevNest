@@ -29,9 +29,9 @@ const Login = ({ setCurrUser, setShow }) => {
             })
            
             const data = await response.json()
-            console.log("estos son los datos ", data);
+            // console.log("estos son los datos ", data);
             localStorage.setItem('token', data.token);
-            console.log("hola")
+            // console.log("hola")
             if (!response.ok)
                 throw data.error
          //   localStorage.setItem("values", response.headers.values())                

@@ -39,6 +39,11 @@ Rails.application.routes.draw do
 
     resources :medical_record
 
+    resources :course_group
+    # post 'assign_group/:group_id', action: :assign_group, as: :assign_group
+
+    post 'assign_group/:group_id', action: :assign_group, as: :assign_group
   
 
+    
   end

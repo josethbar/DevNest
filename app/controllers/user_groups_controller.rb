@@ -22,19 +22,3 @@ class UserGroupsController < ApplicationController
         end
     end
 end
-
-
-# def add_user_to_group
-#     # Código para agregar un usuario a un grupo según los parámetros recibidos
-#     # Puedes acceder a los parámetros group_id y user_id con params[:group_id] y params[:user_id] respectivamente
-    
-#     # Por ejemplo:
-#     group = Group.find(params[:group_id])
-#     user = User.find(params[:user_id])
-
-#     # Agregar lógica para agregar el usuario al grupo
-#     # ...
-
-#     # Responder con un código de estado apropiado
-#     render json: { message: 'Usuario agregado al grupo' }, status: :ok
-# end

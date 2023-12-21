@@ -11,7 +11,7 @@ const User = ({ currUser, setCurrUser, authenticated }) => {
 
 
     useEffect(() => {
-        console.log(authenticated, "estas?")
+        // console.log(authenticated, "estas?")
         if (authenticated == true) {
             navigate("/home")
         }

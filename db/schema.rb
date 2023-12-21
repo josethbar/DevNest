@@ -10,12 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_12_20_163005) do
+ActiveRecord::Schema[7.0].define(version: 2023_12_21_170554) do
   create_table "communications", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "issue"
     t.string "text"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "course_groups", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "group_id"
+    t.bigint "course_id"
+    t.index ["course_id"], name: "index_course_groups_on_course_id"
+    t.index ["group_id"], name: "index_course_groups_on_group_id"
   end
 
   create_table "course_subjects", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -43,7 +52,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_20_163005) do
   end
 
   create_table "healths", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "type"
+    t.string "category"
     t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -149,6 +158,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_20_163005) do
     t.index ["user_id"], name: "index_users_roles_on_user_id"
   end
 
+  add_foreign_key "course_groups", "courses"
+  add_foreign_key "course_groups", "groups"
   add_foreign_key "course_subjects", "courses"
   add_foreign_key "course_subjects", "subjects"
   add_foreign_key "healths", "users"
