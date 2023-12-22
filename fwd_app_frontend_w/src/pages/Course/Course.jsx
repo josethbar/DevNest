@@ -173,7 +173,13 @@ function Course({ authenticated }) {
     // ======================================="acaaaaaaaaaaaaaaaa"===========================
     // const fetchGroups = async () => {
     //     try {
-    //         const response = await fetch('http://localhost:3009/group'); // Ruta para obtener los grupos, ajusta según tu backend
+    //         const token = localStorage.getItem('token');
+    //         const response = await fetch('http://localhost:3009/group',{
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //                 'Authorization': token
+    //             },
+    //         }); // Ruta para obtener los grupos, ajusta según tu backend
     //         if (!response.ok) {
     //             throw new Error('Failed to fetch groups.');
     //         }
