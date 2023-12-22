@@ -4,6 +4,9 @@ import React from 'react';
 import { getCourses } from '../../api/fwd';
 import { useEffect, useState } from 'react';
 import './FwdApp.css';
+import Logout from '../../components/User/Logout';
+// import imagen from '../../img/arrow.png'
+
 // import Logout from '../../components/User/Logout';
 
 // import { Link } from 'react-router-dom';
@@ -22,7 +25,7 @@ function FwdApp({ authenticated, }) {
   const navigate = useNavigate()
 
   useEffect(() => {
-    console.log(authenticated, "estas?")
+    // console.log(authenticated, "estas?")
     if (authenticated == false) {
       navigate("/login")
     }
@@ -60,26 +63,9 @@ function FwdApp({ authenticated, }) {
 
 
 
-
   return (
     <div>
-      <ul className='nav' >
-        <li className='buttom-nav'>
-          <a href="/home" className='link-nav'>Home 🏠</a>
-        </li>
-        <li className='buttom-nav' >
-          <a href="/course" className='link-nav'>course</a>
-        </li>
-        <li className='buttom-nav' >
-          <a href="/group" className='link-nav'>Groups</a>
-        </li>
-        <li className='buttom-nav' >
-          <a href="#" className='link-nav'>Health</a>
-        </li>
-      </ul>
-
-      
-
+      <h1>devNest</h1>
     </div>
   )
 }

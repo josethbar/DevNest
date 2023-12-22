@@ -1,0 +1,5 @@
+class RemoveUserIdFromHealthUser < ActiveRecord::Migration[7.0]
+  def change
+    remove_column :health_users, :user_id, :integer
+  end
+end

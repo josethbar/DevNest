@@ -16,7 +16,17 @@ class ApplicationController < ActionController::API
 
     protected
 
-
+    def index
+        # Verifica si el usuario tiene el rol 'admin' utilizando Rolify
+        if current_user.has_role?(:admin)
+            # El usuario tiene el rol de administrador, realiza las acciones que correspondan
+            @users = User.all
+            render json: @users
+        else    
+            # Si el usuario no tiene el rol de administrador, devuelve un error 403 (Forbidden)
+            render json: { error: 'No tienes permisos para acceder a esta ruta.' }, status: :forbidden
+        end
+    end
     
 
     def configure_permitted_parameters

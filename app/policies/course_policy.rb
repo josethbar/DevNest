@@ -59,8 +59,8 @@ class CoursePolicy
   
   def create?
     # binding.pry
-    user.admin? # Solo un admin puede crear cursos
-    # true
+    # user.admin? # Solo un admin puede crear cursos
+    true
   end
 
   def update?
@@ -69,6 +69,8 @@ class CoursePolicy
   end
 
   def destroy?
+
+    true
     # # binding.pry 
     # puts "entra en el destroy"
     # if user.present?

@@ -33,6 +33,8 @@
 # Role.create(name: 'professor', resource_type: 'professor')
 
 
-# UserGroup.create(group_id: 1, user_id: 8)
+
+
+# UserCourse.create(course_id: 24, user_id: 10)
 
 

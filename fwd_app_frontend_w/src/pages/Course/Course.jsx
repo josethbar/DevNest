@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import './Course.css';
-import { getCourses } from '../../api/fwd';
+// import { getCourses } from '../../api/fwd';
 import { useNavigate } from 'react-router-dom';
-// import defaultImage from "../..";
+import imagen from '../../img/borrar.png';
+import editar from '../../img/editar.png';
 
 function Course({ authenticated }) {
+    // URL de la API para obtener datos de los cursos
     const APi_URL = "http://localhost:3009/course";
+
+    // Variables de estado
     const [courses, setCourses] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [editCourseId, setEditCourseId] = useState(null);
@@ -14,16 +18,24 @@ function Course({ authenticated }) {
         info: '',
         description: ''
     });
+
+    const [selectedCourse, setSelectedCourse] = useState(null);
+    const [selectedGroup, setSelectedGroup] = useState(null);
+
+
+
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
+    // useEffect para verificar el estado de autenticación y redirigir si no está autenticado
     useEffect(() => {
         if (authenticated === false) {
-            console.log("estas?" , authenticated)
+            console.log("¿Estás autenticado?", authenticated)
             navigate("/course");
         }
     }, [authenticated, navigate]);
 
+    // Función para obtener datos de los cursos desde la API
     const fetchData = async () => {
         try {
             const token = localStorage.getItem("token");
@@ -34,6 +46,7 @@ function Course({ authenticated }) {
             });
             const data = await response.json();
             setCourses(data);
+            // console.log("couuuuuuuuuuuusrde", data)
             setIsLoading(false);
         } catch (error) {
             setError('Error al cargar datos.');
@@ -41,10 +54,12 @@ function Course({ authenticated }) {
         }
     };
 
+    // useEffect para obtener datos cuando el componente se monta
     useEffect(() => {
         fetchData();
     }, []);
 
+    // Función para manejar la eliminación de un curso
     const handleDeleteCourse = async (id) => {
         try {
             const token = localStorage.getItem("token");
@@ -61,6 +76,7 @@ function Course({ authenticated }) {
         }
     };
 
+    // Función para manejar la edición de un curso
     const handleEditCourse = (course) => {
         setEditCourseId(course.id);
         setFormData({
@@ -70,8 +86,10 @@ function Course({ authenticated }) {
         });
     };
 
+    // URL para editar un curso específico
     const editCourseUrl = `${APi_URL}/${editCourseId}`;
 
+    // Función para guardar las ediciones a un curso
     const handleSaveEdit = async () => {
         try {
             const token = localStorage.getItem("token");
@@ -98,6 +116,7 @@ function Course({ authenticated }) {
         }
     };
 
+    // Función para manejar cambios en los campos de entrada del formulario de edición
     const handleInputChange = (e) => {
         setFormData({
             ...formData,
@@ -105,21 +124,107 @@ function Course({ authenticated }) {
         });
     };
 
+
+
+    const handleCourseChange = (e) => {
+        setSelectedCourse(e.target.value);
+    };
+
+    const handleGroupChange = (e) => {
+        setSelectedGroup(e.target.value);
+    };
+
+
+    const assignGroupCourse = async (groupId, courseId) => {
+        try {
+            const token = localStorage.getItem('token');
+
+            const requestData = {
+                course_id: courseId,
+                group_id: groupId
+            };
+
+            const response = await fetch(`http://localhost:3009/course_group/assign_group/${selectedGroup}`,
+                {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': token
+                    },
+                    body: JSON.stringify(requestData)
+
+                })
+
+            console.log("CURSOOOOOOOOOOOOO", courseId);
+            console.log("GRUPOOOOOOOOOOOOOOOOOO", groupId);
+
+            if (response.ok) {
+                console.log("que pasoooooo")
+
+            } else {
+
+            }
+        } catch (error) {
+
+        }
+    }
+
+
+    // ======================================="acaaaaaaaaaaaaaaaa"===========================
+    // const fetchGroups = async () => {
+    //     try {
+    //         const token = localStorage.getItem('token');
+    //         const response = await fetch('http://localhost:3009/group',{
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //                 'Authorization': token
+    //             },
+    //         }); // Ruta para obtener los grupos, ajusta según tu backend
+    //         if (!response.ok) {
+    //             throw new Error('Failed to fetch groups.');
+    //         }
+    //         const data = await response.json();
+    //         selectedGroup(data);
+    //     } catch (error) {
+    //         setError('Error al obtener la lista de grupos. y tu');
+    //     }
+    // };
+
+    // useEffect(() => {
+    //     fetchGroups(); // Llama a fetchGroups al cargar el componente para obtener los grupos
+    // }, []);
+
+
+
+
+
+
+
     return (
         <div className='container-cage'>
             <div>
-            {/* <button> <a href="/home"><img src="" alt="" /></a></button>    */}
-            <h1>Courses</h1>
+                <div className='top-container'>
+                    <h1>Courses</h1>
+                    <a href="/newCourse" className="custom-btn btn-2">Nuevo</a>
+                </div>
             </div>
             {error && <p>{error}</p>}
             {isLoading ? (
-                <p>Cargando datos...</p>
+                <div id="container">
+                    <label className="loading-title">Cargando</label>
+                    <span className="loading-circle sp1">
+                        <span className="loading-circle sp2">
+                            <span className="loading-circle sp3"></span>
+                        </span>
+                    </span>
+                </div>
             ) : courses.length > 0 ? (
                 <ul className='courseBox'>
                     {courses.map((course, index) => (
                         <li key={index}>
                             {editCourseId === course.id ? (
-                                <div>
+                                // Formulario de edición para el curso seleccionado
+                                <div className='carta'>
                                     <input
                                         type="text"
                                         name="name"
@@ -138,15 +243,19 @@ function Course({ authenticated }) {
                                         value={formData.description}
                                         onChange={handleInputChange}
                                     />
-                                    <button onClick={handleSaveEdit}>Save</button>
+                                    <button onClick={handleSaveEdit}>Guardar</button>
                                 </div>
                             ) : (
-                                <div>
-                                    <h2>{course.name}</h2>
+                                // Mostrar detalles del curso
+                                <div className='carta'>
+                                    <h2 className='courseName'>{course.name}</h2>
                                     <p>{course.info}</p>
                                     <p>{course.description}</p>
-                                    <button className='editButton' onClick={() => handleEditCourse(course)}>Edit</button>
-                                    <button className='deleteButton' onClick={() => handleDeleteCourse(course.id)}>Delete</button>
+                                    <div className='buttonBox' >
+                                        {/* Botones de editar y eliminar */}
+                                        <button className='editButton' onClick={() => handleEditCourse(course)}> <img src={editar} alt="" className='coursebutton' />  </button>
+                                        <button className='deleteButton' onClick={() => handleDeleteCourse(course.id)}> <img src={imagen} alt="" className='coursebutton' /></button>
+                                    </div>
                                 </div>
                             )}
                         </li>
@@ -155,10 +264,36 @@ function Course({ authenticated }) {
             ) : (
                 <p>No se encontraron datos.</p>
             )}
-            {/* <Link to="/newCourse">New</Link> */}
-            <a href="/newCourse">new</a>
+            {/* Enlace para navegar a la página de nuevo curso */}
+
+
+            <div className='assign-group-form'>
+                <h2>Asignar Grupo a Curso</h2>
+                <label htmlFor='courses'>Seleccionar Curso:</label>
+                <select id='courses' onChange={handleCourseChange}>
+                    <option value=''>Selecciona un curso</option>
+                    {courses.map((course) => (
+                        <option key={course.id} value={course.id}>
+                            {course.name}
+                        </option>
+                    ))}
+                </select>
+                <label htmlFor='groups'>Seleccionar Grupo:</label>
+                <select id='groups' onChange={handleGroupChange}>
+                    <option value=''>Selecciona un grupo</option>
+                    {/* Aquí deberías cargar los grupos desde tu API */}
+                    {/* Ejemplo estático */}
+                    <option value='1'>Grupo 1</option>
+                    <option value='2'>Grupo 2</option>
+                    {/* Fin del ejemplo estático */}
+                </select>
+                <button onClick={assignGroupCourse}>Asignar Grupo</button>
+                {error && <p>{error}</p>}
+            </div>
+
         </div>
     )
 }
 
 export default Course;
+

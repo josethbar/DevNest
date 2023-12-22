@@ -1,6 +1,5 @@
 class GroupController < ApplicationController
         before_action :authenticate_user!, except: [:index, :show ,:create, :destroy]
-        
         before_action :set_course, only: [:show, :edit, :update, :destroy]
     
             def index
@@ -19,6 +18,7 @@ class GroupController < ApplicationController
                     render json: { error: 'Grupo no encontrado' }, status: :not_found
                 end
             end
+            
     
             def new
                 @groups = Group.new
@@ -41,6 +41,8 @@ class GroupController < ApplicationController
                 redirect_to "/"
             end
 
+
+
             def update
                 # authorize @groups
                 respond_to do |format|
@@ -60,16 +62,16 @@ class GroupController < ApplicationController
         
             #   authorize @groups # Implementa tu lógica de autorización aquí, por ejemplo, Pundit o CanCanCan
             @groups = Group.find(params[:id])
-              
-          
+
+
             #   p params[:id]
-              if @groups.destroy
+                if @groups.destroy
                 puts "Curso eliminado correctamente" 
                 render json: { message: "Curso eliminado correctamente" }, status: :ok
-              else
+                else
                 puts "Hubo un error al eliminar el curso"
                 render json: { message: 'Hubo un error al eliminar el curso' }, status: :unprocessable_entity
-              end
+                end
             end
     
     

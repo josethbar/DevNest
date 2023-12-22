@@ -6,7 +6,7 @@ export async function getCourses() {
     try {
         const requestCourses = await fetch(UrlApi_Fwd+"course");
         const CourseData = await requestCourses.json(); //convierte mi request en un objeto
-        console.log(CourseData);
+        // console.log(CourseData);
         return CourseData;
 
     } catch (error) {
