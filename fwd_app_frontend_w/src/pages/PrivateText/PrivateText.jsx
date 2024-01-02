@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Routes, Route, BrowserRouter as Router } from 'react-router-dom';
 import FwdApp from "../FwdApp/FwdApp";
 import NewCourse from "../Course/NewCourse";
@@ -11,14 +11,15 @@ import NavigationBar from "../../navbar";
 import Health from "../Health/Health";
 import DisplayHealth from "../medic records/Clinical_form";
 import RecordsComponent from "../Records/Records";
+import { AuthContext } from "./AuthContext";
 
-const PrivateText = ({ currUser, setCurrUser }) => {
+const PrivateText = () => {
     // debugger;
 
+    const { currUser, setCurrentUser, authenticated, setAuthenticated, login } = useContext(AuthContext);
 
-    // const {authState,setAuthState} = useContext(AuthContext);
     const [message, setMessage] = useState(null);
-    const [authenticated, setAuthenticated] = useState(false);
+    // const [authenticated, setAuthenticated] = useState(false)
 
     const checkTokenValidity = async () => {
         const token = localStorage.getItem('token');
@@ -36,12 +37,15 @@ const PrivateText = ({ currUser, setCurrUser }) => {
                 if (response.ok) {
                     const data = await response.json();
                     // console.log('Authenticated:', token);
-                    // console.log('Authenticated:', data);
+                    console.log('data:', data);
+                    console.log('user', User);
+                    console.log('data.user', data.user);
 
+                    login(data.user)
                     setAuthenticated(true);
                     setMessage(data.message);
-                    setCurrUser(data.user); 
-                    
+                    setCurrentUser(data.user);
+
                 } else {
                     setAuthenticated(false);
                     setMessage(null);
@@ -87,7 +91,7 @@ const PrivateText = ({ currUser, setCurrUser }) => {
                                 <Route path="/newCourse" element={<NewCourse authenticated={authenticated} />} />
                                 <Route path="/group" element={<Group currUser={currUser} authenticated={authenticated} />} />
                                 <Route path="/newGroup" element={<NewGroup />} />
-                                <Route path="/health" element={<Health authenticated={authenticated}/>}/>
+                                <Route path="/health" element={<Health authenticated={authenticated} />} />
                                 <Route path="/healthyform" element={<DisplayHealth authenticated={authenticated} currUser={currUser} />} />
                                 <Route path="/records" element={<RecordsComponent authenticated={authenticated} currUser={currUser} />} />
                             </Routes>
@@ -95,7 +99,7 @@ const PrivateText = ({ currUser, setCurrUser }) => {
                     }
                 />
 
-                <Route path="/login" element={<User currUser={currUser} setCurrUser={setCurrUser} authenticated={authenticated} />}></Route>
+                <Route path="/login" element={<User currUser={currUser} setCurrUser={setCurrentUser} authenticated={authenticated} />}></Route>
 
             </Routes>
 
