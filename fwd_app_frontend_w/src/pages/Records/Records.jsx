@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import jwtDecode from 'jwt-decode';
+// import jwtDecode from 'jwt-decode';
 import "./Records.css";
-
 
 const RecordsComponent = ({ currUser, authenticated }) => {
   const [records, setRecords] = useState([]);
@@ -13,10 +12,13 @@ const RecordsComponent = ({ currUser, authenticated }) => {
 
   useEffect(() => {
     if (!authenticated) {
-      console.log("No estás autenticado. Redirigiendo...");
+      // console.log("No estás autenticado. Redirigiendo...");
       navigate("/records");
+    } else {
+      console.log("Usuario no:", currUser);
+      console.log("que pasó", error)
     }
-  }, [authenticated, navigate]);
+  }, [authenticated, navigate, currUser]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -41,7 +43,7 @@ const RecordsComponent = ({ currUser, authenticated }) => {
       })
       .then((data) => {
         setRecords(data);
-        console.log("Datos obtenidos con éxito:", data);
+        // console.log("Datos obtenidos con éxito:", data);
         setIsLoadingRecords(false);
       })
       .catch((error) => {
@@ -51,20 +53,34 @@ const RecordsComponent = ({ currUser, authenticated }) => {
       });
   }, [authenticated]);
 
+  // Filtrar los registros según el rol del usuario
+  const filteredRecords = () => {
+    // Verificar si el usuario tiene el rol de estudiante
+    if (currUser?.roles && currUser.roles.includes('student')) {
+      const studentRecords = records.filter(records => records.user_id === currUser.id);
+      return studentRecords;
+    }
+
+    console.log("WHAT'S YOUR NAMEEE", currUser);
+    console.log("AUTENTICA?", authenticated);
+    // Si el usuario tiene el rol de profesor o administrador, mostrar todos los registros
+    return records;
+  };
+
   return (
     <div>
       {isLoadingRecords ? (
-         <div id="container">
-         <label className="loading-title">Cargando</label>
-         <span className="loading-circle sp1">
-             <span className="loading-circle sp2">
-                 <span className="loading-circle sp3"></span>
-             </span>
-         </span>
-     </div>
+        <div id="container">
+          <label className="loading-title">Cargando</label>
+          <span className="loading-circle sp1">
+            <span className="loading-circle sp2">
+              <span className="loading-circle sp3"></span>
+            </span>
+          </span>
+        </div>
       ) : (
         <ul>
-          {records.map((record) => (
+          {filteredRecords().map((record) => (
             <li key={record.id}>
               <p>Student: {record.user_id}</p>
               <p>Suffering: {record.suffering}</p>

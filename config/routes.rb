@@ -42,8 +42,9 @@ Rails.application.routes.draw do
     resources :course_group
     # post 'assign_group/:group_id', action: :assign_group, as: :assign_group
 
-    post 'assign_group/:group_id', action: :assign_group, as: :assign_group
-  
+    # post '/course/assign_group/:group_id', to: 'course_group#assign_group', as: :assign_group
+    post 'assign_group/:group_id', to: 'course_group#assign_group', as: :assign_group
 
-    
+
+
   end

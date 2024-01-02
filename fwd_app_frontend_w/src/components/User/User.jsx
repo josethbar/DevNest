@@ -12,7 +12,7 @@ const User = ({ currUser, setCurrUser, authenticated }) => {
 
     useEffect(() => {
         // console.log(authenticated, "estas?")
-        if (authenticated == true) {
+        if (authenticated === true) {
             navigate("/home")
         }
     }, [authenticated, navigate])
