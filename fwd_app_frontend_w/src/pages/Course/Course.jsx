@@ -19,17 +19,15 @@ function Course({ authenticated }) {
         description: ''
     });
 
+    const [groups, setGroups] = useState([])
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [selectedGroup, setSelectedGroup] = useState(null);
-
-
-
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
     // useEffect para verificar el estado de autenticación y redirigir si no está autenticado
     useEffect(() => {
-        if (authenticated === false) {
+        if (authenticated == false) {
             console.log("¿Estás autenticado?", authenticated)
             navigate("/course");
         }
@@ -135,65 +133,67 @@ function Course({ authenticated }) {
     };
 
 
-    const assignGroupCourse = async (groupId, courseId) => {
+
+    const assignGroupCourse = async (selectedCourse, selectedGroup) => {
         try {
+            if (!selectedCourse || !selectedGroup) {
+                setError('Por favor, selecciona un curso y un grupo.');
+                return;
+                
+            }
+    
             const token = localStorage.getItem('token');
-
             const requestData = {
-                course_id: courseId,
-                group_id: groupId
+                course_id: selectedCourse,
+                group_id: selectedGroup
             };
-
-            const response = await fetch(`http://localhost:3009/course_group/assign_group/${selectedGroup}`,
-                {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': token
-                    },
-                    body: JSON.stringify(requestData)
-
-                })
-
-            console.log("CURSOOOOOOOOOOOOO", courseId);
-            console.log("GRUPOOOOOOOOOOOOOOOOOO", groupId);
-
+    
+            const response = await fetch(`http://localhost:3009/assign_group/${selectedGroup}`, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': token
+                },
+                body: JSON.stringify(requestData)
+            });
+    
             if (response.ok) {
-                console.log("que pasoooooo")
-
+                console.log("Grupo asignado correctamente");
             } else {
-
+                setError('Error al asignar el grupo al curso.');
             }
         } catch (error) {
-
+            setError('Error al realizar la asignación.');
         }
-    }
-
+    };
+    
 
     // ======================================="acaaaaaaaaaaaaaaaa"===========================
-    // const fetchGroups = async () => {
-    //     try {
-    //         const token = localStorage.getItem('token');
-    //         const response = await fetch('http://localhost:3009/group',{
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //                 'Authorization': token
-    //             },
-    //         }); // Ruta para obtener los grupos, ajusta según tu backend
-    //         if (!response.ok) {
-    //             throw new Error('Failed to fetch groups.');
-    //         }
-    //         const data = await response.json();
-    //         selectedGroup(data);
-    //     } catch (error) {
-    //         setError('Error al obtener la lista de grupos. y tu');
-    //     }
-    // };
+    const fetchGroups = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch(`http://localhost:3009/group`, {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': token
+                },
+            })
 
-    // useEffect(() => {
-    //     fetchGroups(); // Llama a fetchGroups al cargar el componente para obtener los grupos
-    // }, []);
+            if (!response.ok) {
+                throw new Error('Failed to fetch groups.');
+            }
 
+            const data = await response.json();
+            setGroups(data); // Almacena los grupos en el estado 'groups'
+        } catch (error) {
+            setError('Error fetching groups.aquí');
+        }
+    };
+
+    useEffect(() => {
+        fetchGroups();
+    }, []);
 
 
 
@@ -278,16 +278,20 @@ function Course({ authenticated }) {
                         </option>
                     ))}
                 </select>
+                <label htmlFor='groups'>Seleccionar Curso:</label>
                 <label htmlFor='groups'>Seleccionar Grupo:</label>
                 <select id='groups' onChange={handleGroupChange}>
                     <option value=''>Selecciona un grupo</option>
-                    {/* Aquí deberías cargar los grupos desde tu API */}
-                    {/* Ejemplo estático */}
-                    <option value='1'>Grupo 1</option>
-                    <option value='2'>Grupo 2</option>
-                    {/* Fin del ejemplo estático */}
+                    {groups.map((group) => (
+                        <option key={group.id} value={group.id}>
+                            {group.name}
+                        </option>
+                    ))}
                 </select>
-                <button onClick={assignGroupCourse}>Asignar Grupo</button>
+
+                {/* <button onClick={assignGroupCourse}>Asignar Grupo</button>   */}
+                <button onClick={() => assignGroupCourse(selectedCourse, selectedGroup)}>Asignar Grupo BIG</button>
+
                 {error && <p>{error}</p>}
             </div>
 
