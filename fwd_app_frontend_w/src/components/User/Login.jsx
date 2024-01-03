@@ -6,7 +6,7 @@ import { AuthContext } from "../../pages/PrivateText/AuthContext";
 
 const Login = ({ setShow }) => {
     // debugger;
-    const {login, currentUser} = useContext(AuthContext);
+    const {login} = useContext(AuthContext);
     const formRef = useRef()
     const navigate = useNavigate()
     // const token = response.headers.get("Authorization");
@@ -28,13 +28,16 @@ const Login = ({ setShow }) => {
             const data = await response.json()
             // console.log("estos son los datos ", data);
             localStorage.setItem('token', data.token);
+            console.log("LOOOOOOGJN",  data);
+            console.log("---------------SGUNDA", data.token)
             // console.log("hola")
             if (!response.ok)
                 throw data.error
          //   localStorage.setItem("values", response.headers.values())                
             localStorage.setItem("token", response.headers.get("Authorization"))
-            login(data.user)
-            // currentUser(data)
+            localStorage.setItem('token', data.token);
+            login(data)
+            // console.log("en el login", data);
             
             // console.log("llamado 1")
             navigate("/home")

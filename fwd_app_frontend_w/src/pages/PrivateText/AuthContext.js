@@ -1,11 +1,13 @@
 // AuthContext.js
 import React, { createContext, useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
+// import jwtDecode from 'jwt-decode';
+
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [authenticated, setAuthenticated] = useState(false);
-    const [currentUser, setCurrentUser] = useState(null);
+    const [currentUser, setCurrentUser] = useState({});
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -15,11 +17,13 @@ export const AuthProvider = ({ children }) => {
 
                 // Aquí puedes extraer datos específicos del token decodificado
                 const userData = {
-                    id: decodedToken.userId,
-                    name: decodedToken.name,
+                    id: decodedToken.user_id,
+                    name: decodedToken.first_name,
                     email: decodedToken.email,
                     // ... otros datos del usuario si están presentes en el token
                 };
+
+                // console.log("email" , userData);
 
                 // Utiliza el método login del AuthProvider para establecer el estado del usuario
                 login(userData);
@@ -32,10 +36,13 @@ export const AuthProvider = ({ children }) => {
 
 
 
+
+
     const login = (userData) => {
     // Lógica de autenticación, obtención de datos del usuario, etc.
     // Una vez que se autentica el usuario, actualiza el estado
     setCurrentUser(userData);
+    // console.log('setcuurser', setCurrentUser);
     setAuthenticated(true);
     };
 

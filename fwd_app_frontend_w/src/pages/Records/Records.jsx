@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "./Records.css";
 import { AuthContext } from '../PrivateText/AuthContext';
 
-const RecordsComponent = () => {
+const RecordsComponent = ({ currUser }) => {
   const [records, setRecords] = useState([]);
   const [isLoadingRecords, setIsLoadingRecords] = useState(true);
   const [error, setError] = useState([]);
@@ -13,18 +13,23 @@ const RecordsComponent = () => {
   const navigate = useNavigate();
   useEffect(() => {
     const checkAuthentication = () => {
-        if (!authenticated) {
-            navigate('/records');
-        }
+      if (!authenticated) {
+        navigate('/records');
+      }
     };
 
     checkAuthentication();
-}, [authenticated, navigate]);
+  }, [authenticated, navigate]);
 
+  // Verifica si el usuario está autenticado y si currentUser está disponible
+  const user = authenticated ? (currUser || currentUser) : null;
+
+  // Asegúrate de que los datos del usuario estén disponibles antes de intentar acceder a sus propiedades
+  const name = user ? user.first_name : 'Unknown';
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-
+    console.log('este es el token',token)
     if (!token) {
       setError("Token de autenticación no encontrado");
       return;
@@ -55,6 +60,31 @@ const RecordsComponent = () => {
       });
   }, [authenticated]);
 
+
+
+  
+
+  useEffect(() => {
+    // Aquí puedes acceder a currentUser para obtener sus detalles
+    if (currentUser) {
+    const { user_id, first_name, email } = currentUser;
+    // Realiza acciones con los datos del usuario (id, name, email)
+    console.log("User ID:", user_id);
+    console.log("User Name:", first_name);
+    console.log("User Email:", email);
+    
+    // También puedes verificar su rol y realizar acciones específicas
+    if (currentUser.roles && currentUser.roles.includes('student')) {
+        // Si el usuario es estudiante, realiza ciertas acciones
+        console.log("User is a student");
+    }else{
+      console.log("ALGO NO ESTA PASANDO");
+    }
+    }
+}, [currentUser]);
+
+
+
   // Filtrar los registros según el rol del usuario
   const filteredRecords = () => {
     // Verificar si el usuario tiene el rol de estudiante
@@ -63,14 +93,21 @@ const RecordsComponent = () => {
       return studentRecords;
     }
 
+
+    console.log("records", records);
+    // console.log("role", currentUser.roles);
     console.log("WHAT'S YOUR NAMEEE", currentUser);
     console.log("AUTENTICA?", authenticated);
+  console.log('currentUser:', currentUser);
     // Si el usuario tiene el rol de profesor o administrador, mostrar todos los registros
     return records;
   };
 
   return (
     <div>
+      <p>User is authenticated: {authenticated ? 'Yes' : 'No'}</p>
+      <p>User Name: {name ? name : 'Unknown'}</p>
+
       {isLoadingRecords ? (
         <div id="container">
           <label className="loading-title">Cargando</label>

@@ -2,8 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './navbar.css';
 import Logout from './components/User/Logout';
+import { useState } from 'react';
 
 const NavigationBar = () => {
+  const [currentUser, setCurrentUser] = useState(null)
   return (
 
     <nav className="navbar">
@@ -12,9 +14,8 @@ const NavigationBar = () => {
     <Link to="/course" className='link-nav'>Course</Link>
     <Link to="/group" className='link-nav'>Groups</Link>
     <Link to="/healthyform" className='link-nav'>Health</Link>
-    <div className="logout-button">  <Logout ></Logout>  </div>
+    <div className="logout-button">  <Logout setCurrUser={setCurrentUser} ></Logout>  </div>
     </div>
-   
   </nav>
   );
 };
