@@ -16,12 +16,14 @@ const PrivateText = ({ currUser, setCurrUser }) => {
     // debugger;
 
 
-    // const {authState,setAuthState} = useContext(AuthContext);
+
     const [message, setMessage] = useState(null);
     const [authenticated, setAuthenticated] = useState(false);
 
     const checkTokenValidity = async () => {
         const token = localStorage.getItem('token');
+
+        console.log("EL TOKEN QUE QUIERO", token);
 
         if (token) {
             try {
@@ -29,7 +31,7 @@ const PrivateText = ({ currUser, setCurrUser }) => {
                     method: "GET",
                     headers: {
                         "content-type": "application/json",
-                        "authorization": token
+                        'Authorization': `Bearer ${token}`
                     }
                 });
 
@@ -41,6 +43,7 @@ const PrivateText = ({ currUser, setCurrUser }) => {
                     setAuthenticated(true);
                     setMessage(data.message);
                     setCurrUser(data.user); 
+                    console.log("Data=" ,data);
                     
                 } else {
                     setAuthenticated(false);

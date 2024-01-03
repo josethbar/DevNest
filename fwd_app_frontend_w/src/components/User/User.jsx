@@ -1,8 +1,8 @@
 import Signup from "./Signup";
 import Login from './Login'
 import Logout from './Logout'
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
+
 // import PrivateText from "../../pages/PrivateText/PrivateText";
 import { useNavigate } from "react-router-dom";
 const User = ({ currUser, setCurrUser, authenticated }) => {

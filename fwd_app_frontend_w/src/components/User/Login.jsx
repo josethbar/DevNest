@@ -6,8 +6,6 @@ import { useNavigate } from "react-router-dom";
 // import { AuthContext } from "../../pages/Course/GlobalStates";
 // import jwtDecode from 'jwt-decode';
 
-
-
 const Login = ({ setCurrUser, setShow }) => {
     // debugger;
     const formRef = useRef()
@@ -15,37 +13,35 @@ const Login = ({ setCurrUser, setShow }) => {
     // const token = response.headers.get("Authorization");
 
     const handleLogin = async (credentials) => {
-        // const [loggedIn, setLoggedIn] = useState(false);
-
-        const url = "http://localhost:3009/login"
+        const url = "http://localhost:3009/login";
         try {
             const response = await fetch(url, {
                 method: "post",
                 headers: {
-                    'content-type': 'application/json',
-                    'accept': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
                 },
                 body: JSON.stringify(credentials)
-            })
-           
+            });
+            console.log("Response from server:", response)
+    
             const data = await response.json()
-            // console.log("estos son los datos ", data);
+
             localStorage.setItem('token', data.token);
-            // console.log("hola")
+
             if (!response.ok)
                 throw data.error
-         //   localStorage.setItem("values", response.headers.values())                
+            
             localStorage.setItem("token", response.headers.get("Authorization"))
             setCurrUser(data)
             
-            // console.log("llamado 1")
             navigate("/home")
-            // console.log("llamado 2")
 
         } catch (error) {
             console.log("error", error)
         }
     }
+    
     const handleSubmit = e => {
         e.preventDefault()
         const formData = new FormData(formRef.current)
@@ -59,7 +55,7 @@ const Login = ({ setCurrUser, setShow }) => {
     const handleClick = e => {
         e.preventDefault()
         setShow(false)
-        
+
     }
 
 
