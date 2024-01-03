@@ -1,28 +1,23 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Group.css';
-import { AuthContext } from '../PrivateText/AuthContext';
 
 // import jwtDecode from 'jwt-decode';
 
-function Group() {
+function Group({ authenticated }) {
     // Definición de las URLs de la API
     const GROUPS_API_URL = "http://localhost:3009/group";
     const USERS_API_URL = "http://localhost:3009/api/v1/users";
 
-    // Hook de pero de React Router
+    // Hook de navegación de React Router
     const navigate = useNavigate();
 
     // Efecto para redirigir si el usuario no está autenticado
-    const { authenticated } = useContext(AuthContext);
     useEffect(() => {
-        const checkAuthentication = () => {
-            if (!authenticated) {
-                navigate('/group');
-            }
-        };
-
-        checkAuthentication();
+        if (!authenticated) {
+            console.log("Estás autenticado. Redirigiendo...");
+            navigate("/group");
+        }
     }, [authenticated, navigate]);
 
     // Estados para almacenar grupos y usuarios, y gestionar la carga
@@ -70,13 +65,13 @@ function Group() {
         }
     };
 
-
+    
     // Efecto para cargar datos al montar el componente
     useEffect(() => {
         fetchData();
     }, []);
 
-
+    
 
 
 
@@ -204,7 +199,7 @@ function Group() {
                                             id={`userDropdown_${group.id}`}
                                             value={group.selectedUserIds || ""}
                                             // onChange={(e) => handleUserSelect(group.id, e.target.value)} origin
-                                            onChange={(e) => handleUserSelect(group.id, Array.from(e.target.selectedOptions, option => option.value))}
+                                            onChange={(e) =>handleUserSelect(group.id, Array.from(e.target.selectedOptions, option => option.value))}
                                         >
                                             <option value="">Selecciona Usuario</option>
                                             {users.map((user) => (

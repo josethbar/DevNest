@@ -1,26 +1,24 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 // import jwtDecode from 'jwt-decode';
 import "./Records.css";
-import { AuthContext } from '../PrivateText/AuthContext';
 
-const RecordsComponent = () => {
+const RecordsComponent = ({ currUser, authenticated }) => {
   const [records, setRecords] = useState([]);
   const [isLoadingRecords, setIsLoadingRecords] = useState(true);
   const [error, setError] = useState([]);
-  const { authenticated, currentUser } = useContext(AuthContext);
 
   const navigate = useNavigate();
+
   useEffect(() => {
-    const checkAuthentication = () => {
-        if (!authenticated) {
-            navigate('/records');
-        }
-    };
-
-    checkAuthentication();
-}, [authenticated, navigate]);
-
+    if (!authenticated) {
+      // console.log("No estás autenticado. Redirigiendo...");
+      navigate("/records");
+    } else {
+      console.log("Usuario no:", currUser);
+      console.log("que pasó", error)
+    }
+  }, [authenticated, navigate, currUser]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -58,12 +56,12 @@ const RecordsComponent = () => {
   // Filtrar los registros según el rol del usuario
   const filteredRecords = () => {
     // Verificar si el usuario tiene el rol de estudiante
-    if (currentUser?.roles && currentUser.roles.includes('student')) {
-      const studentRecords = records.filter(records => records.user_id === currentUser.id);
+    if (currUser?.roles && currUser.roles.includes('student')) {
+      const studentRecords = records.filter(records => records.user_id === currUser.id);
       return studentRecords;
     }
 
-    console.log("WHAT'S YOUR NAMEEE", currentUser);
+    console.log("WHAT'S YOUR NAMEEE", currUser);
     console.log("AUTENTICA?", authenticated);
     // Si el usuario tiene el rol de profesor o administrador, mostrar todos los registros
     return records;

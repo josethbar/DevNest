@@ -1,12 +1,15 @@
-import { useContext, useRef } from "react"
+import { useRef } from "react"
 import './login.css';
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../pages/PrivateText/AuthContext";
+// import { useContext } from "react";
+// import {useHistory} from "react-router-dom"
+// import { AuthContext } from "../../pages/Course/GlobalStates";
+// import jwtDecode from 'jwt-decode';
 
 
-const Login = ({ setShow }) => {
+
+const Login = ({ setCurrUser, setShow }) => {
     // debugger;
-    const {login, currentUser} = useContext(AuthContext);
     const formRef = useRef()
     const navigate = useNavigate()
     // const token = response.headers.get("Authorization");
@@ -24,7 +27,7 @@ const Login = ({ setShow }) => {
                 },
                 body: JSON.stringify(credentials)
             })
-
+           
             const data = await response.json()
             // console.log("estos son los datos ", data);
             localStorage.setItem('token', data.token);
@@ -33,8 +36,7 @@ const Login = ({ setShow }) => {
                 throw data.error
          //   localStorage.setItem("values", response.headers.values())                
             localStorage.setItem("token", response.headers.get("Authorization"))
-            login(data.user)
-            // currentUser(data)
+            setCurrUser(data)
             
             // console.log("llamado 1")
             navigate("/home")
@@ -51,7 +53,7 @@ const Login = ({ setShow }) => {
         const userInfo = {
             "user": { email: data.email, password: data.password }
         }
-        handleLogin(userInfo, data)
+        handleLogin(userInfo, setCurrUser)
         e.target.reset()
     }
     const handleClick = e => {
