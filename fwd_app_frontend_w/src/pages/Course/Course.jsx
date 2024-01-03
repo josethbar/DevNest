@@ -1,12 +1,11 @@
+import React, { useState, useEffect } from 'react';
 import './Course.css';
 // import { getCourses } from '../../api/fwd';
 import { useNavigate } from 'react-router-dom';
 import imagen from '../../img/borrar.png';
 import editar from '../../img/editar.png';
-import React, { useState, useEffect, useContext } from 'react';
-import { AuthContext } from '../PrivateText/AuthContext';
 
-function Course() {
+function Course({ authenticated }) {
     // URL de la API para obtener datos de los cursos
     const APi_URL = "http://localhost:3009/course";
 
@@ -21,21 +20,18 @@ function Course() {
     });
 
     const [groups, setGroups] = useState([])
-    const { authenticated } = useContext(AuthContext);
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [selectedGroup, setSelectedGroup] = useState(null);
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
     // useEffect para verificar el estado de autenticación y redirigir si no está autenticado
-    const checkAuthentication = () => {
-        if (!authenticated) {
-            navigate('/login');
+    useEffect(() => {
+        if (authenticated == false) {
+            console.log("¿Estás autenticado?", authenticated)
+            navigate("/course");
         }
-    };
-
-    // Llamar a la función para verificar la autenticación al renderizar el componente
-    checkAuthentication();
+    }, [authenticated, navigate]);
 
     // Función para obtener datos de los cursos desde la API
     const fetchData = async () => {
@@ -143,15 +139,15 @@ function Course() {
             if (!selectedCourse || !selectedGroup) {
                 setError('Por favor, selecciona un curso y un grupo.');
                 return;
-
+                
             }
-
+    
             const token = localStorage.getItem('token');
             const requestData = {
                 course_id: selectedCourse,
                 group_id: selectedGroup
             };
-
+    
             const response = await fetch(`http://localhost:3009/assign_group/${selectedGroup}`, {
                 method: "POST",
                 headers: {
@@ -160,7 +156,7 @@ function Course() {
                 },
                 body: JSON.stringify(requestData)
             });
-
+    
             if (response.ok) {
                 console.log("Grupo asignado correctamente");
             } else {
@@ -170,7 +166,7 @@ function Course() {
             setError('Error al realizar la asignación.');
         }
     };
-
+    
 
     // ======================================="acaaaaaaaaaaaaaaaa"===========================
     const fetchGroups = async () => {
