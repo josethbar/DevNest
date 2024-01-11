@@ -1,51 +1,54 @@
-import { useRef } from "react"
+import { useRef, useContext } from "react"
 import './login.css';
 import { useNavigate } from "react-router-dom";
-// import { useContext } from "react";
-// import {useHistory} from "react-router-dom"
-// import { AuthContext } from "../../pages/Course/GlobalStates";
-// import jwtDecode from 'jwt-decode';
+import { AuthContext } from "../../pages/PrivateText/AuthContext";
 
 
-
-const Login = ({ setCurrUser, setShow }) => {
-    // debugger;
+const Login = ({ setShow }) => {
     const formRef = useRef()
+    const { setCurrentUser, setAuthenticated } = useContext(AuthContext);
     const navigate = useNavigate()
     // const token = response.headers.get("Authorization");
 
     const handleLogin = async (credentials) => {
-        // const [loggedIn, setLoggedIn] = useState(false);
-
-        const url = "http://localhost:3009/login"
+        const url = "http://localhost:3009/login";
         try {
             const response = await fetch(url, {
                 method: "post",
                 headers: {
-                    'content-type': 'application/json',
-                    'accept': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
                 },
                 body: JSON.stringify(credentials)
-            })
-           
+            });
+            console.log("Response from server:", response)
+
             const data = await response.json()
-            // console.log("estos son los datos ", data);
-            localStorage.setItem('token', data.token);
-            // console.log("hola")
+
+            // login(data);
+            // console.log("data del usuario",  data);
+
+            // localStorage.setItem('token', data.token);
+
             if (!response.ok)
                 throw data.error
-         //   localStorage.setItem("values", response.headers.values())                
-            localStorage.setItem("token", response.headers.get("Authorization"))
-            setCurrUser(data)
+
+            // localStorage.setItem("token", response.headers.get("Authorization"))
+            setCurrentUser(data)
+            setAuthenticated(true)
+            localStorage.setItem("token", response.headers.get("Authorization"));
+            localStorage.setItem("userData", JSON.stringify(data)); // Guardar información del usuario
             
-            // console.log("llamado 1")
+
+            // console.log("usuario en el login", setCurrentUser);
+
             navigate("/home")
-            // console.log("llamado 2")
 
         } catch (error) {
             console.log("error", error)
         }
     }
+
     const handleSubmit = e => {
         e.preventDefault()
         const formData = new FormData(formRef.current)
@@ -53,13 +56,13 @@ const Login = ({ setCurrUser, setShow }) => {
         const userInfo = {
             "user": { email: data.email, password: data.password }
         }
-        handleLogin(userInfo, setCurrUser)
+        handleLogin(userInfo, setCurrentUser)
         e.target.reset()
     }
     const handleClick = e => {
         e.preventDefault()
         setShow(false)
-        
+
     }
 
 

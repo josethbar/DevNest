@@ -29,13 +29,17 @@ Rails.application.routes.draw do
     resources :course, only: [:index, :create, :show, :update, :destroy]
     post '/course/:course_id/add_user/:user_id', to: 'user_course#create'
   
-    resources :group, only: [:index, :create, :show, :update, :destroy]
+    resources :group, only: [:index, :create, :show, :update, :destroy] do
+      get 'show_users', on: :member
+    end
     # post '/group/:group_id/add_user/:user_id', to: 'user_groups#create'  //origin
     post '/group/:groupId/add_user', to: 'user_groups#create'
-  
-    resources :user_groups, only: [:create, :destroy] # Podrías limitar solo a la acción create si es lo único que necesitas
+    get '/user_groups', to: 'user_groups#index'
+
+    resources :user_groups, only: [:index, :create, :destroy] 
     
     resources :health
+    resources :health_controllers
 
     resources :medical_record
 
@@ -45,6 +49,10 @@ Rails.application.routes.draw do
     # post '/course/assign_group/:group_id', to: 'course_group#assign_group', as: :assign_group
     post 'assign_group/:group_id', to: 'course_group#assign_group', as: :assign_group
 
+
+    get '/user_role', to: 'user_roles#show'
+
+    # post '/refresh-token', to: 'auth#refresh_token'
 
 
   end

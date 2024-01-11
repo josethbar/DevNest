@@ -1,10 +1,13 @@
 require 'spec_helper'
-
+require 'rails_helper'
 RSpec.describe Course, type: :model do
-  it "is valid with valid atributtes" do 
+  let(:course) { Group.create(name: 'Math Group') }
+
+  it "is valid with valid attributes" do 
     course = Course.new(name: "mate", description: "2dias", info: "aprenderemos calculo integral")
-expect(course).to be_valid
-    end
+    expect(course).to be_valid
+  end
+  
 
 
     context 'validations' do

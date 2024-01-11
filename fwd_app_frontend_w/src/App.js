@@ -1,32 +1,27 @@
-import { useState } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import './App.css';
 import PrivateText from './pages/PrivateText/PrivateText';
+import { AuthProvider } from './pages/PrivateText/AuthContext';
+import { AuthContext } from './pages/PrivateText/AuthContext';
 
 const App = () => {
-  const [currUser, setCurrUser] = useState(null);
-
-  
-  // if (currUser !== null) {
-  //   return (
-  //     <div>
-  //       <ul className='nav'>
-  //         <li className='buttom-nav'>
-  //           <a href="/home" className='link-nav'>Home 🏠</a>
-  //         </li>
-  //         <li className='buttom-nav'>
-  //           <a href="/course" className='link-nav'>Course</a>
-  //         </li>
-  //         <li className='buttom-nav'>
-  //           <a href="/group" className='link-nav'>Groups</a>
-  //         </li>
-  //       </ul>
-  //     </div>
-  //   );
-  // }
+  const token = localStorage.getItem('token');
+  useEffect(() => {
+    if (token) {
+      console.log("SI HAY",  token);
+        // Establecer sesión de usuario o redirigir a la página de inicio de sesión
+        // dependiendo de la presencia del token
+    } else {
+      console.log("NO ESTA ");
+        // Redirigir a la página de inicio de sesión si no hay token almacenado
+    }
+}, []);
 
   return (
     <div className="App">
-      <PrivateText currUser={currUser} setCurrUser={setCurrUser} />
+      <AuthProvider>
+        <PrivateText/>
+      </AuthProvider>
     </div>
   );
 };
