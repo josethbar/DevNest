@@ -7,12 +7,15 @@
 require 'spec_helper'
 require File.expand_path('../config/environment', __dir__)
 require 'rspec/rails'
+require 'rspec/rails'
+require 'factory_bot_rails'
 
 # ... Otras configuraciones de RSpec ...
 
 RSpec.configure do |config|
   # ... Otras configuraciones ...
   config.infer_spec_type_from_file_location!
+  config.include FactoryBot::Syntax::Methods
 end
 
 #

@@ -4,6 +4,8 @@ class User < ApplicationRecord
 
   has_many :user_groups
   has_many :groups, through: :user_groups
+  belongs_to :group, optional: true
+  
     # rolify :before_add => :before_add_method
     after_create :assign_default_role
 

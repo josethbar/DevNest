@@ -1,13 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 import './Course.css';
 // import { getCourses } from '../../api/fwd';
 import { useNavigate } from 'react-router-dom';
 import imagen from '../../img/borrar.png';
 import editar from '../../img/editar.png';
+import { AuthContext } from '../PrivateText/AuthContext';
 
-function Course({ authenticated }) {
+function Course() {
     // URL de la API para obtener datos de los cursos
     const APi_URL = "http://localhost:3009/course";
+
+    //contexto 
+    const { authenticated } = useContext(AuthContext);
 
     // Variables de estado
     const [courses, setCourses] = useState([]);

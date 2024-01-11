@@ -10,8 +10,7 @@ const RecordsComponent = () => {
   // Estados locales para manejar registros, carga, errores, registros filtrados y datos de usuario
   const [records, setRecords] = useState([]);
   const [isLoadingRecords, setIsLoadingRecords] = useState(true);
-  const [error, setError] = useState(null);
-  const [filteredRecords, setFilteredRecords] = useState([]);
+  const [userRole, setUserRole] = useState('');
   const [userDataFromLocalStorage, setUserDataFromLocalStorage] = useState({});
 
   // Función de navegación proporcionada por react-router-dom
@@ -23,7 +22,6 @@ const RecordsComponent = () => {
   useEffect(() => {
     const storedUserData = JSON.parse(localStorage.getItem("userData")) || {};
     setUserDataFromLocalStorage(storedUserData);
-    console.log("Registros ACTUALES:", storedUserData);
   }, []);
   // Efecto para redirigir a la página de registros si no está autenticado
 
@@ -40,8 +38,6 @@ const RecordsComponent = () => {
     const token = localStorage.getItem("token");
 
     if (!token) {
-      setError("Token de autenticación no encontrado");
-      setIsLoadingRecords(false);
       return;
     }
 
@@ -63,76 +59,58 @@ const RecordsComponent = () => {
         setIsLoadingRecords(false);
       })
       .catch((error) => {
-        console.error("Error al obtener registros:", error);
-        setError(`Error al obtener registros desde la API: ${error.message}`);
-        setIsLoadingRecords(false);
+        // setError('THis fialed...')
       });
   }, [authenticated]);
 
   // Efecto para obtener el rol del usuario desde la API y filtrar registros en consecuencia
-  useEffect(() => {
-    const fetchData = async () => {
-      const token = localStorage.getItem("token");
+  useEffect(async () => {
+    const token = localStorage.getItem("token");
   
-      if (!token) {
-        setError("Token de autenticación no encontrado");
-        setIsLoadingRecords(false);
-        return;
-      }
-  
-      try {
-        const response = await fetch("http://localhost:3009/user_role", {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
-  
-        if (!response.ok) {
-          throw new Error(`Error ${response.status}: ${response.statusText}`);
-        }
-  
-        const userDataRole = await response.json();
-        const userRole = userDataRole.role;
-  
-        console.log("Datos del rol del usuario", userDataRole);
-        console.log("Rol del usuario", userRole);
-  
-        // return userRole;
-      } catch (error) {
-        console.error("Error al obtener el rol del usuario:", error);
-        setError(`Error al obtener el rol del usuario: ${error.message}`);
-        setIsLoadingRecords(false);
-      }
-    };
-  
-    fetchData().then((userRole) => {
-      if (userRole) {
-        filterRecords(userRole);
-      }
-    });
-  }, [userDataFromLocalStorage.id]);
-  
-  useEffect(() => {
-    if (records.length > 0 && userDataFromLocalStorage.id) {
-      filterRecords();
-    }
-  }, [records, userDataFromLocalStorage.id]);
-  
-  const filterRecords = (userRole) => {
-    if (!userRole && !userDataFromLocalStorage.id) {
+    if (!token) {
+      setIsLoadingRecords(false);
       return;
     }
+
+    try {
+      const response = await fetch("http://localhost:3009/user_role", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error ${response.status}: ${response.statusText}`);
+      }
+
+      const userDataRole = await response.json();
+      const userRole = userDataRole.role;
+
+      console.log("Datos del rol del usuario", userDataRole);
+      console.log("Rol del usuario", userRole);
+
+      setUserRole(userRole)
+    } catch (error) {
+      setUserRole('error')
+    }
+  }, []);
   
+  
+  const filterRecords = () => {
+    if (!records && userRole === '')
+      return 
+
+    let userRecords = [];
     if (userRole === 'student') {
       // Filtrar registros para estudiantes
-      const userRecords = records.filter((record) => record.user_id === userDataFromLocalStorage.id);
-      setFilteredRecords(userRecords);
+      userRecords = records.filter((record) => record.user_id === userDataFromLocalStorage.id);
     } else {
-      // Mostrar todos los registros para otros roles
-      setFilteredRecords(records);
+      userRecords = records;
     }
+
+    return userRole === 'error' ? [] : userRecords;
   };
   
 
@@ -152,7 +130,7 @@ const RecordsComponent = () => {
         ) : (
           // Muestra la lista de registros filtrados
           <ul>
-            {filteredRecords.map((record) => (
+            {filterRecords().map((record) => (
               <li key={record.id}>
                 <p>Estudiante: {record.user_id}</p>
                 <p>Padecimiento: {record.suffering}</p>

@@ -1,13 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import './App.css';
 import PrivateText from './pages/PrivateText/PrivateText';
+import { AuthProvider } from './pages/PrivateText/AuthContext';
+import { AuthContext } from './pages/PrivateText/AuthContext';
 
 const App = () => {
-  // const navigate = useNavigate();
-  const [currUser, setCurrUser] = useState(null);
-  
+  const token = localStorage.getItem('token');
   useEffect(() => {
-    const token = localStorage.getItem('token');
     if (token) {
       console.log("SI HAY",  token);
         // Establecer sesión de usuario o redirigir a la página de inicio de sesión
@@ -20,7 +19,9 @@ const App = () => {
 
   return (
     <div className="App">
-      <PrivateText currUser={currUser} setCurrUser={setCurrUser} />
+      <AuthProvider>
+        <PrivateText/>
+      </AuthProvider>
     </div>
   );
 };

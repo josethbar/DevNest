@@ -1,10 +1,6 @@
 
 class UserGroupsController < ApplicationController
     def create
-        # binding.pry
-        # user = User.find_by(id: params[:user_id])
-        # group = Group.find_by(id: params[:group_id])
-        # user.presence
         group = Group.find_by(id: params[:group_id])
         user = User.find_by(id: params[:user_id])
 

@@ -15,6 +15,7 @@ class ApplicationController < ActionController::API
     before_action :configure_permitted_parameters, if: :devise_controller?
 
     protected
+    
 
     def index
         # Verifica si el usuario tiene el rol 'admin' utilizando Rolify

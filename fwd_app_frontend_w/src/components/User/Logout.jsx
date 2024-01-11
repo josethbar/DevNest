@@ -1,7 +1,12 @@
-import React from 'react';
+import { React, useContext } from 'react';
 import './logout.css';
-const Logout = ({ setCurrUser }) => {
-  const logout = async (setCurrUser) => {
+import { AuthContext } from '../../pages/PrivateText/AuthContext';
+
+
+const Logout = () => {
+  const { setCurrentUser } = useContext(AuthContext);
+  
+  const logout = async () => {
     try {
       const response = await fetch("http://localhost:3009/logout", {
         method: "DELETE",
@@ -13,7 +18,8 @@ const Logout = ({ setCurrUser }) => {
       const data = await response.json();
       if (!response.ok) throw data.error;
       localStorage.removeItem('token');
-      setCurrUser(null);
+      localStorage.removeItem("userData");
+      setCurrentUser(null);
     } catch (error) {
       console.log("error", error);
     }
@@ -21,7 +27,7 @@ const Logout = ({ setCurrUser }) => {
 
   const handleClick = async (e) => {
     e.preventDefault();
-    await logout(setCurrUser);
+    await logout(setCurrentUser);
     // Redirige a la página de inicio de sesión o a la ubicación deseada
     // en lugar de recargar la página completa
     // window.location.reload();

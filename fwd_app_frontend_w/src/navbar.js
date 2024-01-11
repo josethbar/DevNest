@@ -10,10 +10,10 @@ const NavigationBar = () => {
 
     <nav className="navbar">
     <div className="nav-links">
-    <Link to="/home" className='link-nav'>Home</Link>
-    <Link to="/course" className='link-nav'>Course</Link>
-    <Link to="/group" className='link-nav'>Groups</Link>
-    <Link to="/healthyform" className='link-nav'>Health</Link>
+    <Link to="/home" className='link-nav'>Inicio</Link>
+    {/* <Link to="/course" className='link-nav'>Course</Link> */}
+    {/* <Link to="/group" className='link-nav'>Groups</Link> */}
+    <Link to="/healthyform" className='link-nav'>Expediente medico</Link>
     <div className="logout-button">  <Logout setCurrUser={setCurrentUser} ></Logout>  </div>
     </div>
   </nav>

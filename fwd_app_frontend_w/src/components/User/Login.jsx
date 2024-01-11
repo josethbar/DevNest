@@ -1,14 +1,12 @@
-import { useRef } from "react"
+import { useRef, useContext } from "react"
 import './login.css';
 import { useNavigate } from "react-router-dom";
-// import { useContext } from "react";
-// import {useHistory} from "react-router-dom"
-// import { AuthContext } from "../../pages/Course/GlobalStates";
-// import jwtDecode from 'jwt-decode';
+import { AuthContext } from "../../pages/PrivateText/AuthContext";
 
-const Login = ({ setCurrUser, setShow }) => {
-    // debugger;
+
+const Login = ({ setShow }) => {
     const formRef = useRef()
+    const { setCurrentUser, setAuthenticated } = useContext(AuthContext);
     const navigate = useNavigate()
     // const token = response.headers.get("Authorization");
 
@@ -24,24 +22,33 @@ const Login = ({ setCurrUser, setShow }) => {
                 body: JSON.stringify(credentials)
             });
             console.log("Response from server:", response)
-    
+
             const data = await response.json()
 
-            localStorage.setItem('token', data.token);
+            // login(data);
+            // console.log("data del usuario",  data);
+
+            // localStorage.setItem('token', data.token);
 
             if (!response.ok)
                 throw data.error
+
+            // localStorage.setItem("token", response.headers.get("Authorization"))
+            setCurrentUser(data)
+            setAuthenticated(true)
+            localStorage.setItem("token", response.headers.get("Authorization"));
+            localStorage.setItem("userData", JSON.stringify(data)); // Guardar información del usuario
             
-            localStorage.setItem("token", response.headers.get("Authorization"))
-            setCurrUser(data)
-            
+
+            // console.log("usuario en el login", setCurrentUser);
+
             navigate("/home")
 
         } catch (error) {
             console.log("error", error)
         }
     }
-    
+
     const handleSubmit = e => {
         e.preventDefault()
         const formData = new FormData(formRef.current)
@@ -49,7 +56,7 @@ const Login = ({ setCurrUser, setShow }) => {
         const userInfo = {
             "user": { email: data.email, password: data.password }
         }
-        handleLogin(userInfo, setCurrUser)
+        handleLogin(userInfo, setCurrentUser)
         e.target.reset()
     }
     const handleClick = e => {

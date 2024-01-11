@@ -1,16 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Group.css';
+import { AuthContext } from '../PrivateText/AuthContext';
 
 // import jwtDecode from 'jwt-decode';
 
-function Group({ authenticated }) {
+function Group() {
     // Definición de las URLs de la API
     const GROUPS_API_URL = "http://localhost:3009/group";
     const USERS_API_URL = "http://localhost:3009/api/v1/users";
-
+    const USER_GROUPS = "http://localhost:3009/user_groups"
     // Hook de navegación de React Router
     const navigate = useNavigate();
+
+    const { authenticated } = useContext(AuthContext);
 
     // Efecto para redirigir si el usuario no está autenticado
     useEffect(() => {
@@ -20,16 +23,19 @@ function Group({ authenticated }) {
         }
     }, [authenticated, navigate]);
 
+    
     // Estados para almacenar grupos y usuarios, y gestionar la carga
     const [groups, setGroups] = useState([]);
     const [isLoadingGroups, setIsLoadingGroups] = useState(true);
     const [users, setUsers] = useState([]);
     const [isLoadingUsers, setIsLoadingUsers] = useState(true);
-
+    const [userGroups, setUserGroups] = useState([])
+    const [isLoadingUsersGroups, setIsLoadingUsersGroups] = useState(true);
     // Función para obtener datos de grupos y usuarios desde la API
     const fetchData = async () => {
         try {
             const token = localStorage.getItem('token');
+            console.log("token", token);
 
             // Obtener grupos
             const groupsResponse = await fetch(GROUPS_API_URL, {
@@ -58,6 +64,18 @@ function Group({ authenticated }) {
                 console.error('Error al obtener usuarios:', usersResponse.status);
                 setIsLoadingUsers(false);
             }
+
+            const userGroupsResponse = await fetch(USER_GROUPS, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            const userGroupsData = await userGroupsResponse.json();
+            setUserGroups(userGroupsData)
+            setIsLoadingUsersGroups(false)
+            console.log('Se supone que dberia traer datos de user_groups',userGroups);
         } catch (error) {
             console.error('Error en la llamada a la API:', error.message);
             setIsLoadingGroups(false);
@@ -65,13 +83,13 @@ function Group({ authenticated }) {
         }
     };
 
-    
+
     // Efecto para cargar datos al montar el componente
     useEffect(() => {
         fetchData();
     }, []);
 
-    
+
 
 
 
@@ -80,14 +98,19 @@ function Group({ authenticated }) {
         try {
             const token = localStorage.getItem('token');
 
+            console.log("SON LOS IDS EN LA FUNCION DEL FETCH", groupId, userId)
 
+
+            //pasar de array a entero
             const requestData = {
                 user_id: userId,
                 group_id: groupId
             };
 
+            console.log("SOY EL REQUEST", requestData)
+
             const response = await fetch
-                (`http://localhost:3009/group/${groupId}/add_user`,
+                (`http://localhost:3009/group/:groupId/add_user`,
                     {
                         method: 'POST',
                         headers: {
@@ -161,7 +184,11 @@ function Group({ authenticated }) {
 
     // Manejador para agregar un usuario a un grupo
     const handleAddUser = (groupId, userId) => {
+
+        console.log("SON LOS IDS", groupId, userId)
         addUserToGroup(groupId, userId); // Pasar selectedUserId como argumento
+
+
     };
 
     // Manejador para eliminar un grupo
@@ -195,16 +222,18 @@ function Group({ authenticated }) {
                                 {groups.map((group) => (
                                     <li key={group.id}>
                                         {group.name}
+                                        {group.id}
                                         <select
                                             id={`userDropdown_${group.id}`}
                                             value={group.selectedUserIds || ""}
                                             // onChange={(e) => handleUserSelect(group.id, e.target.value)} origin
-                                            onChange={(e) =>handleUserSelect(group.id, Array.from(e.target.selectedOptions, option => option.value))}
+                                            onChange={(e) => handleUserSelect(group.id, Array.from(e.target.selectedOptions, option => option.value))}
                                         >
                                             <option value="">Selecciona Usuario</option>
                                             {users.map((user) => (
                                                 <option key={user.id} value={user.id}>
                                                     {user.first_name}
+                                                    {user.id}
                                                 </option>
                                             ))}
                                         </select>
