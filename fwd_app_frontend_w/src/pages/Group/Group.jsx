@@ -23,39 +23,43 @@ function Group() {
         }
     }, [authenticated, navigate]);
 
-    
+
     // Estados para almacenar grupos y usuarios, y gestionar la carga
     const [groups, setGroups] = useState([]);
     const [isLoadingGroups, setIsLoadingGroups] = useState(true);
     const [users, setUsers] = useState([]);
     const [isLoadingUsers, setIsLoadingUsers] = useState(true);
-    const [userGroups, setUserGroups] = useState([])
-    const [isLoadingUsersGroups, setIsLoadingUsersGroups] = useState(true);
+    // const [userGroups, setUserGroups] = useState([])
+    // const [isLoadingUsersGroups, setIsLoadingUsersGroups] = useState(true);
     // Función para obtener datos de grupos y usuarios desde la API
     const fetchData = async () => {
+       
         try {
-            const token = localStorage.getItem('token');
-            console.log("token", token);
+            const token = localStorage.getItem("token");
 
             // Obtener grupos
             const groupsResponse = await fetch(GROUPS_API_URL, {
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
+                    Authorization: `Bearer ${token}`
                 }
             });
             const groupsData = await groupsResponse.json();
             setGroups(groupsData);
             setIsLoadingGroups(false);
 
+            
+
             // Obtener usuarios
+
             const usersResponse = await fetch(USERS_API_URL, {
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': token
+                    Authorization: `Bearer ${token}`
                 }
             });
 
+            
             if (usersResponse.ok) {
                 const usersData = await usersResponse.json();
                 setUsers(usersData);
@@ -65,30 +69,30 @@ function Group() {
                 setIsLoadingUsers(false);
             }
 
-            const userGroupsResponse = await fetch(USER_GROUPS, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            });
+            // const userGroupsResponse = await fetch(USER_GROUPS, {
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //         'Authorization': `Bearer ${token}`
+            //     }
+            // });
 
-            const userGroupsData = await userGroupsResponse.json();
-            setUserGroups(userGroupsData)
-            setIsLoadingUsersGroups(false)
-            console.log('Se supone que dberia traer datos de user_groups',userGroups);
+            // const userGroupsData = await userGroupsResponse.json();
+            // setUserGroups(userGroupsData)
+            // setIsLoadingUsersGroups(false)
+            // console.log('Se supone que dberia traer datos de user_groups',userGroups);
         } catch (error) {
             console.error('Error en la llamada a la API:', error.message);
             setIsLoadingGroups(false);
             setIsLoadingUsers(false);
         }
     };
-
+    
 
     // Efecto para cargar datos al montar el componente
     useEffect(() => {
         fetchData();
     }, []);
-
+    
 
 
 
@@ -96,9 +100,16 @@ function Group() {
     // Función para agregar un usuario a un grupo
     const addUserToGroup = async (groupId, userId) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem("token");
+            console.log("Token de group:", token);
 
             console.log("SON LOS IDS EN LA FUNCION DEL FETCH", groupId, userId)
+
+            if (!token) {
+                console.log("No se encontró un token");
+                // Implementa la lógica para redirigir a la página de inicio de sesión, por ejemplo.
+                return;
+            }
 
 
             //pasar de array a entero
@@ -115,7 +126,7 @@ function Group() {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': token
+                            Authorization: `Bearer ${token}`
                         },
                         body: JSON.stringify(requestData)
                     });
@@ -156,13 +167,15 @@ function Group() {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': token
+                    Authorization: `Bearer ${token}`
                 },
             });
 
             if (response.ok) {
                 console.log('Grupo eliminado exitosamente');
-                fetchData(); // Actualizar la lista de grupos
+            } else if (response.status === 401) {
+                console.log('Token no válido o revocado');
+                // Implementa la lógica para manejar el error relacionado con el token no válido o revocado
             } else {
                 console.log('Error al eliminar el grupo');
                 console.log('Error al eliminar el grupo ahhhhhhhhhhhhhhhhhhhhh');

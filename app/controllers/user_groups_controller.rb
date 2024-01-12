@@ -3,7 +3,8 @@ class UserGroupsController < ApplicationController
     def create
         group = Group.find_by(id: params[:group_id])
         user = User.find_by(id: params[:user_id])
-
+        
+        # binding.pry
     if user && group
         begin
             UserGroup.create(user_id: user.id, group_id: group.id)

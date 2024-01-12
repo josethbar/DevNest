@@ -18,11 +18,12 @@ export const AuthProvider = ({ children }) => {
 
     const login = (userData) => {
         setCurrentUser(userData);
-
         console.log("Datos del usuario en el contexto:", userData);
         setAuthenticated(true);
+        
     };
 
+console.log("autenticación del contexto", authenticated);
 
     const logout = () => {
     // Lógica para cerrar sesión

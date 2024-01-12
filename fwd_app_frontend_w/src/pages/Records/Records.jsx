@@ -19,7 +19,7 @@ const RecordsComponent = () => {
 
   // Efecto para obtener y almacenar datos de usuario desde el almacenamiento local
 
-  
+
   useEffect(() => {
     const storedUserData = JSON.parse(localStorage.getItem("userData")) || {};
     setUserDataFromLocalStorage(storedUserData);
@@ -73,32 +73,32 @@ const RecordsComponent = () => {
   useEffect(() => {
     const fetchData = async () => {
       const token = localStorage.getItem("token");
-  
+
       if (!token) {
         setError("Token de autenticación no encontrado");
         setIsLoadingRecords(false);
         return;
       }
-  
+
       try {
         const response = await fetch("http://localhost:3009/user_role", {
           method: "GET",
           headers: {
-            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
           },
         });
-  
+
         if (!response.ok) {
           throw new Error(`Error ${response.status}: ${response.statusText}`);
         }
-  
+
         const userDataRole = await response.json();
         const userRole = userDataRole.role;
-  
+
         console.log("Datos del rol del usuario", userDataRole);
         console.log("Rol del usuario", userRole);
-  
+
         // return userRole;
       } catch (error) {
         console.error("Error al obtener el rol del usuario:", error);
@@ -106,25 +106,25 @@ const RecordsComponent = () => {
         setIsLoadingRecords(false);
       }
     };
-  
+
     fetchData().then((userRole) => {
       if (userRole) {
         filterRecords(userRole);
       }
     });
   }, [userDataFromLocalStorage.id]);
-  
+
   useEffect(() => {
     if (records.length > 0 && userDataFromLocalStorage.id) {
       filterRecords();
     }
   }, [records, userDataFromLocalStorage.id]);
-  
+
   const filterRecords = (userRole) => {
     if (!userRole && !userDataFromLocalStorage.id) {
       return;
     }
-  
+
     if (userRole === 'student') {
       // Filtrar registros para estudiantes
       const userRecords = records.filter((record) => record.user_id === userDataFromLocalStorage.id);
@@ -134,7 +134,7 @@ const RecordsComponent = () => {
       setFilteredRecords(records);
     }
   };
-  
+
 
   return (
     <div>

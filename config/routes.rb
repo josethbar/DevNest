@@ -35,6 +35,8 @@ Rails.application.routes.draw do
     # post '/group/:group_id/add_user/:user_id', to: 'user_groups#create'  //origin
     post '/group/:groupId/add_user', to: 'user_groups#create'
     get '/user_groups', to: 'user_groups#index'
+    match 'assign_group/:group_id', to: 'course_group#assign_group', as: :assign_group, via: [:get, :post]
+
 
     resources :user_groups, only: [:index, :create, :destroy] 
     
