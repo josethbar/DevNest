@@ -29,7 +29,6 @@ function FwdApp() {
       </div>
     </nav>
 
-     
       {/* <span>{currentUser}</span> */}
     </div>
   );

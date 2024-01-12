@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'rails_helper'
+
 
 
 RSpec.describe MedicalRecord, type: :model do

@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useContext } from 'react';
+import React, { useState, useEffect ,useContext } from 'react';
 import './Course.css';
 // import { getCourses } from '../../api/fwd';
 import { useNavigate } from 'react-router-dom';
@@ -31,7 +31,7 @@ function Course() {
 
     // useEffect para verificar el estado de autenticación y redirigir si no está autenticado
     useEffect(() => {
-        if (authenticated == false) {
+        if (authenticated === false) {
             console.log("¿Estás autenticado?", authenticated)
             navigate("/course");
         }
@@ -156,7 +156,7 @@ function Course() {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': token
+                    'Authorization':  `Bearer ${token}`
                 },
                 body: JSON.stringify(requestData)
             });

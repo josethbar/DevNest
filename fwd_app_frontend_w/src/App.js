@@ -1,11 +1,11 @@
-import { useState, useEffect, useContext } from 'react';
+import { useEffect } from 'react';
 import './App.css';
 import PrivateText from './pages/PrivateText/PrivateText';
 import { AuthProvider } from './pages/PrivateText/AuthContext';
-import { AuthContext } from './pages/PrivateText/AuthContext';
+// import { AuthContext } from './pages/PrivateText/AuthContext';
 
 const App = () => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
   useEffect(() => {
     if (token) {
       console.log("SI HAY",  token);

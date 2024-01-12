@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'rails_helper'
+
 RSpec.describe Course, type: :model do
   let(:course) { Group.create(name: 'Math Group') }
 

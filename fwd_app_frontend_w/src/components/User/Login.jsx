@@ -6,11 +6,13 @@ import { AuthContext } from "../../pages/PrivateText/AuthContext";
 
 const Login = ({ setShow }) => {
     const formRef = useRef()
-    const { setCurrentUser, setAuthenticated } = useContext(AuthContext);
+    const { setCurrentUser, setAuthenticated, authenticated, login } = useContext(AuthContext);
     const navigate = useNavigate()
     // const token = response.headers.get("Authorization");
 
     const handleLogin = async (credentials) => {
+
+
         const url = "http://localhost:3009/login";
         try {
             const response = await fetch(url, {
@@ -36,9 +38,11 @@ const Login = ({ setShow }) => {
             // localStorage.setItem("token", response.headers.get("Authorization"))
             setCurrentUser(data)
             setAuthenticated(true)
+            localStorage.removeItem("token");
             localStorage.setItem("token", response.headers.get("Authorization"));
+            console.log("Token almacenado:", localStorage.getItem("token"));
             localStorage.setItem("userData", JSON.stringify(data)); // Guardar información del usuario
-            
+            login(data);
 
             // console.log("usuario en el login", setCurrentUser);
 
