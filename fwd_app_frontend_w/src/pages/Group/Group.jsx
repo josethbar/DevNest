@@ -9,7 +9,8 @@ function Group() {
     // Definición de las URLs de la API
     const GROUPS_API_URL = "http://localhost:3009/group";
     const USERS_API_URL = "http://localhost:3009/api/v1/users";
-    const USER_GROUPS = "http://localhost:3009/user_groups"
+    const USER_GROUPS = "http://localhost:3009/user_groups";
+    
     // Hook de navegación de React Router
     const navigate = useNavigate();
 
@@ -35,6 +36,7 @@ function Group() {
     const fetchData = async () => {
        
         try {
+
             const token = localStorage.getItem("token");
 
             // Obtener grupos
@@ -69,17 +71,18 @@ function Group() {
                 setIsLoadingUsers(false);
             }
 
-            // const userGroupsResponse = await fetch(USER_GROUPS, {
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //         'Authorization': `Bearer ${token}`
-            //     }
-            // });
 
-            // const userGroupsData = await userGroupsResponse.json();
-            // setUserGroups(userGroupsData)
-            // setIsLoadingUsersGroups(false)
-            // console.log('Se supone que dberia traer datos de user_groups',userGroups);
+            const userGroupsResponse = await fetch(USER_GROUPS, {
+
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            }
+
+
+            })
+         console.log( 'si estoy llegando' ,userGroupsResponse);
+          
         } catch (error) {
             console.error('Error en la llamada a la API:', error.message);
             setIsLoadingGroups(false);

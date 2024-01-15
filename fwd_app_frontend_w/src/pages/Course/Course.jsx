@@ -31,9 +31,9 @@ function Course() {
 
     // useEffect para verificar el estado de autenticación y redirigir si no está autenticado
     useEffect(() => {
-        if (authenticated === false) {
+        if (!authenticated) {
             console.log("¿Estás autenticado?", authenticated)
-            navigate("/course");
+            navigate("/login");
         }
     }, [authenticated, navigate]);
 
@@ -151,8 +151,8 @@ function Course() {
                 course_id: selectedCourse,
                 group_id: selectedGroup
             };
-    
-            const response = await fetch(`http://localhost:3009/assign_group/${selectedGroup}`, {
+
+            const response = await fetch(`http://localhost:3009/assign_group/${selectedCourse}/${selectedGroup}`, {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',

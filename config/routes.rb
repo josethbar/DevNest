@@ -35,7 +35,14 @@ Rails.application.routes.draw do
     # post '/group/:group_id/add_user/:user_id', to: 'user_groups#create'  //origin
     post '/group/:groupId/add_user', to: 'user_groups#create'
     get '/user_groups', to: 'user_groups#index'
-    match 'assign_group/:group_id', to: 'course_group#assign_group', as: :assign_group, via: [:get, :post]
+
+
+    # match 'assign_group/:group_id', to: 'course_group#assign_group', as: :assign_group, via: [:get, :post]
+    # match 'assign_group/:course_id/:group_id', to: 'course_group#assign_group', as: :assign_group, via: [:get, :post]  se estaba usando esta anytes de pruebas
+    # config/routes.rb
+post '/assign_group/:course_id/:group_id', to: 'course_group#assign_group'
+
+
 
 
     resources :user_groups, only: [:index, :create, :destroy] 
@@ -49,7 +56,7 @@ Rails.application.routes.draw do
     # post 'assign_group/:group_id', action: :assign_group, as: :assign_group
 
     # post '/course/assign_group/:group_id', to: 'course_group#assign_group', as: :assign_group
-    post 'assign_group/:group_id', to: 'course_group#assign_group', as: :assign_group
+    # post 'assign_group/:group_id', to: 'course_group#assign_group', as: :assign_group
 
 
     get '/user_role', to: 'user_roles#show'
