@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../PrivateText/AuthContext';
 import { Link } from 'react-router-dom';
 import './FwdApp.css'; 
+import HomeNav from '../../components/User/homeNav';
+
 function FwdApp() {
   const { authenticated } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -20,15 +22,8 @@ function FwdApp() {
   return (
     
     <div>
-      <nav className="homeNav">
-      <div className="Home-links">
-    
-      <Link to="/course" className='home-nav'>Course</Link>
-      <Link to="/group" className='home-nav'>Groups</Link>
-  
-      </div>
-    </nav>
 
+      <HomeNav/>
       {/* <span>{currentUser}</span> */}
     </div>
   );
