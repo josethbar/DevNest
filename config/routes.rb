@@ -21,6 +21,20 @@ Rails.application.routes.draw do
     }
     delete '/logout', to: 'users/sessions#destroy', as: :logout
 
+
+    # Rails.application.routes.draw do
+    #   devise_for :users, path: '', path_names: {
+    #     sign_in: 'login',
+    #     sign_out: 'logout',
+    #     registration: 'signup'
+    #   },
+    #   controllers: {
+    #     sessions: 'users/sessions',
+    #     registrations: 'users/registrations'
+    #   }
+    # end
+
+    
     # get 'course', to: 'course#index'
     # post 'course/create'
     # delete 'course/:id', to: 'course#destroy'

@@ -8,12 +8,19 @@ const Logout = () => {
   
   const logout = async () => {
     try {
+      debugger;
+
+      // alert(localStorage.getItem("token"));
+
+      // console.log("token para logout", localStorage.getItem("token"));
       const response = await fetch("http://localhost:3009/logout", {
         method: "DELETE",
         headers: {
           "content-type": "application/json",
           "authorization": localStorage.getItem("token")
         },
+        
+        
       });
       const data = await response.json();
       if (!response.ok) throw data.error;
