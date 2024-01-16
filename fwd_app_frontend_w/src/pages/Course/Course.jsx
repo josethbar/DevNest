@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import imagen from '../../img/borrar.png';
 import editar from '../../img/editar.png';
 import { AuthContext } from '../PrivateText/AuthContext';
+import HomeNav from '../../components/User/homeNav';
 
 function Course() {
     // URL de la API para obtener datos de los cursos
@@ -146,18 +147,22 @@ function Course() {
                 
             }
     
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem("token");
             const requestData = {
-                course_id: selectedCourse,
-                group_id: selectedGroup
+                course_id: 42,
+                group_id: 8
             };
 
-            const response = await fetch(`http://localhost:3009/assign_group/${selectedCourse}/${selectedGroup}`, {
+            console.log("roken en course", token);
+
+            // const response = await fetch(`http://localhost:3009/assign_group/${selectedCourse}/${selectedGroup}`, {
+            const response = await fetch(`http://localhost:3009/assign_group`, {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization':  `Bearer ${token}`
+                    'Authorization': token
                 },
+                
                 body: JSON.stringify(requestData)
             });
     
@@ -223,7 +228,11 @@ function Course() {
                     </span>
                 </div>
             ) : courses.length > 0 ? (
+
                 <ul className='courseBox'>
+
+                    <div className='dad-course' >
+                        <HomeNav/>
                     {courses.map((course, index) => (
                         <li key={index}>
                             {editCourseId === course.id ? (
@@ -264,6 +273,13 @@ function Course() {
                             )}
                         </li>
                     ))}
+
+
+
+                    </div>
+
+
+                   
                 </ul>
             ) : (
                 <p>No se encontraron datos.</p>

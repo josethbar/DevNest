@@ -1,5 +1,5 @@
 class CourseController < ApplicationController
-    before_action :authenticate_user!, except: [:index, :show, :update ,:create, :destroy]
+    before_action :authenticate_user!
     
     before_action :set_course, only: [:show, :edit, :destroy]
 

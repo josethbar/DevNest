@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Group.css';
 import { AuthContext } from '../PrivateText/AuthContext';
-
+import HomeNav from '../../components/User/homeNav';
 // import jwtDecode from 'jwt-decode';
 
 function Group() {
@@ -57,7 +57,7 @@ function Group() {
             const usersResponse = await fetch(USERS_API_URL, {
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`
+                    'Authorization': token
                 }
             });
 
@@ -228,7 +228,9 @@ function Group() {
                     </span>
                 </div>
             ) : (
-                <div>
+                <div  className="dad-group"  >
+
+                    <HomeNav/>
                     {/* Contenido una vez que se han cargado grupos y usuarios */}
                     {/* <div>¡Hola! Este es el contenido del componente Group.</div> */}
                     {/* Mostrar lista de grupos */}

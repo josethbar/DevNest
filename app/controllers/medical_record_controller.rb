@@ -1,5 +1,5 @@
 class MedicalRecordController < ApplicationController
-    before_action :authenticate_user!, except: [:show,:index ,:update, :create, :destroy ]
+    before_action :authenticate_user!
     before_action :set_health, only: [:show, :edit, :destroy]
 
     def index

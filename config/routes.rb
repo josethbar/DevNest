@@ -21,6 +21,20 @@ Rails.application.routes.draw do
     }
     delete '/logout', to: 'users/sessions#destroy', as: :logout
 
+
+    # Rails.application.routes.draw do
+    #   devise_for :users, path: '', path_names: {
+    #     sign_in: 'login',
+    #     sign_out: 'logout',
+    #     registration: 'signup'
+    #   },
+    #   controllers: {
+    #     sessions: 'users/sessions',
+    #     registrations: 'users/registrations'
+    #   }
+    # end
+
+    
     # get 'course', to: 'course#index'
     # post 'course/create'
     # delete 'course/:id', to: 'course#destroy'
@@ -40,7 +54,10 @@ Rails.application.routes.draw do
     # match 'assign_group/:group_id', to: 'course_group#assign_group', as: :assign_group, via: [:get, :post]
     # match 'assign_group/:course_id/:group_id', to: 'course_group#assign_group', as: :assign_group, via: [:get, :post]  se estaba usando esta anytes de pruebas
     # config/routes.rb
-post '/assign_group/:course_id/:group_id', to: 'course_group#assign_group'
+
+    # post '/assign_group/:course_id/:group_id', to: 'course_group#assign_group' 
+
+    post '/assign_group', to: 'course_group#assign_group' 
 
 
 
