@@ -40,7 +40,10 @@ Rails.application.routes.draw do
     # match 'assign_group/:group_id', to: 'course_group#assign_group', as: :assign_group, via: [:get, :post]
     # match 'assign_group/:course_id/:group_id', to: 'course_group#assign_group', as: :assign_group, via: [:get, :post]  se estaba usando esta anytes de pruebas
     # config/routes.rb
-post '/assign_group/:course_id/:group_id', to: 'course_group#assign_group'
+
+    # post '/assign_group/:course_id/:group_id', to: 'course_group#assign_group' 
+
+    post '/assign_group', to: 'course_group#assign_group' 
 
 
 

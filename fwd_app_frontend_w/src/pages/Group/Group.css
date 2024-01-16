@@ -5,3 +5,8 @@
     background-color: aliceblue;
     border-radius: 5px;
 }
+
+
+.dad-group{
+    display: flex;
+}
