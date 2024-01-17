@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../PrivateText/AuthContext';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import './FwdApp.css'; 
 import HomeNav from '../../components/User/homeNav';
 
@@ -22,9 +22,10 @@ function FwdApp() {
   return (
     
     <div>
-
       <HomeNav/>
-      {/* <span>{currentUser}</span> */}
+      {/* <span>{cur
+        rentUser}</span> */}
+       
     </div>
   );
 }

@@ -10,3 +10,26 @@
 .dad-group{
     display: flex;
 }
+
+.list{
+    text-decoration: none;
+    list-style: none;
+    display: grid;
+    grid-template-rows: auto auto;
+    background-color: rgb(183, 183, 183);
+    margin: 20px;
+    border-radius: 15px;
+    height: 300px;
+
+}
+
+.dadList{
+    border: 2px solid black;
+    width: 900px;
+display: grid;
+grid-template-columns: auto auto auto auto;
+}
+
+.groupName{
+    font-size: 40px;
+}

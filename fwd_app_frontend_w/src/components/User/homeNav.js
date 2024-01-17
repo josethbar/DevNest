@@ -6,11 +6,11 @@ const HomeNav = () => {
 
     return (
   
-      <nav className="homeNav">
-      <div className="Home-links">
+      <nav className="subNav">
+      <div className="sub-nav-links">
     
-      <Link to="/course" className='link-nav'>Course</Link>
-      <Link to="/group" className='link-nav'>Groups</Link>
+      <Link to="/course" className='sub-links'>Course</Link>
+      <Link to="/group" className='sub-links'>Groups</Link>
     
 
       </div>

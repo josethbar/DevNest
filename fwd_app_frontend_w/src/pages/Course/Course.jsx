@@ -150,9 +150,11 @@ function Course() {
 
       const token = localStorage.getItem("token");
       const requestData = {
-        course_id: 42,
-        group_id: 8,
+        course_id: selectedCourse,
+        group_id: selectedGroup,
       };
+      console.log("curso seleccionado", selectedCourse);
+      console.log("grupo seleccionado", selectedGroup);
 
       console.log("roken en course", token);
 
@@ -168,17 +170,30 @@ function Course() {
       });
 
       if (response.ok) {
+        const responseData = await response.json(); 
         console.log("Grupo asignado correctamente");
-        console.log(response.message); // Mensaje desde el servidor
-        // Puedes mostrar el mensaje en tu componente, por ejemplo, estableciéndolo en el estado
-        setSuccessMessage(response.message);
+        console.log(responseData.message);
+  
+        const serverMessage = responseData.message || "";
+        if (serverMessage.includes("El grupo ya está asignado")) {
+          setError(serverMessage);
+          setSuccessMessage("");
+        } else {
+    
+          setSuccessMessage(serverMessage);
+          setError("");
+        }
       } else {
+        // const errorData = await response.json();
         setError("Error al asignar el grupo al curso.");
+        setSuccessMessage("");  // Asegúrate de limpiar successMessage en caso de error
       }
     } catch (error) {
       setError("Error al realizar la asignación.");
+      setSuccessMessage("");
     }
   };
+  
 
   // ======================================="acaaaaaaaaaaaaaaaa"===========================
   const fetchGroups = async () => {

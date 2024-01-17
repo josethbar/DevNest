@@ -234,11 +234,15 @@ function Group() {
                     {/* Mostrar lista de grupos */}
                     <div>
                         {groups.length > 0 ? (
-                            <ul>
+                            <ul className='dadList'>
                                 {groups.map((group) => (
-                                    <li key={group.id}>
-                                        {group.name}
-                                        {group.id}
+
+                                    
+                                    <li className='list' key={group.id}>
+
+
+                                        <h1 className='groupName'> {group.name} </h1>
+                                   
                                         <select
                                             id={`userDropdown_${group.id}`}
                                             value={group.selectedUserIds || ""}

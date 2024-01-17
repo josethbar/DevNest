@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext, AuthProvider } from "../PrivateText/AuthContext";
+import { AuthContext, AuthProvider} from "../PrivateText/AuthContext";
 import "./Records.css";
 
 const RecordsComponent = () => {
   // Obtener el estado de autenticación del contexto
   const { authenticated } = useContext(AuthContext);
   console.log("Authenticated en records:", authenticated);
+  // alert(authenticated)
 
 
   // Estados locales para manejar registros, carga, errores, registros filtrados y datos de usuario
@@ -31,7 +32,8 @@ const RecordsComponent = () => {
 
   useEffect(() => {
     if (!authenticated) {
-      navigate('/records');
+      console.log("¿Estás autenticado?", authenticated);
+      navigate('/login');
     }
   }, [authenticated, navigate]);
 
@@ -50,8 +52,8 @@ const RecordsComponent = () => {
     fetch("http://localhost:3009/medical_record", {
       method: "GET",
       headers: {
-        Authorization: token,
         "Content-Type": "application/json",
+        Authorization: token
       },
     })
       .then((response) => {
@@ -131,7 +133,7 @@ const RecordsComponent = () => {
 
   return (
     <div>
-      <AuthProvider>
+
         {isLoadingRecords ? (
           // Muestra un mensaje de carga si los registros están siendo cargados
           <div id="container">
@@ -155,7 +157,7 @@ const RecordsComponent = () => {
             ))}
           </ul>
         )}
-      </AuthProvider>
+
     </div>
   );
 };
