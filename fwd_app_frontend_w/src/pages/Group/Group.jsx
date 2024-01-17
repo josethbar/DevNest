@@ -1,16 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Group.css';
-
+import { AuthContext } from '../PrivateText/AuthContext';
+import HomeNav from '../../components/User/homeNav';
 // import jwtDecode from 'jwt-decode';
 
-function Group({ authenticated }) {
+function Group() {
     // Definición de las URLs de la API
     const GROUPS_API_URL = "http://localhost:3009/group";
     const USERS_API_URL = "http://localhost:3009/api/v1/users";
-
+    const USER_GROUPS = "http://localhost:3009/user_groups";
+    
     // Hook de navegación de React Router
     const navigate = useNavigate();
+
+    const { authenticated } = useContext(AuthContext);
 
     // Efecto para redirigir si el usuario no está autenticado
     useEffect(() => {
@@ -20,29 +24,35 @@ function Group({ authenticated }) {
         }
     }, [authenticated, navigate]);
 
+
     // Estados para almacenar grupos y usuarios, y gestionar la carga
     const [groups, setGroups] = useState([]);
     const [isLoadingGroups, setIsLoadingGroups] = useState(true);
     const [users, setUsers] = useState([]);
     const [isLoadingUsers, setIsLoadingUsers] = useState(true);
-
+ 
     // Función para obtener datos de grupos y usuarios desde la API
     const fetchData = async () => {
+       
         try {
-            const token = localStorage.getItem('token');
+
+            const token = localStorage.getItem("token");
 
             // Obtener grupos
             const groupsResponse = await fetch(GROUPS_API_URL, {
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
+                    Authorization: token
                 }
             });
             const groupsData = await groupsResponse.json();
             setGroups(groupsData);
             setIsLoadingGroups(false);
 
+            
+
             // Obtener usuarios
+
             const usersResponse = await fetch(USERS_API_URL, {
                 headers: {
                     'Content-Type': 'application/json',
@@ -50,6 +60,7 @@ function Group({ authenticated }) {
                 }
             });
 
+            
             if (usersResponse.ok) {
                 const usersData = await usersResponse.json();
                 setUsers(usersData);
@@ -58,41 +69,65 @@ function Group({ authenticated }) {
                 console.error('Error al obtener usuarios:', usersResponse.status);
                 setIsLoadingUsers(false);
             }
+
+
+            const userGroupsResponse = await fetch(USER_GROUPS, {
+
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: token
+            }
+
+
+            })
+          
         } catch (error) {
             console.error('Error en la llamada a la API:', error.message);
             setIsLoadingGroups(false);
             setIsLoadingUsers(false);
         }
     };
-
     
+
     // Efecto para cargar datos al montar el componente
     useEffect(() => {
         fetchData();
     }, []);
-
     
+
 
 
 
     // Función para agregar un usuario a un grupo
     const addUserToGroup = async (groupId, userId) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem("token");
+            console.log("Token de group:", token);
+
+            console.log("SON LOS IDS EN LA FUNCION DEL FETCH", groupId, userId)
+
+            if (!token) {
+                console.log("No se encontró un token");
+                // Implementa la lógica para redirigir a la página de inicio de sesión, por ejemplo.
+                return;
+            }
 
 
+            //pasar de array a entero
             const requestData = {
                 user_id: userId,
                 group_id: groupId
             };
 
+            console.log("SOY EL REQUEST", requestData)
+
             const response = await fetch
-                (`http://localhost:3009/group/${groupId}/add_user`,
+                (`http://localhost:3009/group/:groupId/add_user`,
                     {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': token
+                            Authorization: token
                         },
                         body: JSON.stringify(requestData)
                     });
@@ -133,13 +168,15 @@ function Group({ authenticated }) {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': token
+                    Authorization: token
                 },
             });
 
             if (response.ok) {
                 console.log('Grupo eliminado exitosamente');
-                fetchData(); // Actualizar la lista de grupos
+            } else if (response.status === 401) {
+                console.log('Token no válido o revocado');
+                // Implementa la lógica para manejar el error relacionado con el token no válido o revocado
             } else {
                 console.log('Error al eliminar el grupo');
                 console.log('Error al eliminar el grupo ahhhhhhhhhhhhhhhhhhhhh');
@@ -161,7 +198,11 @@ function Group({ authenticated }) {
 
     // Manejador para agregar un usuario a un grupo
     const handleAddUser = (groupId, userId) => {
+
+        console.log("SON LOS IDS", groupId, userId)
         addUserToGroup(groupId, userId); // Pasar selectedUserId como argumento
+
+
     };
 
     // Manejador para eliminar un grupo
@@ -173,7 +214,7 @@ function Group({ authenticated }) {
 
     return (
         <div>
-            <h1>Grupos</h1>
+          
             {/* Mostrar mensaje de carga si se están cargando grupos o usuarios */}
             {isLoadingGroups || isLoadingUsers ? (
                 <div id="container">
@@ -185,26 +226,34 @@ function Group({ authenticated }) {
                     </span>
                 </div>
             ) : (
-                <div>
+                <div  className="dad-group"  >
+
+                    <HomeNav/>
                     {/* Contenido una vez que se han cargado grupos y usuarios */}
                     {/* <div>¡Hola! Este es el contenido del componente Group.</div> */}
                     {/* Mostrar lista de grupos */}
                     <div>
                         {groups.length > 0 ? (
-                            <ul>
+                            <ul className='dadList'>
                                 {groups.map((group) => (
-                                    <li key={group.id}>
-                                        {group.name}
+
+                                    
+                                    <li className='list' key={group.id}>
+
+
+                                        <h1 className='groupName'> {group.name} </h1>
+                                   
                                         <select
                                             id={`userDropdown_${group.id}`}
                                             value={group.selectedUserIds || ""}
                                             // onChange={(e) => handleUserSelect(group.id, e.target.value)} origin
-                                            onChange={(e) =>handleUserSelect(group.id, Array.from(e.target.selectedOptions, option => option.value))}
+                                            onChange={(e) => handleUserSelect(group.id, Array.from(e.target.selectedOptions, option => option.value))}
                                         >
                                             <option value="">Selecciona Usuario</option>
                                             {users.map((user) => (
                                                 <option key={user.id} value={user.id}>
                                                     {user.first_name}
+                                                    {user.id}
                                                 </option>
                                             ))}
                                         </select>
@@ -223,14 +272,7 @@ function Group({ authenticated }) {
                         )}
                     </div>
                     {/* Seleccionar un usuario para agregarlo al grupo */}
-                    <p>Usuarios disponibles para agregar a un grupo:</p>
-                    <ul>
-                        {users.map((user) => (
-                            <li key={user.id} onClick={() => handleUserSelect(user.id)}>
-                                {user.first_name} ----- {user.email}
-                            </li>
-                        ))}
-                    </ul>
+                   
                 </div>
             )}
         </div>

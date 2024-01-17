@@ -1,73 +1,33 @@
+import React, { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import React from 'react';
-// import Course from '../Course/Course';
-import { getCourses } from '../../api/fwd';
-import { useEffect, useState } from 'react';
-import './FwdApp.css';
-import Logout from '../../components/User/Logout';
-// import imagen from '../../img/arrow.png'
-
-// import Logout from '../../components/User/Logout';
-
+import { AuthContext } from '../PrivateText/AuthContext';
 // import { Link } from 'react-router-dom';
-// import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-// import newCourse from '../Course/NewCourse';
-// const APi_URL = "http://localhost:3009/course";
+import './FwdApp.css'; 
+import HomeNav from '../../components/User/homeNav';
 
+function FwdApp() {
+  const { authenticated } = useContext(AuthContext);
+  const navigate = useNavigate();
 
-
-function FwdApp({ authenticated, }) {
-
-  const [coursesList, setCoursesList] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState();
-
-  const navigate = useNavigate()
 
   useEffect(() => {
-    // console.log(authenticated, "estas?")
-    if (authenticated == false) {
-      navigate("/login")
+    // Verifica si el usuario no está autenticado antes de redirigir
+    if (!authenticated) {
+      navigate("/login");
+      console.log("autenticadoooos" , authenticated);
     }
-  }, [authenticated, navigate])
-
-  useEffect(() => {
-    const fetchData = async (e) => {
-      // e.preventDefault();
-      try {
-        const railsData = await getCourses();
-        setCoursesList(railsData);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-
-    };
-
-    fetchData();
-  }, []); // El array vacío como segundo parámetro asegura que el efecto se ejecute solo una vez al montar el componente
-
-  if (loading) {
-    return <p>Cargando datos...</p>;
-  }
-
-  if (error) {
-    return <p>Error: {error}</p>;
-  }
-
-
-
-
-
-
+  }, [authenticated, navigate]);
 
 
   return (
+    
     <div>
-      <h1>devNest</h1>
+      <HomeNav/>
+      {/* <span>{cur
+        rentUser}</span> */}
+       
     </div>
-  )
+  );
 }
 
 export default FwdApp;

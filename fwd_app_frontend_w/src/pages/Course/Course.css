@@ -270,3 +270,16 @@ padding: 20px;
 }
 
 }
+
+
+
+
+.dad-course{
+ display: flex;
+}
+
+.success-message {
+  color: green;
+  font-weight: bold;
+  margin-top: 10px;
+}

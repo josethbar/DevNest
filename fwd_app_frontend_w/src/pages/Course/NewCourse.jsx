@@ -1,19 +1,22 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { useContext } from 'react';
+import { AuthContext } from '../PrivateText/AuthContext';
 
 // URL de la API para crear un nuevo curso
 const API_URL = "http://localhost:3009/course";
 
-function NewCourse(authenticated) {
+function NewCourse() {
     // Estado para almacenar la información del nuevo curso
+    const { authenticated, setAuthenticated } = useContext(AuthContext);
     const [newCourse, setNewCourse] = useState({
         name: '',
         description: '',
         info: ''
     });
-
+    
+    // console.log("ATENTICADO DEL CONTE", authenticated);
     // Función para manejar cambios en los campos de entrada del formulario
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -38,8 +41,11 @@ function NewCourse(authenticated) {
             if (response.ok) {
                 const data = await response.json();
                 console.log('Curso creado:', data);
+                setAuthenticated(true);
+                navigate("/course");
             } else {
                 const errorData = await response.json();
+                console.log("Token recuperado:", token);
                 console.error('Error al crear el curso:', errorData.errors);
             }
 
@@ -47,7 +53,8 @@ function NewCourse(authenticated) {
             console.error('Error al crear el curso en el catch:', error);
         }
         
-        if(newCourse){
+        
+        if(authenticated){
             console.log("weeeeeeeee");
             navigate("/course");
         }
@@ -57,13 +64,13 @@ function NewCourse(authenticated) {
     const navigate = useNavigate()
 
     // Efecto para redirigir a la página de inicio de sesión si no está autenticado
-    useEffect(() => {
+    // useEffect(() => {
 
-        console.log(authenticated, "¿estás autenticado?")
-        if (authenticated == false) {
-            navigate("/login")
-        }
-    }, [authenticated, navigate])
+    //     console.log(authenticated, "¿estás autenticado?")
+    //     if (!authenticated) {
+    //         navigate("/login")
+    //     }
+    // }, [authenticated, navigate])
 
     // Renderización del componente
     return (

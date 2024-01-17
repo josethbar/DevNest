@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :group do
+  factory :user_group do
     
   end
 end

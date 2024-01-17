@@ -1,37 +1,62 @@
-require 'rails_helper'
+# spec/models/group_spec.rb
+
+require 'spec_helper'
 
 RSpec.describe Group, type: :model do
-    it "is valid with valid atributtes" do 
-    group = Group.new(name: "almendra", quantity: "Pericles" )
-expect(user).to be_valid
-    end
   
-  context 'validations' do
-  it 'is invalid without an age' do
-    group = Group.new(name: "almendra", quantity: "Pericles")    
+  it "es válido con atributos válidos" do
+    group = Group.new(name: "Grupo A", quantity: 10)
+    expect(group).to be_valid
+  end
+
+  it "es inválido sin un nombre" do
+    group = Group.new(name: nil, quantity: 5)
     expect(group).not_to be_valid
   end
 
-  it 'is invalid without a name' do
-    user = User.new(first_name: "karol", last_name: "karol", email: "kaal21@gmail.com", age: nil, password: "12345678")    
-    expect(user).not_to be_valid
+  it "es válido sin una cantidad, asigna la cantidad predeterminada" do
+    group = Group.new(name: "Grupo B", quantity: nil)
+    group.save
+    expect(group).to be_valid
+    expect(group.quantity).to eq(Group::DEFAULT_QUANTITY)
+  end
+  
+  
+
+  it "es inválido con una cantidad negativa" do
+    group = Group.new(name: "Grupo C", quantity: -3)
+    expect(group).not_to be_valid
   end
 
-  it 'is invalid without a last_name' do
-    user = User.new(first_name: "karol", last_name: "karol", email: "kaal21@gmail.com", age: nil, password: "12345678")
-    expect(user).not_to be_valid
+  it "es inválido con una cantidad no numérica" do
+    group = Group.new(name: "Grupo D", quantity: "no es un número")
+    expect(group).not_to be_valid
   end
+
+  it "es inválido con un nombre duplicado" do
+   group_2 = Group.create(name: "Grupo E", quantity: 8)
+    group = Group.new(name: "Grupo E", quantity: 12)
+    expect(group).not_to be_valid
+  end
+
+  it "asigna una cantidad predeterminada si no se proporciona" do
+    group = Group.new(name: "Grupo F")
+    group.save
+    expect(group.quantity).to eq(Group::DEFAULT_QUANTITY)
+  end
+  
+
+# Cambia
+# Cambia
+it "puede tener muchos usuarios asociados" do
+  group = Group.create(name: "Grupo G", quantity: 2)
+  user1 = User.new(first_name: "Usuario", last_name: "1", age: 25, state: "Activo", jti: "token1", email: "usuario1@example.com",password: "password123")
+  user2 = User.new(first_name: "Usuario", last_name: "2", age: 30, state: "Inactivo", jti: "token2", email: "usuario2@example.com",password: "password456")
+
+  group.users << [user1, user2]
+
+  expect(group.users).to include(user1, user2)
 end
 
-describe '#assign_default_role' do
-  it 'assigns the role of :student if user has no roles' do
-    user = User.new(first_name: "karol", last_name: "karol", email: "kaal21@gmail.com", age: nil, password: "12345678")
-    
-    expect(user.has_role?(:student)).to be_falsey 
-    
-    user.assign_default_role
-    
-    expect(user.has_role?(:student)).to be_truthy 
-  end
-end
+
 end

@@ -66,5 +66,7 @@ gem 'devise'
 
 gem 'devise-jwt'
 
+gem 'jsonapi-serializer'
+
 gem 'dotenv-rails', groups: [:development, :test]
 # 'dotenv-rails' is for storing secret key in ENV file
