@@ -6,6 +6,8 @@ import "./Records.css";
 const RecordsComponent = () => {
   // Obtener el estado de autenticación del contexto
   const { authenticated } = useContext(AuthContext);
+  console.log("Authenticated en records:", authenticated);
+
 
   // Estados locales para manejar registros, carga, errores, registros filtrados y datos de usuario
   const [records, setRecords] = useState([]);
@@ -18,18 +20,18 @@ const RecordsComponent = () => {
   const navigate = useNavigate();
 
   // Efecto para obtener y almacenar datos de usuario desde el almacenamiento local
-
-
   useEffect(() => {
     const storedUserData = JSON.parse(localStorage.getItem("userData")) || {};
     setUserDataFromLocalStorage(storedUserData);
     console.log("Registros ACTUALES:", storedUserData);
   }, []);
+
+
   // Efecto para redirigir a la página de registros si no está autenticado
 
   useEffect(() => {
     if (!authenticated) {
-      navigate("/records");
+      navigate('/records');
     }
   }, [authenticated, navigate]);
 
@@ -48,7 +50,7 @@ const RecordsComponent = () => {
     fetch("http://localhost:3009/medical_record", {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: token,
         "Content-Type": "application/json",
       },
     })
@@ -67,52 +69,43 @@ const RecordsComponent = () => {
         setError(`Error al obtener registros desde la API: ${error.message}`);
         setIsLoadingRecords(false);
       });
-  }, [authenticated]);
+  }, []);
 
   // Efecto para obtener el rol del usuario desde la API y filtrar registros en consecuencia
+  const token = localStorage.getItem("token");
   useEffect(() => {
     const fetchData = async () => {
-      const token = localStorage.getItem("token");
-
-      if (!token) {
-        setError("Token de autenticación no encontrado");
-        setIsLoadingRecords(false);
-        return;
-      }
-
       try {
         const response = await fetch("http://localhost:3009/user_role", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
+            Authorization: token
           },
         });
-
+  
         if (!response.ok) {
           throw new Error(`Error ${response.status}: ${response.statusText}`);
         }
-
+  
         const userDataRole = await response.json();
         const userRole = userDataRole.role;
-
+  
         console.log("Datos del rol del usuario", userDataRole);
         console.log("Rol del usuario", userRole);
+  
+        // Llamar a filterRecords dentro del bloque try
+        filterRecords(userRole);
 
-        // return userRole;
       } catch (error) {
         console.error("Error al obtener el rol del usuario:", error);
         setError(`Error al obtener el rol del usuario: ${error.message}`);
         setIsLoadingRecords(false);
       }
     };
-
-    fetchData().then((userRole) => {
-      if (userRole) {
-        filterRecords(userRole);
-      }
-    });
-  }, [userDataFromLocalStorage.id]);
+  
+    fetchData();
+  }, [userDataFromLocalStorage.id, token]);
 
   useEffect(() => {
     if (records.length > 0 && userDataFromLocalStorage.id) {

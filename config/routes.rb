@@ -40,7 +40,7 @@ Rails.application.routes.draw do
     # delete 'course/:id', to: 'course#destroy'
 
     # resources :course, only: [:index, :create, :destroy]
-    resources :course, only: [:index, :create, :show, :update, :destroy]
+    resources :course
     post '/course/:course_id/add_user/:user_id', to: 'user_course#create'
   
     resources :group, only: [:index, :create, :show, :update, :destroy] do
@@ -48,7 +48,7 @@ Rails.application.routes.draw do
     end
     # post '/group/:group_id/add_user/:user_id', to: 'user_groups#create'  //origin
     post '/group/:groupId/add_user', to: 'user_groups#create'
-    get '/user_groups', to: 'user_groups#index'
+    get '/user_groups', to: 'user_groups#find'
 
 
     # match 'assign_group/:group_id', to: 'course_group#assign_group', as: :assign_group, via: [:get, :post]

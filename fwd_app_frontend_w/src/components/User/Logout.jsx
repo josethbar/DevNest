@@ -8,7 +8,6 @@ const Logout = () => {
   
   const logout = async () => {
     try {
-      debugger;
 
       // alert(localStorage.getItem("token"));
 

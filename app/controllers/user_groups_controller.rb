@@ -1,5 +1,7 @@
 
 class UserGroupsController < ApplicationController
+    include RackSessionsFix
+    
     def create
         group = Group.find_by(id: params[:group_id])
         user = User.find_by(id: params[:user_id])
@@ -18,4 +20,15 @@ class UserGroupsController < ApplicationController
             render json: { error: 'Hubo un problema al encontrar el usuario o el grupo' }, status: :not_found
         end
     end
+
+    def find
+        group = Group.find_by(id: params[:group_id])
+    
+        if group
+          users = group.users
+          render json: { users: users }
+        else
+          render json: { error: 'Hubo un problema al encontrar el grupo' }, status: :not_found
+        end
+      end
 end

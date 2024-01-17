@@ -30,8 +30,7 @@ function Group() {
     const [isLoadingGroups, setIsLoadingGroups] = useState(true);
     const [users, setUsers] = useState([]);
     const [isLoadingUsers, setIsLoadingUsers] = useState(true);
-    // const [userGroups, setUserGroups] = useState([])
-    // const [isLoadingUsersGroups, setIsLoadingUsersGroups] = useState(true);
+ 
     // Función para obtener datos de grupos y usuarios desde la API
     const fetchData = async () => {
        
@@ -43,7 +42,7 @@ function Group() {
             const groupsResponse = await fetch(GROUPS_API_URL, {
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`
+                    Authorization: token
                 }
             });
             const groupsData = await groupsResponse.json();
@@ -76,12 +75,11 @@ function Group() {
 
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
+                Authorization: token
             }
 
 
             })
-         console.log( 'si estoy llegando' ,userGroupsResponse);
           
         } catch (error) {
             console.error('Error en la llamada a la API:', error.message);
@@ -129,7 +127,7 @@ function Group() {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            Authorization: `Bearer ${token}`
+                            Authorization: token
                         },
                         body: JSON.stringify(requestData)
                     });
@@ -170,7 +168,7 @@ function Group() {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`
+                    Authorization: token
                 },
             });
 
@@ -216,7 +214,7 @@ function Group() {
 
     return (
         <div>
-            <h1>Grupos</h1>
+          
             {/* Mostrar mensaje de carga si se están cargando grupos o usuarios */}
             {isLoadingGroups || isLoadingUsers ? (
                 <div id="container">
@@ -270,14 +268,7 @@ function Group() {
                         )}
                     </div>
                     {/* Seleccionar un usuario para agregarlo al grupo */}
-                    <p>Usuarios disponibles para agregar a un grupo:</p>
-                    <ul>
-                        {users.map((user) => (
-                            <li key={user.id} onClick={() => handleUserSelect(user.id)}>
-                                {user.first_name} ----- {user.email}
-                            </li>
-                        ))}
-                    </ul>
+                   
                 </div>
             )}
         </div>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./medical_form.css";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from 'jwt-decode';
-
+import fwdlogo from '../../img/fwdlogo.png';
 /**
  * Componente DropdownComponent para el formulario médico.
  * @param {Object} currUser - Objeto de información del usuario actual.
@@ -135,16 +135,21 @@ const DropdownComponent = ({ currUser, authenticated }) => {
 
   // Renderizar el componente de formulario médico.
   return (
-    <div>
+    <div className="login-box" >
+
+<img  className="logofwd" src={fwdlogo} alt="Descripción de la imagen" />
+     <form>
+
+      <div className="user-box">
       {error && <p>{error}</p>}
       {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
-      <label htmlFor="categoryDropdown">Selecciona una categoría:</label>
+      <label htmlFor="categoryDropdown">Selecciona un tipo de afección:</label>
       <select
         id="categoryDropdown"
         value={selectedCategory}
         onChange={handleCategoryChange}
       >
-        <option value="">Selecciona...</option>
+        <option className="input" value="">Selecciona...</option>
         {categories &&
           categories.map((category) => (
             <option key={category.id} value={category.category}>
@@ -152,18 +157,28 @@ const DropdownComponent = ({ currUser, authenticated }) => {
             </option>
           ))}
       </select>
+      </div>
 
-      <label htmlFor="descriptionInput">Descripción:</label>
+        <div className="user-box" >
+      <label className="inputdescription" htmlFor="descriptionInput">Escriba una descripción sobre que procedimientos hay que seguir en caso se que sufra esta afección en la instalaciones</label>
       <input
         type="text"
         id="descriptionInput"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
+        </div>
 
-      <p>Categoría seleccionada: {selectedCategory}</p>
-
-      <button onClick={handleSubmit}>Enviar</button>
+      <p className="category">Categoría seleccionada: </p>
+        <h2 className="selectedCategory">{selectedCategory}</h2>
+         <center>
+         <a href="#">
+         <button className="summitButton"  onClick={handleSubmit}>Enviar</button>
+         <span></span>
+         </a>
+         </center>
+      </form>
+     
     </div>
   );
 };

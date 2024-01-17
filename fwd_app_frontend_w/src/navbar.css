@@ -2,10 +2,11 @@
 
 
 .navbar {
-  background-color: #0566c6; /* Azul oscuro */
+  background-color: #662d91; /* Azul oscuro */
   overflow: hidden;
   padding: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+  border: 1px solid black;
 }
 
 .nav-links {
