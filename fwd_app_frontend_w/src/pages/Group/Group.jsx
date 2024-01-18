@@ -10,7 +10,7 @@ function Group() {
     const GROUPS_API_URL = "http://localhost:3009/group";
     const USERS_API_URL = "http://localhost:3009/api/v1/users";
     const USER_GROUPS = "http://localhost:3009/user_groups";
-    
+
     // Hook de navegación de React Router
     const navigate = useNavigate();
 
@@ -30,10 +30,10 @@ function Group() {
     const [isLoadingGroups, setIsLoadingGroups] = useState(true);
     const [users, setUsers] = useState([]);
     const [isLoadingUsers, setIsLoadingUsers] = useState(true);
- 
+
     // Función para obtener datos de grupos y usuarios desde la API
     const fetchData = async () => {
-       
+
         try {
 
             const token = localStorage.getItem("token");
@@ -49,7 +49,7 @@ function Group() {
             setGroups(groupsData);
             setIsLoadingGroups(false);
 
-            
+
 
             // Obtener usuarios
 
@@ -60,7 +60,7 @@ function Group() {
                 }
             });
 
-            
+
             if (usersResponse.ok) {
                 const usersData = await usersResponse.json();
                 setUsers(usersData);
@@ -73,27 +73,27 @@ function Group() {
 
             const userGroupsResponse = await fetch(USER_GROUPS, {
 
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: token
-            }
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: token
+                }
 
 
             })
-          
+
         } catch (error) {
             console.error('Error en la llamada a la API:', error.message);
             setIsLoadingGroups(false);
             setIsLoadingUsers(false);
         }
     };
-    
+
 
     // Efecto para cargar datos al montar el componente
     useEffect(() => {
         fetchData();
     }, []);
-    
+
 
 
 
@@ -214,7 +214,7 @@ function Group() {
 
     return (
         <div>
-          
+
             {/* Mostrar mensaje de carga si se están cargando grupos o usuarios */}
             {isLoadingGroups || isLoadingUsers ? (
                 <div id="container">
@@ -226,9 +226,9 @@ function Group() {
                     </span>
                 </div>
             ) : (
-                <div  className="dad-group"  >
+                <div className="dad-group"  >
 
-                    <HomeNav/>
+                    <HomeNav />
                     {/* Contenido una vez que se han cargado grupos y usuarios */}
                     {/* <div>¡Hola! Este es el contenido del componente Group.</div> */}
                     {/* Mostrar lista de grupos */}
@@ -237,12 +237,12 @@ function Group() {
                             <ul className='dadList'>
                                 {groups.map((group) => (
 
-                                    
+
                                     <li className='list' key={group.id}>
 
 
                                         <h1 className='groupName'> {group.name} </h1>
-                                   
+
                                         <select
                                             id={`userDropdown_${group.id}`}
                                             value={group.selectedUserIds || ""}
@@ -258,11 +258,11 @@ function Group() {
                                             ))}
                                         </select>
 
-                                        <button onClick={() => handleAddUser(group.id, group.selectedUserId)}>add user</button>
+                                        <button className='adduser' onClick={() => handleAddUser(group.id, group.selectedUserId)}>add user</button>
 
                                         {/* <button onClick={() => handleAddUser(group.id)}>add user</button> no1 */}
                                         {/* <p>Categoría seleccionada: {selectedUserId}</p> */}
-                                        <button onClick={() => handleDeleteGroup(group.id)}>eliminar/grupo</button>
+                                        <button className='deletegroup' onClick={() => handleDeleteGroup(group.id)}>eliminar/grupo</button>
                                     </li>
                                 ))}
                                 <Link to='/newGroup' className='addgroup'>Agregar grupo</Link>
@@ -272,7 +272,7 @@ function Group() {
                         )}
                     </div>
                     {/* Seleccionar un usuario para agregarlo al grupo */}
-                   
+
                 </div>
             )}
         </div>

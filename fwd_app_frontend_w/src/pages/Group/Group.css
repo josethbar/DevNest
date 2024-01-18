@@ -15,21 +15,39 @@
     text-decoration: none;
     list-style: none;
     display: grid;
-    grid-template-rows: auto auto;
+    grid-template-rows: auto auto ;
     background-color: rgb(183, 183, 183);
-    margin: 20px;
+    margin: 15px;
+   
     border-radius: 15px;
     height: 300px;
-
+    width: 300px;
 }
 
 .dadList{
     border: 2px solid black;
-    width: 900px;
 display: grid;
-grid-template-columns: auto auto auto auto;
+grid-template-columns: auto auto auto;
+padding: 10px;
 }
 
 .groupName{
-    font-size: 40px;
+    font-size: 20px;
+}
+
+.adduser{
+width: 80px;
+height: 40px;
+display: flex;
+justify-content: center;
+}
+
+
+.deletegroup{
+    position: relative;
+    left: 200px;
+    width: 80px;
+    height: 40px;
+    display: flex;
+    justify-content: center;  
 }

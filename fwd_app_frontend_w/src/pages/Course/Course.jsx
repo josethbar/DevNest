@@ -170,16 +170,16 @@ function Course() {
       });
 
       if (response.ok) {
-        const responseData = await response.json(); 
+        const responseData = await response.json();
         console.log("Grupo asignado correctamente");
         console.log(responseData.message);
-  
+
         const serverMessage = responseData.message || "";
         if (serverMessage.includes("El grupo ya está asignado")) {
           setError(serverMessage);
           setSuccessMessage("");
         } else {
-    
+
           setSuccessMessage(serverMessage);
           setError("");
         }
@@ -193,7 +193,7 @@ function Course() {
       setSuccessMessage("");
     }
   };
-  
+
 
   // ======================================="acaaaaaaaaaaaaaaaa"===========================
   const fetchGroups = async () => {

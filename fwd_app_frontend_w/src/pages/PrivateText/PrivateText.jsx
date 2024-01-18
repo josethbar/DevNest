@@ -2,7 +2,7 @@ import { useEffect, useContext } from "react";
 import { Routes, Route, BrowserRouter as Router } from 'react-router-dom';
 import FwdApp from "../FwdApp/FwdApp";
 // import { useNavigate } from "react-router-dom";
-import NewCourse from "../Course/NewCourse";
+import NewCourse from "../Course/NewCourse"
 import User from "../../components/User/User";
 import Course from "../Course/Course";
 import Group from "../Group/Group";
