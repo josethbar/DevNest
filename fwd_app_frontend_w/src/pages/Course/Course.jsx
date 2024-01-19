@@ -235,14 +235,12 @@ function Course() {
       </div>
       {error && <p>{error}</p>}
       {isLoading ? (
-        <div id="container">
-          <label className="loading-title">Cargando</label>
-          <span className="loading-circle sp1">
-            <span className="loading-circle sp2">
-              <span className="loading-circle sp3"></span>
-            </span>
-          </span>
+         <div>
+         <div class="loader-container">
+        <div class="loader"></div>
+        <div class="loader-text">cargando cursos...</div>
         </div>
+            </div>
       ) : courses.length > 0 ? (
         <ul className="courseBox">
           <div className="dad-course">

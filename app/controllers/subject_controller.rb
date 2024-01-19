@@ -1,10 +1,8 @@
 class SubjectController < ApplicationController
-    before_action :authenticate_user!, except: [:index, :show, :update ,:create, :destroy]
-    
+    before_action :authenticate_user!
     before_action :set_course, only: [:show, :edit, :destroy]
 
         def index
-          # authorize @courses # Verifica la autorización usando Pundit
             @subject = Subject.all
             render json: @subject
         end

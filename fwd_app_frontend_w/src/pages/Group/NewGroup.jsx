@@ -27,7 +27,7 @@ export default function NewGroup() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': token
                 },
                 body: JSON.stringify({ groups: grupoData })
             });

@@ -217,18 +217,28 @@ function Group() {
 
             {/* Mostrar mensaje de carga si se están cargando grupos o usuarios */}
             {isLoadingGroups || isLoadingUsers ? (
-                <div id="container">
-                    <label className="loading-title">Cargando</label>
-                    <span className="loading-circle sp1">
-                        <span className="loading-circle sp2">
-                            <span className="loading-circle sp3"></span>
-                        </span>
-                    </span>
+                <div>
+
+          
+             <div class="loader-container">
+            <div class="loader"></div>
+            <div class="loader-text">cargando grupos...</div>
+            </div>
                 </div>
+
             ) : (
                 <div className="dad-group"  >
+                       
 
-                    <HomeNav />
+          <nav className="subNav">
+             <div className="sub-nav-links">
+                            
+                  <Link to="/course" className='sub-links'>Course</Link>
+                  <Link to="/home" className='sub-links'>Groups</Link>
+                            
+             </div>
+          </nav>
+                   
                     {/* Contenido una vez que se han cargado grupos y usuarios */}
                     {/* <div>¡Hola! Este es el contenido del componente Group.</div> */}
                     {/* Mostrar lista de grupos */}
@@ -268,7 +278,12 @@ function Group() {
                                 <Link to='/newGroup' className='addgroup'>Agregar grupo</Link>
                             </ul>
                         ) : (
-                            <p>No hay grupos disponibles.</p>
+                            <div>
+                                <p>No hay grupos disponibles.</p>
+
+                                <Link to='/newGroup' className='addgroup'>Agregar grupo</Link>
+                            </div>
+                            
                         )}
                     </div>
                     {/* Seleccionar un usuario para agregarlo al grupo */}

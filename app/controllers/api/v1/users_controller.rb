@@ -5,7 +5,7 @@ class Api::V1::UsersController < ApplicationController
       # GET /api/v1/users
       def index
         if user_signed_in?
-          @users = User.all.map { |user| { id: user.id, first_name: user.first_name, email: user.email } }
+          @users = User.all.map { |user| { id: user.id, first_name: user.first_name, last_name: user.last_name, email: user.email } }
           render json: @users
         else
           render json: { error: 'No autorizado. Inicia sesión para acceder a esta información.   qué esta pasando  aq' }, status: :unauthorized
@@ -77,7 +77,7 @@ class Api::V1::UsersController < ApplicationController
     
         # Only allow a trusted parameter "white list" through.
         def user_params
-            params.require(:user).permit(:first_name, :description, :email, :encrypted_password, :avatar)
+            params.require(:user).permit(:first_name, :last_name, :description, :email, :encrypted_password, :avatar)
         end
 
 

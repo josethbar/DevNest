@@ -4,7 +4,7 @@ export async function getUsers() {
   try {
     const token = localStorage.getItem("token");
 
-    const requestUsers = await fetch(UrlApi_Fwd + "api/v1/user", {
+    const requestUsers = await fetch(UrlApi_Fwd + "api/v1/users", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -13,7 +13,7 @@ export async function getUsers() {
     });
 
     const users = await requestUsers.json();
-    console.log(users);
+    console.log("Users from API:", users);
     return users;
   } catch (error) {
     return { error: "Hubo un error en el API - fwd.js" };

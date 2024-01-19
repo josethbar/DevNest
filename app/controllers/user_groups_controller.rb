@@ -9,6 +9,10 @@ class UserGroupsController < ApplicationController
         # binding.pry
     if user && group
         begin
+
+            UserGroups.transaction do
+                user.Group << group
+             end
             UserGroup.create(user_id: user.id, group_id: group.id)
 
             render json: { message: 'Usuario agregado al grupo correctamente' }
@@ -21,14 +25,5 @@ class UserGroupsController < ApplicationController
         end
     end
 
-    def find
-        group = Group.find_by(id: params[:group_id])
-    
-        if group
-          users = group.users
-          render json: { users: users }
-        else
-          render json: { error: 'Hubo un problema al encontrar el grupo' }, status: :not_found
-        end
-      end
+   
 end

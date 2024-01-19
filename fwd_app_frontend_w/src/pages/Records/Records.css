@@ -9,10 +9,12 @@
     border: 2px solid black;
     width: 150px;
     height: 70px;
-    background-color: rgb(104, 3, 109);
+    background-color: #662d91;
     color: white;
 }
 
-.newForm:hover{
-
+.buscador{
+    
+    width: 200x;
+    height: 20px;
 }
