@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Group.css';
 import { AuthContext } from '../PrivateText/AuthContext';
-import HomeNav from '../../components/User/homeNav';
 // import jwtDecode from 'jwt-decode';
 
 function Group() {
@@ -75,11 +74,12 @@ function Group() {
 
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: token
+                    'Authorization': token
                 }
 
 
-            })
+            });
+            
 
         } catch (error) {
             console.error('Error en la llamada a la API:', error.message);
@@ -168,7 +168,7 @@ function Group() {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: token
+                    'Authorization': token
                 },
             });
 
@@ -218,41 +218,40 @@ function Group() {
             {/* Mostrar mensaje de carga si se están cargando grupos o usuarios */}
             {isLoadingGroups || isLoadingUsers ? (
                 <div>
-
-          
-             <div class="loader-container">
-            <div class="loader"></div>
-            <div class="loader-text">cargando grupos...</div>
-            </div>
+                    <div className="loader-container">
+                        <div className="loader"></div>
+                        <div className="loader-text">cargando grupos...</div>
+                    </div>
                 </div>
-
             ) : (
                 <div className="dad-group"  >
-                       
-
-          <nav className="subNav">
-             <div className="sub-nav-links">
-                            
-                  <Link to="/course" className='sub-links'>Course</Link>
-                  <Link to="/home" className='sub-links'>Groups</Link>
-                            
-             </div>
-          </nav>
-                   
-                    {/* Contenido una vez que se han cargado grupos y usuarios */}
-                    {/* <div>¡Hola! Este es el contenido del componente Group.</div> */}
-                    {/* Mostrar lista de grupos */}
+                    <nav className="subNav">
+                        <div className="sub-nav-links">
+                            <Link to="/course" className='sub-links'>Course</Link>
+                            <Link to="/home" className='sub-links'>Groups</Link>
+                            {groups.length > 0 ? (
+                                <ul className='dadGroups'>
+                                    {groups.map((group) => (
+                                        <li className='groupsList' key={group.id}>
+                                            <Link to="/home" className='sub-links'>{group.name}</Link>
+                                        </li>
+                                    ))}
+                                    <Link to='/newGroup' className='addgroup'>Agregar grupo</Link>
+                                </ul>
+                            ) : (
+                                <div>
+                                    <p>No hay grupos disponibles.</p>
+                                    <Link to='/newGroup' className='addgroup'>Agregar grupo</Link>
+                                </div>
+                            )}
+                        </div>
+                    </nav>
                     <div>
                         {groups.length > 0 ? (
                             <ul className='dadList'>
                                 {groups.map((group) => (
-
-
                                     <li className='list' key={group.id}>
-
-
                                         <h1 className='groupName'> {group.name} </h1>
-
                                         <select
                                             id={`userDropdown_${group.id}`}
                                             value={group.selectedUserIds || ""}
@@ -267,12 +266,12 @@ function Group() {
                                                 </option>
                                             ))}
                                         </select>
-
                                         <button className='adduser' onClick={() => handleAddUser(group.id, group.selectedUserId)}>add user</button>
-
+                                        <button className="button" onClick={() => handleDeleteGroup(group.id)} >
+                                            <svg viewBox="0 0 448 512" className="svgIcon"><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"></path></svg>
+                                        </button>
                                         {/* <button onClick={() => handleAddUser(group.id)}>add user</button> no1 */}
                                         {/* <p>Categoría seleccionada: {selectedUserId}</p> */}
-                                        <button className='deletegroup' onClick={() => handleDeleteGroup(group.id)}>eliminar/grupo</button>
                                     </li>
                                 ))}
                                 <Link to='/newGroup' className='addgroup'>Agregar grupo</Link>
@@ -280,14 +279,10 @@ function Group() {
                         ) : (
                             <div>
                                 <p>No hay grupos disponibles.</p>
-
                                 <Link to='/newGroup' className='addgroup'>Agregar grupo</Link>
                             </div>
-                            
                         )}
                     </div>
-                    {/* Seleccionar un usuario para agregarlo al grupo */}
-
                 </div>
             )}
         </div>

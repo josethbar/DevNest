@@ -12,6 +12,8 @@ import Health from "../Health/Health";
 import DisplayHealth from "../medic records/Clinical_form";
 import RecordsComponent from "../Records/Records";
 import { AuthContext, AuthProvider } from "./AuthContext";
+import Administration from "../Administration/Administration";
+import Subject from "../Subject/Subject";
 
 
 const PrivateText = () => {
@@ -51,7 +53,6 @@ const PrivateText = () => {
                         // Vuelve a verificar la validez del token después de actualizarlo
 
                         setAuthenticated(true);   // Actualizar el estado de autenticación
-
                         checkTokenValidity(); // Verificar la validez del nuevo token
 
                     } else {
@@ -120,16 +121,15 @@ const PrivateText = () => {
                                     <Route path="/health" element={<Health authenticated={authenticated} />} />
                                     <Route path="/healthyform" element={<DisplayHealth authenticated={authenticated} currentUser={currentUser} />} />
                                     <Route path="/records" element={<RecordsComponent authenticated={authenticated} currentUser={currentUser} />} />
+                                    <Route path="/administration" element={<Administration authenticated={authenticated} />} />
+                                    <Route path="/subject" element={<Subject authenticated={authenticated} />} />
                                 </Routes>
                             </>
                         }
                     />
-
                     <Route path="/login" element={<User />}></Route>
-
                 </Routes>
             </Router>
-
         </AuthProvider>
     );
 };

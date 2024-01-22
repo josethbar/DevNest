@@ -2,6 +2,15 @@
 class UserGroupsController < ApplicationController
     include RackSessionsFix
     
+    before_action :authenticate_user!
+    
+    def index
+        user_groups = UserGroup.all
+        render json: user_groups
+      end
+    
+
+
     def create
         group = Group.find_by(id: params[:group_id])
         user = User.find_by(id: params[:user_id])

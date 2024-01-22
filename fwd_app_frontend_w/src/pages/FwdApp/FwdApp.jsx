@@ -4,6 +4,7 @@ import { AuthContext } from '../PrivateText/AuthContext';
 // import { Link } from 'react-router-dom';
 import './FwdApp.css';
 import HomeNav from '../../components/User/homeNav';
+import Subject from '../Subject/Subject';
 
 function FwdApp() {
   const { authenticated } = useContext(AuthContext);
@@ -24,12 +25,10 @@ function FwdApp() {
     <div>
 
       <div className="Home-container">
-        <HomeNav />
+        <HomeNav/>
+        <Subject/>
 
-        {/* <span>{cur
-      rentUser}</span> */}
-        {/* <iframe className="fwdvideo" width="360" height="315" src="https://www.youtube.com/embed/wx0yE5gRUDU?si=Hc-deROp8jps4qC9" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe> */}
-
+   
 
       </div>
 

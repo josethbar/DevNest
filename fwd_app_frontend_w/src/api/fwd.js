@@ -82,3 +82,23 @@ export async function getUserRole() {
     return { error: "Hubo un error en el API - fwd.js" };
   }
 }
+
+export async function getSubject() {
+  try {
+    const token = localStorage.getItem("token");
+
+    const requestRole = await fetch(UrlApi_Fwd + "subject", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token
+      },
+    });
+
+    const subjectData = await requestRole.json();
+    console.log( "subject en api", subjectData);
+    return subjectData;
+  } catch (error) {
+    return { error: "Hubo un error en el API - fwd.js" };
+  }
+}

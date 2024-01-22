@@ -48,7 +48,7 @@ Rails.application.routes.draw do
     end
     # post '/group/:group_id/add_user/:user_id', to: 'user_groups#create'  //origin
     post '/group/:groupId/add_user', to: 'user_groups#create'
-    get '/user_groups', to: 'user_groups#find'
+    # get '/user_groups', to: 'user_groups#find'
 
 
     # match 'assign_group/:group_id', to: 'course_group#assign_group', as: :assign_group, via: [:get, :post]
@@ -77,6 +77,8 @@ Rails.application.routes.draw do
 
 
     get '/user_role', to: 'user_roles#show'
+
+    resources :subject
 
     # post '/refresh-token', to: 'auth#refresh_token'
 

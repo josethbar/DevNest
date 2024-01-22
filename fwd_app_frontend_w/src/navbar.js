@@ -15,8 +15,8 @@ const NavigationBar = () => {
     <div className="nav-links">
     <Link to="/home" className='link-nav'>Inicio</Link>
     <Link to="/course" className='link-nav'>Rendimiento</Link> 
-    <Link to="/group" className='link-nav'>Usuarios</Link>
     <Link to="/records" className='link-nav'>Expediente medico</Link>
+    <Link to="/administration" className='link-nav'>Usuarios</Link>
     <div className="logout-button">  <Logout setCurrUser={setCurrentUser} ></Logout>  </div>
     </div>
   </nav>
