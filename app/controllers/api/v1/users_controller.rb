@@ -1,6 +1,8 @@
 class Api::V1::UsersController < ApplicationController 
-    before_action :authenticate_user!, except: [:index, :show]  
-    before_action :set_user, only: [:show, :update, :destroy]   
+  include RackSessionsFix
+
+    before_action :authenticate_user!
+    
     
       # GET /api/v1/users
       def index
@@ -32,6 +34,7 @@ class Api::V1::UsersController < ApplicationController
           return
         end
     
+        user_roles = User.all.map { |user| { id: user.id, role: user.role.name } }
         user_data = {
           id: @user.id,
           first_name: @user.first_name,
@@ -40,6 +43,7 @@ class Api::V1::UsersController < ApplicationController
         
         questions = @user.questions
     
+        render json: user_roles
         render json: { user: user_data, questions: questions }
       end
     
@@ -60,12 +64,28 @@ class Api::V1::UsersController < ApplicationController
           @user.avatar.attach(user_params[:avatar])
         end
     
+
         if @user.update(user_params.except(:avatar))
             render json: @user
         else
             render json: @user.errors, status: :unprocessable_entity
         end
     end
+
+    def update_state
+      user = User.find(params[:id])
+      new_state = params[:state]
+  
+      allowed_states = ['aprobado', 'en_curso', 'expulsado', 'retirado']
+      
+      if user && new_state && allowed_states.include?(new_state)
+          user.update(state: new_state)
+          render json: { user: user_data, questions: questions }, status: :ok
+
+      else
+        render json: { error: 'Error al actualizar el estado del usuario', details: error.message }, status: :unprocessable_entity
+      end
+  end
     
       # DELETE /api/v1/users/1
     def destroy

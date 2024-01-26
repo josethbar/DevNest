@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_22_173659) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_23_152939) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -118,8 +118,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_22_173659) do
     t.string "comment"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "subject_id", null: false
-    t.index ["subject_id"], name: "index_subject_feedbacks_on_subject_id"
+    t.bigint "user_subject_id", null: false
+    t.index ["user_subject_id"], name: "index_subject_feedbacks_on_user_subject_id"
   end
 
   create_table "subjects", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -160,6 +160,17 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_22_173659) do
     t.index ["user_id"], name: "index_user_groups_on_user_id"
   end
 
+  create_table "user_subjects", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "state"
+    t.integer "grade"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.bigint "subject_id", null: false
+    t.index ["subject_id"], name: "index_user_subjects_on_subject_id"
+    t.index ["user_id"], name: "index_user_subjects_on_user_id"
+  end
+
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -194,11 +205,13 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_22_173659) do
   add_foreign_key "course_subjects", "subjects"
   add_foreign_key "healths", "users"
   add_foreign_key "medical_records", "users"
-  add_foreign_key "subject_feedbacks", "subjects"
+  add_foreign_key "subject_feedbacks", "user_subjects"
   add_foreign_key "user_communications", "communications"
   add_foreign_key "user_communications", "users"
   add_foreign_key "user_courses", "courses"
   add_foreign_key "user_courses", "users"
   add_foreign_key "user_groups", "groups"
   add_foreign_key "user_groups", "users"
+  add_foreign_key "user_subjects", "subjects"
+  add_foreign_key "user_subjects", "users"
 end

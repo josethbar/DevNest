@@ -9,7 +9,7 @@ import Group from "../Group/Group";
 import NewGroup from "../Group/NewGroup";
 import NavigationBar from "../../navbar";
 import Health from "../Health/Health";
-import DisplayHealth from "../medic records/Clinical_form";
+import DisplayHealth from "../Clinical Form/Clinical_form"
 import RecordsComponent from "../Records/Records";
 import { AuthContext, AuthProvider } from "./AuthContext";
 import Administration from "../Administration/Administration";

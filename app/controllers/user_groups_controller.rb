@@ -12,17 +12,18 @@ class UserGroupsController < ApplicationController
 
 
     def create
+        puts "Ruta recibida: #{request.fullpath}"
         group = Group.find_by(id: params[:group_id])
-        user = User.find_by(id: params[:user_id])
+        user =params[:user_id].first
         
         # binding.pry
     if user && group
         begin
 
-            UserGroups.transaction do
-                user.Group << group
+            UserGroup.transaction do
+                UserGroup.create(user_id: user, group_id: group.id)
              end
-            UserGroup.create(user_id: user.id, group_id: group.id)
+            # UserGroup.create(user_id: user.id, group_id: group.id)
 
             render json: { message: 'Usuario agregado al grupo correctamente' }
         rescue ActiveRecord::RecordInvalid => e

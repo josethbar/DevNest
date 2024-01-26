@@ -131,9 +131,9 @@ const RecordsComponent = () => {
     <div>
       {isLoadingRecords ? (
         <div>
-          <div class="loader-container">
-            <div class="loader"></div>
-            <div class="loader-text">cargando expedientes..</div>
+          <div className="loader-container">
+            <div className="loader"></div>
+            <div className="loader-text">cargando expedientes..</div>
           </div>
         </div>
       ) : (

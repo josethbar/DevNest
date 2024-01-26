@@ -8,7 +8,7 @@ function Group() {
     // Definición de las URLs de la API
     const GROUPS_API_URL = "http://localhost:3009/group";
     const USERS_API_URL = "http://localhost:3009/api/v1/users";
-    const USER_GROUPS = "http://localhost:3009/user_groups";
+ 
 
     // Hook de navegación de React Router
     const navigate = useNavigate();
@@ -19,7 +19,7 @@ function Group() {
     useEffect(() => {
         if (!authenticated) {
             console.log("Estás autenticado. Redirigiendo...");
-            navigate("/group");
+            navigate("/login");
         }
     }, [authenticated, navigate]);
 
@@ -59,7 +59,6 @@ function Group() {
                 }
             });
 
-
             if (usersResponse.ok) {
                 const usersData = await usersResponse.json();
                 setUsers(usersData);
@@ -68,18 +67,6 @@ function Group() {
                 console.error('Error al obtener usuarios:', usersResponse.status);
                 setIsLoadingUsers(false);
             }
-
-
-            const userGroupsResponse = await fetch(USER_GROUPS, {
-
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': token
-                }
-
-
-            });
-            
 
         } catch (error) {
             console.error('Error en la llamada a la API:', error.message);
@@ -122,7 +109,7 @@ function Group() {
             console.log("SOY EL REQUEST", requestData)
 
             const response = await fetch
-                (`http://localhost:3009/group/:groupId/add_user`,
+                (`http://localhost:3009/group/${groupId}/add_user/${userId}`,
                     {
                         method: 'POST',
                         headers: {
@@ -290,5 +277,3 @@ function Group() {
 }
 
 export default Group;
-
-

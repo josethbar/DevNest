@@ -43,7 +43,6 @@ const Login = ({ setShow }) => {
 
             // Actualizar el almacenamiento local al iniciar sesión
             localStorage.setItem('token', response.headers.get('Authorization'));
-
             console.log("token al entrar", localStorage.setItem('token', response.headers.get('Authorization')));
             localStorage.setItem('userData', JSON.stringify(data));
 

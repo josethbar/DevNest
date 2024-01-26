@@ -225,15 +225,6 @@ function Course() {
   console.log(successMessage);
   return (
     <div className="container-cage">
-      <div>
-        <div className="top-container">
-          <h1>Courses</h1>
-          <a href="/newCourse" className="custom-btn btn-2">
-            Nuevo
-          </a>
-        </div>
-      </div>
-      {error && <p>{error}</p>}
       {isLoading ? (
         <div>
           <div className="loader-container">
@@ -243,8 +234,11 @@ function Course() {
         </div>
       ) : courses.length > 0 ? (
         <ul className="courseBox">
-          <div className="dad-course">
+           <div className="top-container">
             <HomeNav />
+        </div>
+      {error && <p>{error}</p>}
+          <div className="dad-course">
             {courses.map((course, index) => (
               <li key={index}>
                 {editCourseId === course.id ? (
@@ -299,9 +293,14 @@ function Course() {
                     </div>
                   </div>
                 )}
+                
               </li>
+               
             ))}
           </div>
+          <a href="/newCourse" className="custom-btn btn-2">
+            Nuevo
+          </a>
         </ul>
       ) : (
         <p>No se encontraron datos.</p>

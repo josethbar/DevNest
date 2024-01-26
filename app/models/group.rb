@@ -13,9 +13,21 @@ class Group < ApplicationRecord
 
   DEFAULT_QUANTITY = 0
 
+    # Add a callback to create UserSubjects for each user when a subject is created
+    after_create :create_user_subjects_for_users
+
   private
 
   def set_default_quantity
     self.quantity ||= DEFAULT_QUANTITY
   end
+
+  def create_user_subjects_for_users
+    users.each do |user|
+      subject = subjects.create(name: "Default Subject") # Customize this based on your Subject model
+      UserSubject.create(user: user, subject: subject)
+    end
+  end
+
+
 end
