@@ -45,4 +45,7 @@
 }
 
 
-    
+.Home-container{
+  display: flex;
+}
+

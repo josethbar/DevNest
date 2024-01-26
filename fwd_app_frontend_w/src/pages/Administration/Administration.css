@@ -1,0 +1,28 @@
+.administration-container {
+    padding: 20px;
+}
+
+.user-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.user-table th, .user-table td {
+    border: 2px solid #ffcb05;
+    padding: 8px;
+    text-align: left;
+}
+
+.user-table th {
+    background-color: #662d91;
+}
+
+.error-message {
+    color: red;
+}
+
+.no-users-message {
+    font-style: italic;
+    color: gray;
+}

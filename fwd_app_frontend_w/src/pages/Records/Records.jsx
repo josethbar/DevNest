@@ -1,168 +1,180 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext, AuthProvider } from "../PrivateText/AuthContext";
+import { AuthContext } from "../PrivateText/AuthContext";
+import { getMedicalRecord, getUserRole, getUsers } from "../../api/fwd";
 import "./Records.css";
 
 const RecordsComponent = () => {
-  // Obtener el estado de autenticación del contexto
   const { authenticated } = useContext(AuthContext);
+  const navigate = useNavigate();
 
-  // Estados locales para manejar registros, carga, errores, registros filtrados y datos de usuario
   const [records, setRecords] = useState([]);
   const [isLoadingRecords, setIsLoadingRecords] = useState(true);
   const [error, setError] = useState(null);
   const [filteredRecords, setFilteredRecords] = useState([]);
   const [userDataFromLocalStorage, setUserDataFromLocalStorage] = useState({});
+  const [userRole, setUserRole] = useState(null);
+  const [users, setUsers] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  // Función de navegación proporcionada por react-router-dom
-  const navigate = useNavigate();
-
-  // Efecto para obtener y almacenar datos de usuario desde el almacenamiento local
-
-
-  useEffect(() => {
-    const storedUserData = JSON.parse(localStorage.getItem("userData")) || {};
-    setUserDataFromLocalStorage(storedUserData);
-    console.log("Registros ACTUALES:", storedUserData);
-  }, []);
-  // Efecto para redirigir a la página de registros si no está autenticado
-
-  useEffect(() => {
-    if (!authenticated) {
-      navigate("/records");
-    }
-  }, [authenticated, navigate]);
-
-
-
-  // Efecto para obtener registros médicos desde la API
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-      setError("Token de autenticación no encontrado");
-      setIsLoadingRecords(false);
-      return;
-    }
-
-    fetch("http://localhost:3009/medical_record", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`Error ${response.status}: ${response.statusText}`);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setRecords(data);
-        setIsLoadingRecords(false);
-      })
-      .catch((error) => {
-        console.error("Error al obtener registros:", error);
-        setError(`Error al obtener registros desde la API: ${error.message}`);
-        setIsLoadingRecords(false);
-      });
-  }, [authenticated]);
-
-  // Efecto para obtener el rol del usuario desde la API y filtrar registros en consecuencia
   useEffect(() => {
     const fetchData = async () => {
-      const token = localStorage.getItem("token");
-
-      if (!token) {
-        setError("Token de autenticación no encontrado");
-        setIsLoadingRecords(false);
-        return;
-      }
-
       try {
-        const response = await fetch("http://localhost:3009/user_role", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
-          },
-        });
+        const storedUserData =
+          JSON.parse(localStorage.getItem("userData")) || {};
+        setUserDataFromLocalStorage(storedUserData);
 
-        if (!response.ok) {
-          throw new Error(`Error ${response.status}: ${response.statusText}`);
+        if (!authenticated) {
+          navigate("/login");
+          return;
         }
 
-        const userDataRole = await response.json();
-        const userRole = userDataRole.role;
+        const [medicalRecords, userRoleData] = await Promise.all([
+          getMedicalRecord(),
+          getUserRole(),
+        ]);
 
-        console.log("Datos del rol del usuario", userDataRole);
-        console.log("Rol del usuario", userRole);
-
-        // return userRole;
+        setRecords(medicalRecords);
+        setUserRole(userRoleData.role);
+        setIsLoadingRecords(false);
       } catch (error) {
-        console.error("Error al obtener el rol del usuario:", error);
-        setError(`Error al obtener el rol del usuario: ${error.message}`);
+        console.error("Error al obtener registros:", error);
+        setError(`Error al obtener registros desde la API: ${error.message}`);
         setIsLoadingRecords(false);
       }
     };
 
-    fetchData().then((userRole) => {
-      if (userRole) {
-        filterRecords(userRole);
-      }
-    });
-  }, [userDataFromLocalStorage.id]);
+    fetchData();
+  }, [authenticated, navigate]);
 
   useEffect(() => {
-    if (records.length > 0 && userDataFromLocalStorage.id) {
-      filterRecords();
+    if (records.length > 0 && userRole) {
+      filterRecords(userRole, searchTerm);
     }
-  }, [records, userDataFromLocalStorage.id]);
+  }, [records, userRole, searchTerm]);
 
-  const filterRecords = (userRole) => {
-    if (!userRole && !userDataFromLocalStorage.id) {
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const usersData = await getUsers();
+
+        if (!usersData.error) {
+          setUsers(usersData);
+        } else {
+          console.error(usersData.error);
+        }
+      } catch (error) {
+        console.error("Error al obtener usuarios:", error);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
+  const filterRecords = (role, term) => {
+    if (!role) {
       return;
     }
 
-    if (userRole === 'student') {
-      // Filtrar registros para estudiantes
-      const userRecords = records.filter((record) => record.user_id === userDataFromLocalStorage.id);
-      setFilteredRecords(userRecords);
+    let filtered = [];
+
+    if (role === "student") {
+      const userRecords = records.filter(
+        (record) => record.user_id === userDataFromLocalStorage.id
+      );
+      filtered = userRecords;
     } else {
-      // Mostrar todos los registros para otros roles
-      setFilteredRecords(records);
+      filtered = records.slice(); // Create a copy of records array
     }
+
+    // Filter records by user name and suffering
+    filtered = filtered.filter((record) => {
+      const userName = getUserName(record.user_id).toLowerCase();
+      const suffering = record.suffering.toLowerCase();
+      const searchTermLower = term.toLowerCase();
+
+      return (
+        userName.includes(searchTermLower) ||
+        suffering.includes(searchTermLower)
+      );
+    });
+
+    // Sort filtered records by user name
+    filtered.sort((a, b) => {
+      const nameA = getUserName(a.user_id).toLowerCase();
+      const nameB = getUserName(b.user_id).toLowerCase();
+      return nameA.localeCompare(nameB);
+    });
+
+    setFilteredRecords(filtered);
   };
 
+  const formNavigate = () => {
+    navigate("/healthyForm");
+  };
+
+  const getUserName = (userId) => {
+    const user = Array.isArray(users)
+      ? users.find((u) => u.id === userId)
+      : null;
+
+    if (user) {
+      const firstName = user.first_name || "Desconocido";
+      const lastName = user.last_name || "";
+      return `${firstName} ${lastName}`.trim();
+    }
+
+    return "Desconocido";
+  };
 
   return (
     <div>
-      <AuthProvider>
-        {isLoadingRecords ? (
-          // Muestra un mensaje de carga si los registros están siendo cargados
-          <div id="container">
-            <label className="loading-title">Cargando</label>
-            <span className="loading-circle sp1">
-              <span className="loading-circle sp2">
-                <span className="loading-circle sp3"></span>
-              </span>
-            </span>
+      {isLoadingRecords ? (
+        <div>
+          <div className="loader-container">
+            <div className="loader"></div>
+            <div className="loader-text">cargando expedientes..</div>
           </div>
-        ) : (
-          // Muestra la lista de registros filtrados
+        </div>
+      ) : (
+        <div>
+          <div className="recordsHeader">
+            <h1>
+              {userDataFromLocalStorage.first_name}{" "}
+              {userDataFromLocalStorage.last_name}
+            </h1>
+            <input
+              className="buscador"
+              type="text"
+              placeholder="Buscar por padecimiento o nombre de usuario"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <button className="newForm" onClick={formNavigate}>
+              Llenar un nuevo formulario
+            </button>
+          </div>
           <ul>
             {filteredRecords.map((record) => (
               <li key={record.id}>
-                <p>Estudiante: {record.user_id}</p>
-                <p>Padecimiento: {record.suffering}</p>
-                <p>Especificaciones: {record.specifications}</p>
+                {userRole === "student" ? (
+                  <>
+                    <p>Padecimiento: {record.suffering}</p>
+                    <p>Especificaciones: {record.specifications}</p>
+                  </>
+                ) : (
+                  <>
+                    <p>Usuario: {getUserName(record.user_id)}</p>
+                    <p>Padecimiento: {record.suffering}</p>
+                    <p>Especificaciones: {record.specifications}</p>
+                  </>
+                )}
                 <hr />
               </li>
             ))}
           </ul>
-        )}
-      </AuthProvider>
+        </div>
+      )}
     </div>
   );
 };

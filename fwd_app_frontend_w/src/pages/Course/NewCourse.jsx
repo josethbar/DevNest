@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from '../PrivateText/AuthContext';
+import './NewCourse.css';
 
 // URL de la API para crear un nuevo curso
 const API_URL = "http://localhost:3009/course";
@@ -74,6 +75,7 @@ function NewCourse() {
 
     // Renderización del componente
     return (
+        
         <div className='container-cage'>
             <h1>Crear Curso</h1>
 

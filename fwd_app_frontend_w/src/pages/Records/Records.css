@@ -1,0 +1,20 @@
+.recordsHeader{
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.newForm{
+    border-radius: 15px;
+    border: 2px solid black;
+    width: 150px;
+    height: 70px;
+    background-color: #662d91;
+    color: white;
+}
+
+.buscador{
+    
+    width: 200x;
+    height: 20px;
+}

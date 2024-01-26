@@ -1,4 +1,6 @@
 class MedicalRecordController < ApplicationController
+    include RackSessionsFix
+    
     before_action :authenticate_user!
     before_action :set_health, only: [:show, :edit, :destroy]
 
