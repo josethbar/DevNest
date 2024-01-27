@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../PrivateText/AuthContext";
-import { getMedicalRecord, getUserRole, getUsers } from "../../api/fwd";
+import { getMedicalRecord, getUserRoleUnique, getUsers } from "../../api/fwd";
 import "./Records.css";
 
 const RecordsComponent = () => {
@@ -31,7 +31,7 @@ const RecordsComponent = () => {
 
         const [medicalRecords, userRoleData] = await Promise.all([
           getMedicalRecord(),
-          getUserRole(),
+          getUserRoleUnique(),
         ]);
 
         setRecords(medicalRecords);

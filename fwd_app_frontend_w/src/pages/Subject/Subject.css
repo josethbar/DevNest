@@ -1,7 +1,7 @@
 .material-container{
     display: grid;
     grid-template-columns: auto auto auto;
-    background-color: #3b85e7;
+    background-color: #003d5b;
     padding: 10px;
     border-radius: 15px;
     justify-content: center;
@@ -12,4 +12,5 @@
     border: 2px solid black;
     border-radius: 15px;
     margin: 8px;
+    background-color: #662d91;
 }

@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useContext, useEffect } from "react";
-import { getUsers, getUserRole, updateUserState, updateUserRole} from "../../api/fwd";
+import { getUsers, getUserRole, updateUserState, updateUserRole } from "../../api/fwd";
 import { AuthContext } from "../PrivateText/AuthContext";
 import { useNavigate } from "react-router-dom";
 import "./Administration.css";
@@ -47,7 +47,10 @@ function Administration() {
                 const initialSelectedStates = {};
 
                 usersData.forEach((user) => {
-                    initialSelectedRoles[user.id] = getUserRoleById(user.id);
+                    // Busca el rol actual en el array userRoles
+                    const userRole = userRolesData.find((role) => role.id === user.id)?.role;
+
+                    initialSelectedRoles[user.id] = userRole || ""; // Si no se encuentra, establece como cadena vacía
                     initialSelectedStates[user.id] = user.state || "";
                 });
 
@@ -67,14 +70,7 @@ function Administration() {
     function getUserRoleById(userId) {
         const userRoleData = userRoles.find((userData) => userData.id === userId);
 
-        if (userRoleData && userRoleData.role) {
-            return userRoleData.role || "Sin Rol";
-        } else {
-            console.error(
-                `No se encontró un rol válido para el usuario con ID ${userId}`
-            );
-            return "Sin Rol";
-        }
+
     }
 
     const handleUpdateRole = async (userId, newRole) => {
@@ -142,7 +138,10 @@ function Administration() {
     function getUserStateById(user) {
         return user.state || 'Sin Estado';
     }
-
+   
+    const handleClick = e => {
+        navigate('/signup');
+    };
 
 
 
@@ -151,15 +150,19 @@ function Administration() {
             <h1>Lista de Usuarios</h1>
             {error && <p className="error-message">{error}</p>}
             {users.length > 0 ? (
-                <table className="user-table">
+                <div>
+                <button onClick={handleClick} className="newUser">
+                  Crear nuevo usuario
+                </button>
+            <table className="user-table">
                     <thead>
                         <tr>
                             <th>Nombre</th>
                             <th>Apellido</th>
                             <th>Email</th>
                             <th>Edad</th>
-                            <th>Estado</th>
                             <th>Role</th>
+                            <th>Estado</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -168,9 +171,7 @@ function Administration() {
                                 <td>{user.first_name}</td>
                                 <td>{user.last_name}</td>
                                 <td>{user.email}</td>
-                                <td>{user.age}</td>
-                                <td>{getUserStateById(user)}</td>
-                                <td>{getUserRoleById(user.id)}</td>
+                                <td>{2024 - user.age}</td>
                                 <td>
                                     <select
                                         value={selectedRoles[user.id]}
@@ -208,8 +209,16 @@ function Administration() {
                         ))}
                     </tbody>
                 </table>
+
+           </div>
+                
             ) : (
-                <p className="no-users-message">No hay usuarios para mostrar.</p>
+                <div>
+                <div className="loader-container">
+                    <div className="loader"></div>
+                    <div className="loader-text">cargando usuarios, esto puede tardar un poco</div>
+                </div>
+            </div>
             )}
         </div>
     );

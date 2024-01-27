@@ -27,8 +27,9 @@ Rails.application.routes.draw do
     post '/course/:course_id/add_user/:user_id', to: 'user_course#create'
   
     resources :group, only: [:index, :create, :show, :update, :destroy] do
-      get 'show_users', on: :member
+      get 'group_users', on: :member
     end
+    
     post '/group/:group_id/add_user/:user_id', to: 'user_groups#create'  
     # post '/group/:groupId/add_user', to: 'user_groups#create'
     # get '/user_groups', to: 'user_groups#find'
@@ -37,8 +38,9 @@ Rails.application.routes.draw do
     get 'groups/:name', to: 'groups#show_by_name', as: 'group_by_name'
 
 
-
     resources :user_groups, only: [:index, :create, :destroy] 
+    delete '/group/:group_id/remove_user/:user_id', to: 'user_groups#destroy'
+
     
     resources :health
     resources :health_controllers

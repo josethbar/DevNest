@@ -12,29 +12,25 @@ const HomeNav = () => {
     setGroupsDisplay(true);
   };
 
-  console.log("es aqui", groupsDisplay);
-  const { authenticated } = useContext(AuthContext);
-  const navigate = useNavigate();
+const fetchGroups = async () => {
+  try {
+    const groupsList = await getGroups();
+    if (groupsList.length > 0) {
+      setGroupsData(groupsList);
+      console.log("datos de grupos desde la API AHHHHHHHHHHHHHHHHHHHHHH", groupsList);
+    } else {
+      console.log("La API no devolvió ningún grupo.");
+    }
+  } catch (error) {
+    console.error("Error al obtener registros:", error);
+  }
+};
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (!authenticated) {
-          console.log("¿Estás autenticado?", authenticated);
-          navigate("/login");
-          return;
-        }
+  
 
-        const [groupsDataFecth] = await Promise.all([getGroups()]);
-        setGroupsData(groupsDataFecth);
-        console.log("datos de grupos", groupsData);  // Mover esto aquí
-      } catch (error) {
-        console.error("Error al obtener registros:", error);
-      }
-    };
-
-    fetchData();
-  }, [authenticated, navigate]);
+    useEffect(() => {
+      fetchGroups();
+  }, []);
 
   return (
     <div>
@@ -48,7 +44,9 @@ const HomeNav = () => {
             <span to="" className="sub-links" onClick={displayGroups}>
               Groups
             </span>
-            <Link to="/group" className="sub-links">hola</Link>
+            {groupsData.map((group) => (
+              <Link to="/group" className="sub-links">{group.name}</Link>
+                                    ))}
           </div>
         </nav>
       ) : (

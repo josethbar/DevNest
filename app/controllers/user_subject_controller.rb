@@ -15,13 +15,24 @@
     
         def create
             @user_subject = UserSubject.new(user_subject_params)
+            
+            unless User.exists?(id: params[:user_subject][:user_id])
+                render json: { error: 'User does not exist' }, status: :unprocessable_entity
+                return
+            end
+        
+            unless Subject.exists?(id: params[:user_subject][:subject_id])
+                render json: { error: 'Subject does not exist' }, status: :unprocessable_entity
+                return
+            end
         
             if @user_subject.save
                 render json: @user_subject, status: :created
             else
                 render json: { errors: @user_subject.errors.full_messages }, status: :unprocessable_entity
+            end
         end
-        end
+        
     
         def update
             if @user_subject.update(user_subject_params)

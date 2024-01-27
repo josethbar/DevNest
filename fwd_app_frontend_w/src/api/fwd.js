@@ -95,7 +95,7 @@ export async function getGroups() {
   try {
     const token = localStorage.getItem("token");
 
-    const response = await fetch(`${UrlApi_Fwd}group`, {
+    const response = await fetch(UrlApi_Fwd + "group", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -110,6 +110,31 @@ export async function getGroups() {
     return { error: "Hubo un error en el API - fwd.js" };
   }
 }
+
+export async function fetchGroupUsers(groupId) {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(`http://localhost:3009/group/${groupId}/users`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error en la solicitud: ${response.status} ${response.statusText}`);
+    }
+
+    const usersData = await response.json();
+    console.log("Grupos en API:", usersData);
+    return usersData.map(userGroup => userGroup.user);
+  } catch (error) {
+    console.error("Error al obtener usuarios en el grupo:", error.message);
+    return { error: `Error al obtener usuarios en el grupo: ${error.message}` };
+  }
+}
+
 
 export async function getGroupByName(groupName) {
   try {
@@ -170,6 +195,31 @@ export async function getUserRole() {
     const userRoles = await requestRole.json();
     console.log('Roles de Usuario:', userRoles);
     return userRoles;
+  } catch (error) {
+    console.error('Error en getUserRole:', error.message);
+    return { error: 'Hubo un error en el API - fwd.js' };
+  }
+}
+
+export async function getUserRoleUnique(userId) {
+  try {
+    const token = localStorage.getItem("token");
+
+    const requestRole = await fetch(`${UrlApi_Fwd}user_roles/${userId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
+    });
+
+    if (!requestRole.ok) {
+      throw new Error('Error al obtener el rol del usuario');
+    }
+
+    const userRole = await requestRole.json();
+    console.log('Rol del Usuario:', userRole);
+    return userRole;
   } catch (error) {
     console.error('Error en getUserRole:', error.message);
     return { error: 'Hubo un error en el API - fwd.js' };
