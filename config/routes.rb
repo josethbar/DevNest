@@ -1,11 +1,13 @@
 Rails.application.routes.draw do
     namespace :api do
       namespace :v1 do
-        resources :users
+        resources :users do 
+          member do
+            patch 'update_state'
+          end
+        end
       end
     end
-  
-
 
   root 'private#welcome'
   devise_for :users, 
@@ -21,48 +23,24 @@ Rails.application.routes.draw do
     }
     delete '/logout', to: 'users/sessions#destroy', as: :logout
 
-
-    # Rails.application.routes.draw do
-    #   devise_for :users, path: '', path_names: {
-    #     sign_in: 'login',
-    #     sign_out: 'logout',
-    #     registration: 'signup'
-    #   },
-    #   controllers: {
-    #     sessions: 'users/sessions',
-    #     registrations: 'users/registrations'
-    #   }
-    # end
-
-    
-    # get 'course', to: 'course#index'
-    # post 'course/create'
-    # delete 'course/:id', to: 'course#destroy'
-
-    # resources :course, only: [:index, :create, :destroy]
     resources :course
     post '/course/:course_id/add_user/:user_id', to: 'user_course#create'
   
     resources :group, only: [:index, :create, :show, :update, :destroy] do
-      get 'show_users', on: :member
+      get 'group_users', on: :member
     end
-    # post '/group/:group_id/add_user/:user_id', to: 'user_groups#create'  //origin
-    post '/group/:groupId/add_user', to: 'user_groups#create'
-    get '/user_groups', to: 'user_groups#find'
-
-
-    # match 'assign_group/:group_id', to: 'course_group#assign_group', as: :assign_group, via: [:get, :post]
-    # match 'assign_group/:course_id/:group_id', to: 'course_group#assign_group', as: :assign_group, via: [:get, :post]  se estaba usando esta anytes de pruebas
-    # config/routes.rb
-
-    # post '/assign_group/:course_id/:group_id', to: 'course_group#assign_group' 
+    
+    post '/group/:group_id/add_user/:user_id', to: 'user_groups#create'  
+    # post '/group/:groupId/add_user', to: 'user_groups#create'
+    # get '/user_groups', to: 'user_groups#find'
 
     post '/assign_group', to: 'course_group#assign_group' 
-
-
+    get 'groups/:name', to: 'groups#show_by_name', as: 'group_by_name'
 
 
     resources :user_groups, only: [:index, :create, :destroy] 
+    delete '/group/:group_id/remove_user/:user_id', to: 'user_groups#destroy'
+
     
     resources :health
     resources :health_controllers
@@ -70,15 +48,19 @@ Rails.application.routes.draw do
     resources :medical_record
 
     resources :course_group
-    # post 'assign_group/:group_id', action: :assign_group, as: :assign_group
-
-    # post '/course/assign_group/:group_id', to: 'course_group#assign_group', as: :assign_group
-    # post 'assign_group/:group_id', to: 'course_group#assign_group', as: :assign_group
 
 
-    get '/user_role', to: 'user_roles#show'
+    resources :user_roles, only: [:show, :index] do
+      member do
+        patch 'update_role'
+        patch 'update_state'
+      end
+    end
 
-    # post '/refresh-token', to: 'auth#refresh_token'
+    resources :subject
+    get 'subject_types' , to: 'subject#subject_types'
+
+    resources :user_subject
 
 
   end

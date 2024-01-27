@@ -1,16 +1,28 @@
 class Api::V1::UsersController < ApplicationController 
-    before_action :authenticate_user!, except: [:index, :show]  
-    before_action :set_user, only: [:show, :update, :destroy]   
+  include RackSessionsFix
+
+    before_action :authenticate_user!
+    
     
       # GET /api/v1/users
       def index
         if user_signed_in?
-          @users = User.all.map { |user| { id: user.id, first_name: user.first_name, email: user.email } }
+          @users = User.all.map do |user|
+            {
+              id: user.id,
+              first_name: user.first_name,
+              last_name: user.last_name,
+              email: user.email,
+              age: user.age,        # Agrega age si es un atributo de tus usuarios
+              state: user.state     # Agrega state si es un atributo de tus usuarios
+            }
+          end
           render json: @users
         else
-          render json: { error: 'No autorizado. Inicia sesión para acceder a esta información.   qué esta pasando  aq' }, status: :unauthorized
+          render json: { error: 'No autorizado. Inicia sesión para acceder a esta información.' }, status: :unauthorized
         end
       end
+      
     
       # GET /api/v1/users/1
     
@@ -22,6 +34,7 @@ class Api::V1::UsersController < ApplicationController
           return
         end
     
+        user_roles = User.all.map { |user| { id: user.id, role: user.role.name } }
         user_data = {
           id: @user.id,
           first_name: @user.first_name,
@@ -30,6 +43,7 @@ class Api::V1::UsersController < ApplicationController
         
         questions = @user.questions
     
+        render json: user_roles
         render json: { user: user_data, questions: questions }
       end
     
@@ -50,12 +64,28 @@ class Api::V1::UsersController < ApplicationController
           @user.avatar.attach(user_params[:avatar])
         end
     
+
         if @user.update(user_params.except(:avatar))
             render json: @user
         else
             render json: @user.errors, status: :unprocessable_entity
         end
     end
+
+    def update_state
+      user = User.find(params[:id])
+      new_state = params[:state]
+  
+      allowed_states = ['aprobado', 'en_curso', 'expulsado', 'retirado']
+      
+      if user && new_state && allowed_states.include?(new_state)
+          user.update(state: new_state)
+          render json: { user: user_data, questions: questions }, status: :ok
+
+      else
+        render json: { error: 'Error al actualizar el estado del usuario', details: error.message }, status: :unprocessable_entity
+      end
+  end
     
       # DELETE /api/v1/users/1
     def destroy
@@ -77,7 +107,7 @@ class Api::V1::UsersController < ApplicationController
     
         # Only allow a trusted parameter "white list" through.
         def user_params
-            params.require(:user).permit(:first_name, :description, :email, :encrypted_password, :avatar)
+            params.require(:user).permit(:first_name, :last_name, :description, :email, :encrypted_password, :avatar)
         end
 
 

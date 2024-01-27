@@ -37,4 +37,4 @@
 
 # UserCourse.create(course_id: 24, user_id: 10)
 
-
+Subject.create(name: "Api", type: "material", description: "holi", grade: 86 )

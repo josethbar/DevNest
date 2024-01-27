@@ -6,7 +6,7 @@ import imagen from "../../img/borrar.png";
 import editar from "../../img/editar.png";
 import { AuthContext } from "../PrivateText/AuthContext";
 import HomeNav from "../../components/User/homeNav";
-
+import { getUserRole, getUserRoleUnique, getUsers} from "../../api/fwd";
 function Course() {
   // URL de la API para obtener datos de los cursos
   const APi_URL = "http://localhost:3009/course";
@@ -18,6 +18,9 @@ function Course() {
   const [courses, setCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [editCourseId, setEditCourseId] = useState(null);
+  const [userRole, setUserRole] = useState(null); 
+  const [userId, setUserId] = useState(null);
+  const [users, setUsers] = useState([]);
   const [formData, setFormData] = useState({
     name: "",
     info: "",
@@ -61,12 +64,64 @@ function Course() {
       setError(`Error al cargar datos: ${error.message}`);
       setIsLoading(false);
     }
+
+
+    getUserRole()
+    .then(roleData => {
+
+        if (!roleData.error) {
+            setUserRole(roleData.role);
+        } else {
+            // console.error("Error al obtener el rol del usuario:", roleData.error);
+        }
+    })
+    .catch(error => {
+        // console.error("Error al obtener el rol del usuario:", error);
+    });
+
   };
 
   // useEffect para obtener datos cuando el componente se monta
   useEffect(() => {
     fetchData();
   }, []);
+
+  const fetchUsers = async () => {
+    try {
+        const usersData = await getUsers();
+        if (!usersData.error) {
+            setUsers(usersData);
+            console.log("Lista de usuarios:", users);
+        } else {
+            console.error("Error al obtener usuarios:", usersData.error);
+        }
+    } catch (error) {
+        console.error("Error al obtener usuarios:", error);
+    }
+};
+
+  useEffect(() => {
+
+    getUserRoleUnique(userId)
+        .then(roleData => {
+            if (!roleData.error) {
+                setUserRole(roleData.role);
+            } else {
+                console.error("Error al obtener el rol del usuario:", roleData.error);
+            }
+        })
+        .catch(error => {
+            console.error("Error al obtener el rol del usuario:", error);
+        });
+}, [userId]);  
+
+useEffect(() => {
+  fetchUsers();
+  
+
+  const authenticatedUserId = localStorage.getItem("userId"); 
+  setUserId(authenticatedUserId);
+}, []);
 
   // Función para manejar la eliminación de un curso
   const handleDeleteCourse = async (id) => {
@@ -170,16 +225,16 @@ function Course() {
       });
 
       if (response.ok) {
-        const responseData = await response.json(); 
+        const responseData = await response.json();
         console.log("Grupo asignado correctamente");
         console.log(responseData.message);
-  
+
         const serverMessage = responseData.message || "";
         if (serverMessage.includes("El grupo ya está asignado")) {
           setError(serverMessage);
           setSuccessMessage("");
         } else {
-    
+
           setSuccessMessage(serverMessage);
           setError("");
         }
@@ -193,7 +248,7 @@ function Course() {
       setSuccessMessage("");
     }
   };
-  
+
 
   // ======================================="acaaaaaaaaaaaaaaaa"===========================
   const fetchGroups = async () => {
@@ -225,28 +280,24 @@ function Course() {
   console.log(successMessage);
   return (
     <div className="container-cage">
-      <div>
-        <div className="top-container">
-          <h1>Courses</h1>
-          <a href="/newCourse" className="custom-btn btn-2">
-            Nuevo
-          </a>
-        </div>
-      </div>
-      {error && <p>{error}</p>}
       {isLoading ? (
-        <div id="container">
-          <label className="loading-title">Cargando</label>
-          <span className="loading-circle sp1">
-            <span className="loading-circle sp2">
-              <span className="loading-circle sp3"></span>
-            </span>
-          </span>
+        <div>
+          <div className="loader-container">
+            <div className="loader"></div>
+            <div className="loader-text">cargando cursos...</div>
+          </div>
         </div>
       ) : courses.length > 0 ? (
+
         <ul className="courseBox">
-          <div className="dad-course">
+           <div className="top-container">
             <HomeNav />
+            
+        </div>
+        
+      {error && <p>{error}</p>}
+          <div className="dad-course">
+            
             {courses.map((course, index) => (
               <li key={index}>
                 {editCourseId === course.id ? (
@@ -272,6 +323,7 @@ function Course() {
                     />
                     <button onClick={handleSaveEdit}>Guardar</button>
                   </div>
+                  
                 ) : (
                   // Mostrar detalles del curso
                   <div className="carta">
@@ -301,15 +353,23 @@ function Course() {
                     </div>
                   </div>
                 )}
+                
               </li>
+               
             ))}
           </div>
+         
         </ul>
       ) : (
         <p>No se encontraron datos.</p>
       )}
       {/* Enlace para navegar a la página de nuevo curso */}
+      <div  className='newCourse'>
 
+         <a href="/newCourse" className="custom-btn btn-2">
+            Crear curso
+          </a>
+      </div>
       <div className="assign-group-form">
         <h2>Asignar Grupo a Curso</h2>
         <label htmlFor="courses">Seleccionar Curso:</label>

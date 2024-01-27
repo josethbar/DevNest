@@ -2,8 +2,9 @@ import React, { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../PrivateText/AuthContext';
 // import { Link } from 'react-router-dom';
-import './FwdApp.css'; 
+import './FwdApp.css';
 import HomeNav from '../../components/User/homeNav';
+import Subject from '../Subject/Subject';
 
 function FwdApp() {
   const { authenticated } = useContext(AuthContext);
@@ -14,18 +15,23 @@ function FwdApp() {
     // Verifica si el usuario no está autenticado antes de redirigir
     if (!authenticated) {
       navigate("/login");
-      console.log("autenticadoooos" , authenticated);
+      console.log("autenticadoooos", authenticated);
     }
   }, [authenticated, navigate]);
 
 
   return (
-    
+
     <div>
-      <HomeNav/>
-      {/* <span>{cur
-        rentUser}</span> */}
-       
+
+      <div className="Home-container">
+        <HomeNav/>
+        <Subject/>
+
+   
+
+      </div>
+
     </div>
   );
 }
