@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { getSubject, postSubject, postUserSubject, getUsers, getSubjectTypes, getUserRole} from "../../api/fwd";
+import { getSubject, postSubject, postUserSubject, getUsers, getSubjectTypes, getUserRole, getUserRoleUnique} from "../../api/fwd";
 import './Subject.css';
 
 function Subject() {
     const [subjects, setSubjects] = useState([]);
     const [users, setUsers] = useState([]);
     const [userRole, setUserRole] = useState(null); 
+    const [userId, setUserId] = useState(null);
     const [subjectTypes, setSubjectTypes] = useState([]);
     const [newSubjectData, setNewSubjectData] = useState({
         name: "",
@@ -14,7 +15,7 @@ function Subject() {
         grade: 0,
     });
     const [newUserSubjectData, setNewUserSubjectData] = useState({
-        state: "",
+        state: "pending",
         grade: 0,
         feedback: "",
         user_id: "",
@@ -38,10 +39,6 @@ function Subject() {
 
     const createSubjectAndUserAssociation = async () => {
         try {
-            if (!newSubjectData.name || !newSubjectData.type || !newSubjectData.description) {
-                throw new Error("Por favor, completa todos los campos obligatorios.");
-            }
-
             if (!newUserSubjectData.user_id) {
                 throw new Error("Por favor, selecciona un usuario.");
             }
@@ -61,6 +58,9 @@ function Subject() {
 
                 console.log("user_id que es pa user_subject", newUserSubjectData.user_id);
                 console.log("Datos del usuario y subject", userSubjectData);
+
+
+
                 const createdUserSubject = await postUserSubject(userSubjectData);
 
                 if (createdUserSubject.error) {
@@ -119,15 +119,33 @@ function Subject() {
             if (!typesData.error) {
                 setSubjectTypes(typesData);
             } else {
-                console.error("Error al obtener tipos de sujetos:", typesData.error);
+                // console.error("Error al obtener tipos de sujetos:", typesData.error);
             }
         })
         .catch(error => {
-            console.error("Error al obtener tipos de sujetos:", error);
+            // console.error("Error al obtener tipos de sujetos:", error);
         });
 
     // Llama a getUserRole para obtener el rol del usuario
     getUserRole()
+        .then(roleData => {
+
+            if (!roleData.error) {
+                setUserRole(roleData.role);
+            } else {
+                // console.error("Error al obtener el rol del usuario:", roleData.error);
+            }
+        })
+        .catch(error => {
+            // console.error("Error al obtener el rol del usuario:", error);
+        });
+}, []);
+
+
+
+useEffect(() => {
+
+    getUserRoleUnique(userId)
         .then(roleData => {
             if (!roleData.error) {
                 setUserRole(roleData.role);
@@ -138,7 +156,17 @@ function Subject() {
         .catch(error => {
             console.error("Error al obtener el rol del usuario:", error);
         });
+}, [userId]);  
+
+useEffect(() => {
+    fetchUsers();
+    
+
+    const authenticatedUserId = localStorage.getItem("userId"); 
+    setUserId(authenticatedUserId);
 }, []);
+
+
 
     return (
         <div>
@@ -164,8 +192,8 @@ function Subject() {
                     <p>No hay subjects disponibles.</p>
                 )}
             </div>
-
-            {userRole === "profesor" || userRole === "admin" ? (
+                    
+            {userRole === "professor" || userRole === "admin" ? (
             <div>
                 <h2>Crear Nuevo Subject</h2>
             <div>

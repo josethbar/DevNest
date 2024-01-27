@@ -10,20 +10,27 @@ class GroupController < ApplicationController
                 #authorize @courses # Verifica la autorización usando Pundit
             end
 
-
-
-
-
-            def show_users
-                @group = Group.find(params[:group_id])
-
-                if @group
-                    users = @group.users
-                    render json: { users: users }
+            def group_users
+                group = Group.find_by(id: params[:id])
+            
+                if group
+                  users = group.users
+                  render json: users
                 else
-                    render json: { error: 'Grupo no encontrado' }, status: :not_found
+                  render json: { error: 'Grupo no encontrado' }, status: :not_found
                 end
-            end      
+              end
+
+            # def show_users
+            #     @group = Group.find(params[:group_id])
+
+            #     if @group
+            #         users = @group.users
+            #         render json: { users: users }
+            #     else
+            #         render json: { error: 'Grupo no encontrado' }, status: :not_found
+            #     end
+            # end      
             
             def users
                 group = Group.find(params[:id])

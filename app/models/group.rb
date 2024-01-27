@@ -18,6 +18,11 @@ class Group < ApplicationRecord
 
   private
 
+  def group_users
+    users
+  end
+
+
   def set_default_quantity
     self.quantity ||= DEFAULT_QUANTITY
   end

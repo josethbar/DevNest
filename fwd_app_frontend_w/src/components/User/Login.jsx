@@ -65,10 +65,7 @@ const Login = ({ setShow }) => {
         e.target.reset();
     };
 
-    const handleClick = e => {
-        e.preventDefault();
-        setShow(false);
-    };
+   
 
 
 
@@ -76,7 +73,8 @@ const Login = ({ setShow }) => {
         <div className="inputContainer">
 
             <form className="form_main" action="" ref={formRef} onSubmit={handleSubmit}>
-                <p className="heading">Login</p>
+                <p className="heading">Login</p><br />
+                <span>Tu correo y contraseña te fueron proporcionados por el administrador</span>
 
                 <div className="inputContainer">
                     <input className="inputField" id="username" type="email" name='email' placeholder="email" />
@@ -103,8 +101,6 @@ const Login = ({ setShow }) => {
 
 
                 <div className="signupContainer">
-                    <p>Not registered yet,</p>
-                    <a className="forgotLink" href="#signup" onClick={handleClick} >Signup</a>
 
                 </div>
             </form>

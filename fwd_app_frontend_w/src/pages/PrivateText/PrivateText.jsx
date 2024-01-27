@@ -14,6 +14,7 @@ import RecordsComponent from "../Records/Records";
 import { AuthContext, AuthProvider } from "./AuthContext";
 import Administration from "../Administration/Administration";
 import Subject from "../Subject/Subject";
+import Signup from "../../components/User/Signup";
 
 
 const PrivateText = () => {
@@ -123,6 +124,7 @@ const PrivateText = () => {
                                     <Route path="/records" element={<RecordsComponent authenticated={authenticated} currentUser={currentUser} />} />
                                     <Route path="/administration" element={<Administration authenticated={authenticated} />} />
                                     <Route path="/subject" element={<Subject authenticated={authenticated} />} />
+                                    <Route path="/signup" element={<Signup authenticated={authenticated} />} />
                                 </Routes>
                             </>
                         }

@@ -199,3 +199,8 @@ justify-content: center;
   .groupsList{
     list-style: none;
   }
+
+  .showUsers{
+    position: relative;
+    top: 100px;
+  }

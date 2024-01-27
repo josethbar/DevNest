@@ -21,34 +21,13 @@ class SubjectController < ApplicationController
 
   def create
     @subject = Subject.new(subject_params)
-  
-    ActiveRecord::Base.transaction do
-      if @subject.save
-        user_id = params.dig(:user_subject, :user_id)
-        user = User.find_by(id: user_id)
-  
-        if user
-          user_subject_params = {
-            user: user,
-            subject: @subject,
-            state: '',
-            grade: 0,
-            feedback: ''
-          }
-  
-          UserSubject.create(user_subject_params)
-  
-          render json: @subject, status: :created
-        else
-          puts "User not found for user_id: #{user_id}"  # Agregamos este mensaje
-          render json: { error: 'No se proporcionó un ID de usuario válido' }, status: :unprocessable_entity
-        end
-      else
+    
+    if @subject.save
+        render json: @subject, status: :created
+    else
         render json: { errors: @subject.errors.full_messages }, status: :unprocessable_entity
-      end
     end
-  end
-  
+end
   
 
   def update
