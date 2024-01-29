@@ -31,6 +31,8 @@ Rails.application.routes.draw do
     end
     
     post '/group/:group_id/add_user/:user_id', to: 'user_groups#create'  
+    get '/group/:group_id/group_users', to: 'user_groups#group_users'
+
     # post '/group/:groupId/add_user', to: 'user_groups#create'
     # get '/user_groups', to: 'user_groups#find'
 

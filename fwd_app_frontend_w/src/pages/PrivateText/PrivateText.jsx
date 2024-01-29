@@ -17,7 +17,7 @@ import Subject from "../Subject/Subject";
 import Signup from "../../components/User/Signup";
 
 
-const PrivateText = () => {
+const PrivateText = ({setShow}) => {
     // const navigate = useNavigate();
     const { currentUser, setCurrentUser, authenticated, setAuthenticated } = useContext(AuthContext);
 
@@ -26,6 +26,7 @@ const PrivateText = () => {
 
         if (!token) {
             setAuthenticated(false);
+
             setCurrentUser(null);
             return;
         }
@@ -122,7 +123,7 @@ const PrivateText = () => {
                                     <Route path="/health" element={<Health authenticated={authenticated} />} />
                                     <Route path="/healthyform" element={<DisplayHealth authenticated={authenticated} currentUser={currentUser} />} />
                                     <Route path="/records" element={<RecordsComponent authenticated={authenticated} currentUser={currentUser} />} />
-                                    <Route path="/administration" element={<Administration authenticated={authenticated} />} />
+                                    <Route path="/administration" element={<Administration authenticated={authenticated} setShow={setShow}/>} />
                                     <Route path="/subject" element={<Subject authenticated={authenticated} />} />
                                     <Route path="/signup" element={<Signup authenticated={authenticated} />} />
                                 </Routes>

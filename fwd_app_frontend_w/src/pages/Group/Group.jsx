@@ -39,7 +39,10 @@ function Group() {
 
     const addUserToGroup = async (groupId, userId) => {
         try {
+
             const token = localStorage.getItem("token");
+            console.log("Adding user to group. Group ID:", groupId);
+
 
             // Check if the user is already in the group
             const userOnGroup = await fetchGroupUsers(groupId);

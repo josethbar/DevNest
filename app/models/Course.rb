@@ -2,8 +2,10 @@
 class Course < ApplicationRecord
   resourcify
 
+  belongs_to :user, optional: true
+  
   has_many :course_groups
-has_many :groups, through: :course_groups
+  has_many :groups, through: :course_groups
 
   # has_and_belongs_to_many :groups
   validates :name, presence: true

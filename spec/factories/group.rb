@@ -2,7 +2,7 @@
 
 FactoryBot.define do
    factory :group do
-      sequence(:name) { |n| "Group #{n}" }
+      sequence(:name) { |n| "Group #{n+1}" }
       quantity { 10 }
-      end
    end
+end

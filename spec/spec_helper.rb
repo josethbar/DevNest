@@ -6,16 +6,27 @@
 # En el archivo rails_helper.rb o spec_helper.rb
 require 'spec_helper'
 require File.expand_path('../config/environment', __dir__)
-require 'rspec/rails'
+abort('The Rails environment is running in production mode!') if Rails.env.production?
 require 'rspec/rails'
 require 'factory_bot_rails'
+Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each { |f| require f }
 
 # ... Otras configuraciones de RSpec ...
 
 RSpec.configure do |config|
   # ... Otras configuraciones ...
-  config.infer_spec_type_from_file_location!
   config.include FactoryBot::Syntax::Methods
+  config.infer_spec_type_from_file_location!
+  config.use_transactional_fixtures = true
+  config.include Devise::Test::ControllerHelpers, type: :controller
+end
+
+RSpec.configure do |config|
+  config.include Devise::Test::ControllerHelpers, type: :controller
+
+  config.before(:each, type: :controller) do
+    @request.env['devise.mapping'] = Devise.mappings[:tu_modelo_de_usuario]
+  end
 end
 
 #

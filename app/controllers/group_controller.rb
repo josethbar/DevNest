@@ -9,18 +9,8 @@ class GroupController < ApplicationController
                 render json: @groups
                 #authorize @courses # Verifica la autorización usando Pundit
             end
-
-            def group_users
-                group = Group.find_by(id: params[:id])
-            
-                if group
-                  users = group.users
-                  render json: users
-                else
-                  render json: { error: 'Grupo no encontrado' }, status: :not_found
-                end
-              end
-
+                
+                
             # def show_users
             #     @group = Group.find(params[:group_id])
 
@@ -66,8 +56,7 @@ class GroupController < ApplicationController
         
             def create
                 @group = Group.new(group_params)
-                # authorize @groups
-    
+
                 if @group.save
                     render json: @group, status: :created
                     return
@@ -80,7 +69,6 @@ class GroupController < ApplicationController
 
 
             def update
-                # authorize @groups
                 respond_to do |format|
                     if @group.update(group_params)
                         format.html { redirect_to article_url(@group), notice: "Course was successfully updated." }

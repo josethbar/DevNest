@@ -50,8 +50,8 @@ RSpec.describe Group, type: :model do
 # Cambia
 it "puede tener muchos usuarios asociados" do
   group = Group.create(name: "Grupo G", quantity: 2)
-  user1 = User.new(first_name: "Usuario", last_name: "1", age: 25, state: "Activo", jti: "token1", email: "usuario1@example.com",password: "password123")
-  user2 = User.new(first_name: "Usuario", last_name: "2", age: 30, state: "Inactivo", jti: "token2", email: "usuario2@example.com",password: "password456")
+  user1 = User.new(first_name: "Usuario", last_name: "1", age: 25, state: "Activo", jti: "token1", email: "usuario3@example.com",password: "password123")
+  user2 = User.new(first_name: "Usuario", last_name: "2", age: 30, state: "Inactivo", jti: "token2", email: "usuario4@example.com",password: "password456")
 
   group.users << [user1, user2]
 

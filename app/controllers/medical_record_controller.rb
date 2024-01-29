@@ -39,7 +39,7 @@ class MedicalRecordController < ApplicationController
         else
             render json: { errors: @medical_record.errors.full_messages }, status: :unprocessable_entity
         end
-        redirect_to "/"
+        
     end
 
 
@@ -78,7 +78,7 @@ class MedicalRecordController < ApplicationController
 
     private
 
-    def set_medical_record
+    def set_health
         @medicalRecord = MedicalRecord.find(params[:id])
     end
 
