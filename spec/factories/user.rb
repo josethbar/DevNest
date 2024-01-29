@@ -6,7 +6,7 @@ FactoryBot.define do
         age { 25 }
         state { "Activo" }
         jti { "token123" }
-        email { "john.doe@example.com" }
+        sequence(:email) { |n| "user#{n +1}@example.com" }
         password { "password123" }
     end
 end

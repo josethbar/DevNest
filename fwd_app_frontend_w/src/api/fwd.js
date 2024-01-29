@@ -122,6 +122,7 @@ export async function fetchGroupUsers(groupId) {
       }
     });
 
+    console.log("URL requested:", `http://localhost:3009/group/${groupId}/users`);
     if (!response.ok) {
       throw new Error(`Error en la solicitud: ${response.status} ${response.statusText}`);
     }

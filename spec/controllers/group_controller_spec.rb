@@ -17,7 +17,7 @@ RSpec.describe GroupController, type: :controller do
       expect(response).to be_successful
     end
 
-    it 'returns a not found response for invalid group' do
+    it 'returns a not found response invalid group' do
       get :show_users, params: { group_id: 'invalid_id' }
       expect(response).to have_http_status(:not_found)
     end
@@ -51,6 +51,7 @@ RSpec.describe GroupController, type: :controller do
       end
     end
   end
+
 
   describe 'PATCH #update' do
     let(:group) { FactoryBot.create(:group) }

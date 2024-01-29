@@ -143,18 +143,22 @@ const RecordsComponent = () => {
               {userDataFromLocalStorage.first_name}{" "}
               {userDataFromLocalStorage.last_name}
             </h1>
-            <input
-              className="buscador"
-              type="text"
-              placeholder="Buscar por padecimiento o nombre de usuario"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <button className="newForm" onClick={formNavigate}>
-              Llenar un nuevo formulario
-            </button>
-          </div>
-          <ul>
+            {userRole !== "student" && (
+            <div>
+              <input
+                className="buscador"
+                type="text"
+                placeholder="Buscar por padecimiento o nombre de usuario"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+          )}
+              <button className="newForm" onClick={formNavigate}>
+                Llenar un nuevo formulario
+              </button>
+        </div>
+        <ul>
             {filteredRecords.map((record) => (
               <li key={record.id}>
                 {userRole === "student" ? (

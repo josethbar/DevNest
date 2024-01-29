@@ -7,7 +7,7 @@ import "./Administration.css";
 
 
 
-function Administration() {
+function Administration(props) {
     const [users, setUsers] = useState([]);
     const [error, setError] = useState(null);
     const [userRoles, setUserRoles] = useState([]);
@@ -21,6 +21,8 @@ function Administration() {
         state: "",
         // Agrega cualquier otro campo necesario
     });
+
+    
 
     const navigate = useNavigate();
     const { authenticated } = useContext(AuthContext);
@@ -135,12 +137,12 @@ function Administration() {
         }
     };
 
-    function getUserStateById(user) {
-        return user.state || 'Sin Estado';
-    }
-   
-    const handleClick = e => {
+    const handleClick = () => {
+        if (typeof props.setShow === 'function') {
+            props.setShow(true);
+        }
         navigate('/signup');
+
     };
 
 

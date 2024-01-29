@@ -21,7 +21,6 @@ class CourseController < ApplicationController
     
         def create
           @course = Course.new(course_params)
-          authorize @course
 
             if @course.save
                 render json: @course, status: :created
@@ -29,7 +28,6 @@ class CourseController < ApplicationController
             else
                 render json: { errors: @course.errors.full_messages }, status: :unprocessable_entity
             end
-            redirect_to "/"
           end
 
 
@@ -45,8 +43,7 @@ class CourseController < ApplicationController
         
 
         def destroy
-    
-          authorize @course # Implementa tu lógica de autorización aquí, por ejemplo, Pundit o CanCanCan
+          # Implementa tu lógica de autorización aquí, por ejemplo, Pundit o CanCanCan
           @course = Course.find(params[:id])
           
       
